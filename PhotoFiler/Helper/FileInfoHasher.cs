@@ -9,7 +9,6 @@ using DictionaryHash = System.Collections.Generic.Dictionary<string, System.IO.F
 
 namespace PhotoFiler.Helper
 {
-    [DefaultProperty("Item")]
     public class FileInfoHasher
     {
         const int MAX_LENGTH = 19;                          // Maximum hash length return by the algorithm
@@ -171,7 +170,7 @@ namespace PhotoFiler.Helper
         /// </summary>
         /// <param name="bytes">Array of bytes to convert to string</param>
         /// <returns>String converted from bytes</returns>
-        static string GetString(byte[] bytes)
+        private string GetString(byte[] bytes)
         {
             char[] chars = new char[bytes.Length / sizeof(char)];
             System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
