@@ -11,7 +11,7 @@ namespace PhotoFiler.Controllers
         public ActionResult Index()
         {
             return View();
-        }
+        }   
 
         public ActionResult About()
         {

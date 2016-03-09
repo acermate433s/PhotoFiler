@@ -12,15 +12,20 @@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.CreationDateTime)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Size)
         </th>
         <th></th>
     </tr>
-
 @foreach (var item in Model) {
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationDateTime)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Size)
@@ -31,7 +36,6 @@
         </td>
     </tr>
 }
-
 </table>
 
 @if (ViewBag.Previous > 0) {
@@ -39,7 +43,6 @@
 }
 
 <span>Page @ViewBag.Current / @ViewBag.Max</span>
-
 
 @if (ViewBag.Next <= ViewBag.Max)
 {

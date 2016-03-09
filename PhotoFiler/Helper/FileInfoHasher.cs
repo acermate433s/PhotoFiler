@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ImageProcessor;
+using PhotoFiler.Models;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -62,6 +64,76 @@ namespace PhotoFiler.Helper
                 else
                     return null;
             }   
+        }
+
+        public byte[] View(string hash, out string name)
+        {
+            name = null;
+            if (!_HashTable.ContainsKey(hash))
+                return null;
+            name = Items[hash].FullName;
+
+            return System.IO.File.ReadAllBytes(this[hash].FullName);
+        }
+
+        /// <summary>
+        /// Resized the image to 25% of the size of the original image
+        /// </summary>
+        /// <param name="hash"></param>
+        /// <returns>Byte array of the resized image</returns>
+        public byte[] Preview(string hash, out string name)
+        {
+            const int QUALITY = 50;             // JPEG compression quality
+            const int MAX = 300;                // Maximum height or width
+
+            name = null;
+            if (!_HashTable.ContainsKey(hash))
+                return null;
+            name = this[hash].FullName;
+
+            byte[] photoBytes = File.ReadAllBytes(this[hash].FullName);
+            int quality = QUALITY;
+            var format = new ImageProcessor.Imaging.Formats.JpegFormat();
+
+            using (MemoryStream inStream = new MemoryStream(photoBytes))
+            using (MemoryStream outStream = new MemoryStream())
+            using (ImageFactory imageFactory = new ImageFactory())
+            {
+                var factory =
+                        imageFactory
+                            .Load(inStream);
+
+                var image = factory.Image;
+                var width = image.Width;
+                var height = image.Height;
+
+                if (width > height)
+                {
+                    width = MAX;
+                    height = height / (image.Width / MAX);
+                }
+                else
+                {
+                    height = MAX;
+                    width = width / (image.Height / MAX);
+                }
+
+                Size size = new Size(width, height);
+
+                factory
+                    .Resize(
+                        new ImageProcessor.Imaging.ResizeLayer(
+                            new Size(MAX, MAX), 
+                            ImageProcessor.Imaging.ResizeMode.Crop, 
+                            ImageProcessor.Imaging.AnchorPosition.Center
+                        )
+                    )
+                    .Format(format)
+                    .Quality(quality)
+                    .Save(outStream);
+
+                return outStream.ToArray();
+            }
         }
 
         /// <summary>
@@ -192,6 +264,50 @@ namespace PhotoFiler.Helper
             var digits = (new String(ConvertToBase62(number).ToArray()));
 
             return digits;
+        }
+
+        /// <summary>
+        /// Generates a page of IEnumerable<FileHash> with a no. of items.
+        /// </summary>
+        /// <param name="page">Page to show</param>
+        /// <param name="count">No. of items per page</param>
+        /// <returns></returns>
+        public IEnumerable<FileHash> List(int page = 1, int count = 10)
+        {
+            var value =
+                Items
+                    .Select(item =>
+                        new FileHash()
+                        {
+                            Hash = item.Key,
+                            Name = item.Value.Name, 
+                            CreationDateTime = item.Value.CreationTime, 
+                            Size =
+                                (new Func<long, string>(
+                                    (length) =>
+                                    {
+                                        var suffixes = new[] { "bytes", "KB", "MB", "GB" };
+                                        int index = 0;
+
+                                        while (length > 1024)
+                                        {
+                                            length /= 1024;
+                                            index++;
+                                        }
+
+                                        return String.Format("{0}{1}", length, suffixes[index]);
+                                    }
+                                    )
+                                )
+                                .Invoke(item.Value.Length),
+                            PreviewUrl = $"Preview?hash={item.Key}",
+                        }
+                    )
+                    .OrderBy(item => item.Name)
+                    .Skip((page - 1) * count)
+                    .Take(count);
+
+            return value;
         }
 
         #endregion

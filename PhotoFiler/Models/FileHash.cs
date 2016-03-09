@@ -17,5 +17,12 @@ namespace PhotoFiler.Models
         [DisplayName("Size")]
         [DisplayFormat(DataFormatString = "{0:###,###,###}")]
         public string Size { get; set; }
+
+        [DisplayName("Preview")]
+        public string PreviewUrl { get; set; }
+
+        [DisplayName("Created On")]
+        [DisplayFormat(DataFormatString = "{0:d}")]
+        public DateTime CreationDateTime { get; set; }
     }
 }

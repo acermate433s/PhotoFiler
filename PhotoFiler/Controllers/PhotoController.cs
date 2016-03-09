@@ -1,7 +1,6 @@
 ﻿using PhotoFiler.Helper;
 using PhotoFiler.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,39 +12,57 @@ namespace PhotoFiler.Controllers
         const string ROOT_PATH = @"\\ARCHIVE\Volume_1\Public\trash\575 Wallpapers (All 1080p, No watermarks) - Imgur";
         const int MAX_HASH_LENGTH = 4;
 
+        delegate byte[] FileBytes<T, U>(T input, out T name);
+
         FileInfoHasher _FileInfoHasher = new FileInfoHasher(ROOT_PATH, MAX_HASH_LENGTH);
 
         public PhotoController()
         {
-
         }
 
+        [Route("{hash}")]
         public ActionResult Index(string hash)
         {
-            return Retrieve(hash, true);
+            if (hash != null)
+                return Retrieve(hash, true);
+            else
+                return RedirectToAction("Index", "Home");
         }
 
         public ActionResult Download(string hash)
         {
-            return Retrieve(hash, false);
+            if (hash != null)
+                return Retrieve(hash, false);
+            else
+                return RedirectToAction("Index", "Home");            
+        }
+
+        public ActionResult Preview(string hash)
+        {
+            return ImageFile(hash, true, _FileInfoHasher.Preview);
         }
 
         private ActionResult Retrieve(string hash, bool inline)
         {
-            if (!_FileInfoHasher.ContainsHash(hash))
+            return ImageFile(hash, inline, _FileInfoHasher.View);
+        }
+
+        private ActionResult ImageFile(string hash, bool inline, FileBytes<string, string> action)
+        {
+            string name = "";
+            var fileData = action(hash, out name);
+            if (fileData == null)
                 return new HttpNotFoundResult("Hash not found");
 
-            var fileInfo = _FileInfoHasher[hash];
             var cd = new System.Net.Mime.ContentDisposition()
             {
-                FileName = fileInfo.FullName,
+                FileName = name,
                 Inline = inline,
             };
 
             Response.AppendHeader("Content-Disposition", cd.ToString());
 
-            var fileData = System.IO.File.ReadAllBytes(fileInfo.FullName);
-            var contentType = MimeMapping.GetMimeMapping(fileInfo.FullName);
+            var contentType = MimeMapping.GetMimeMapping(name);
 
             return File(fileData, contentType);
         }
@@ -61,39 +78,21 @@ namespace PhotoFiler.Controllers
             ViewBag.Next = page + 1;
             ViewBag.Count = count;
 
-            var value =
-                _FileInfoHasher
-                    .Items
-                    .Select(item =>
-                        new FileHash()
-                        {
-                            Hash = item.Key,
-                            Name = item.Value.Name,
-                            Size =
-                                (new Func<long, string>(
-                                    (length) =>
-                                        {
-                                            var suffixes = new[] { "bytes", "KB", "MB", "GB" };
-                                            int index = 0;
+            return View(_FileInfoHasher.List(page, count));
+        }
 
-                                            while(length > 1024)
-                                            {
-                                                length /= 1024;
-                                                index++;
-                                            }
+        public ActionResult Gallery(int page = 1, int count = 10)
+        {
+            int total = _FileInfoHasher.Items.Count();
 
-                                            return String.Format("{0}{1}", length, suffixes[index]);
-                                        }
-                                    )
-                                )
-                                .Invoke(item.Value.Length),
-                        }
-                    )
-                    .OrderBy(item => item.Name)
-                    .Skip((page - 1) * count)
-                    .Take(count);
+            ViewBag.Total = total;
+            ViewBag.Previous = page - 1;
+            ViewBag.Current = page;
+            ViewBag.Max = total / count + (total % count == 0 ? 0 : 1);
+            ViewBag.Next = page + 1;
+            ViewBag.Count = count;
 
-            return View(value);
+            return View(_FileInfoHasher.List(page, count));
         }
     }
 }

@@ -13,11 +13,7 @@ namespace PhotoFiler
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-            routes.MapRoute(
-                name: "Photo",
-                url: "{hash}",
-                defaults: new { controller = "Photo", action = "Index", hash = UrlParameter.Optional }
-            );
+            routes.MapMvcAttributeRoutes();
 
             routes.MapRoute(
                 name: "Default",

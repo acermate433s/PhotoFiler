@@ -1,0 +1,36 @@
+﻿@using PhotoFiler.Helper
+
+@model IEnumerable<PhotoFiler.Models.FileHash>
+
+@{
+    ViewBag.Title = "Gallery";
+}
+
+<h2>@ViewBag.Total files found</h2>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <a href="/@item.Hash">
+            <span class="col-xs-12 col-sm-6 col-md-4 col-md-3">
+                @Html.Image($"Preview?hash={item.Hash}", item.Name)
+            </span>
+        </a>
+    }
+</div>
+
+<div class="row">
+    <div class="col-xs-12 text-center">
+        @if (ViewBag.Previous > 0)
+        {
+            @Html.ActionLink("<<", "Gallery", new { page = ViewBag.Previous, count = ViewBag.Count });
+        }
+
+        <span>Page @ViewBag.Current / @ViewBag.Max</span>
+
+        @if (ViewBag.Next <= ViewBag.Max)
+        {
+            @Html.ActionLink(">>", "Gallery", new { page = ViewBag.Next, count = ViewBag.Count })
+        }
+    </div>
+</div>
