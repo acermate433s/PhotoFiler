@@ -1,6 +1,4 @@
 ﻿using PhotoFiler.Helper;
-using PhotoFiler.Models;
-using System;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,16 +7,15 @@ namespace PhotoFiler.Controllers
 {
     public class PhotoController : Controller
     {
-        const string ROOT_PATH = @"\\ARCHIVE\Volume_1\Public\trash\575 Wallpapers (All 1080p, No watermarks) - Imgur";
-        const int MAX_HASH_LENGTH = 4;
+        const int DEFAULT_COUNT = 12;
 
         delegate byte[] FileBytes<T, U>(T input, out T name);
 
-        FileInfoHasher _FileInfoHasher = new FileInfoHasher(ROOT_PATH, MAX_HASH_LENGTH);
+        FileInfoHasher _FileInfoHasher = (FileInfoHasher) System.Web.HttpContext.Current.Application["FileHashes"];
 
         public PhotoController()
         {
-        }
+        } 
 
         [Route("{hash}")]
         public ActionResult Index(string hash)
@@ -29,6 +26,7 @@ namespace PhotoFiler.Controllers
                 return RedirectToAction("Index", "Home");
         }
 
+        [Route("Download/{hash}")]
         public ActionResult Download(string hash)
         {
             if (hash != null)
@@ -37,6 +35,7 @@ namespace PhotoFiler.Controllers
                 return RedirectToAction("Index", "Home");            
         }
 
+        [Route("Preview/{hash}")]
         public ActionResult Preview(string hash)
         {
             return ImageFile(hash, true, _FileInfoHasher.Preview);
@@ -67,7 +66,8 @@ namespace PhotoFiler.Controllers
             return File(fileData, contentType);
         }
 
-        public ActionResult List(int page = 1, int count = 10)
+        [Route("List")]
+        public ActionResult List(int page = 1, int count = DEFAULT_COUNT)
         {
             int total = _FileInfoHasher.Items.Count();
 
@@ -81,7 +81,8 @@ namespace PhotoFiler.Controllers
             return View(_FileInfoHasher.List(page, count));
         }
 
-        public ActionResult Gallery(int page = 1, int count = 10)
+        [Route("")]
+        public ActionResult Gallery(int page = 1, int count = DEFAULT_COUNT)
         {
             int total = _FileInfoHasher.Items.Count();
 

@@ -11,15 +11,14 @@ using DictionaryHash = System.Collections.Generic.Dictionary<string, System.IO.F
 
 namespace PhotoFiler.Helper
 {
-    public class FileInfoHasher
+    public class FileInfoHasher 
     {
-        const int MAX_LENGTH = 19;                          // Maximum hash length return by the algorithm
+        const int MAX_LENGTH = 19;                              // Maximum hash length return by the algorithm
 
-        private string _RootPath = "";                      // Root path to recursively scan all files
-        private int _HashLength = 4;                        // Maximum length of the filename hash
-        private DictionaryHash _HashTable = null;           // Dictionary of all the hashed filename of the root path
-
-        #region Constructors
+        private string _RootPath = "";                          // Root path to recursively scan all files
+        private int _HashLength = 10;                           // Maximum length of the filename hash
+        private DictionaryHash _HashTable = null;               // Dictionary of all the hashed filename of the root path
+        private IEnumerable<FileHash> _List = null;
 
         /// <param name="path">Root path to recursively scan all files</param>
         /// <param name="hashLength">Maximum lenght of the filename hash</param>
@@ -27,20 +26,19 @@ namespace PhotoFiler.Helper
         {
             _RootPath = path;
             _HashLength =  hashLength <= MAX_LENGTH ? hashLength : MAX_LENGTH;
-
+                
             try
             {
-                _HashTable = FileInfoHash(FileInfo(_RootPath));
+                var files = FileInfo(_RootPath);
+                _HashTable = FileInfoHash(files);
+
+                _List = ScanFiles();
             }
-            catch(Exception ex)
+            catch
             {
                 _HashTable = new DictionaryHash();
             }
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Dictionary of all FileInfo hashed by filename
@@ -104,27 +102,12 @@ namespace PhotoFiler.Helper
                             .Load(inStream);
 
                 var image = factory.Image;
-                var width = image.Width;
-                var height = image.Height;
-
-                if (width > height)
-                {
-                    width = MAX;
-                    height = height / (image.Width / MAX);
-                }
-                else
-                {
-                    height = MAX;
-                    width = width / (image.Height / MAX);
-                }
-
-                Size size = new Size(width, height);
 
                 factory
                     .Resize(
                         new ImageProcessor.Imaging.ResizeLayer(
-                            new Size(MAX, MAX), 
-                            ImageProcessor.Imaging.ResizeMode.Crop, 
+                            new Size(MAX, MAX),
+                            ImageProcessor.Imaging.ResizeMode.Crop,
                             ImageProcessor.Imaging.AnchorPosition.Center
                         )
                     )
@@ -146,10 +129,6 @@ namespace PhotoFiler.Helper
             return _HashTable.ContainsKey(hash);
         }
 
-        #endregion
-
-        #region Functions
-
         /// <summary>
         /// Recursively get the files in a given path
         /// </summary>
@@ -165,6 +144,7 @@ namespace PhotoFiler.Helper
                 .AddRange(
                     directory
                         .EnumerateFiles()
+                        .Where(item => (new[] { ".jpg", ".png" }).Contains(item.Extension))
                         .Cast<FileInfo>()
                 );
 
@@ -173,7 +153,6 @@ namespace PhotoFiler.Helper
                 .AddRange(
                     directory
                         .EnumerateDirectories()
-                        .AsParallel()
                         .SelectMany(item => FileInfo(item.FullName)
                     )
                 );
@@ -191,19 +170,29 @@ namespace PhotoFiler.Helper
         {
             var algorithm = (HashAlgorithm) MD5.Create();
 
-            return
+            var value =
                 fileInfos
-                    .Select(item => new
+                    .Select(item =>
+                        new
                         {
                             Hash = ComputeHash(ref algorithm, item.FullName),
                             FileInfo = item,
                         }
                     )
+                    .Select(item =>
+                        new
+                        {
+                            Hash = item.Hash.Substring(item.Hash.Length - _HashLength),
+                            FileInfo = item.FileInfo,
+                        }
+                    );
+
+            return
+                value
                     .ToDictionary(
                         item => item.Hash.Substring(item.Hash.Length - _HashLength),
                         item => item.FileInfo
                     );
-
         }
 
         /// <summary>
@@ -266,13 +255,7 @@ namespace PhotoFiler.Helper
             return digits;
         }
 
-        /// <summary>
-        /// Generates a page of IEnumerable<FileHash> with a no. of items.
-        /// </summary>
-        /// <param name="page">Page to show</param>
-        /// <param name="count">No. of items per page</param>
-        /// <returns></returns>
-        public IEnumerable<FileHash> List(int page = 1, int count = 10)
+        private IEnumerable<FileHash> ScanFiles()
         {
             var value =
                 Items
@@ -280,8 +263,8 @@ namespace PhotoFiler.Helper
                         new FileHash()
                         {
                             Hash = item.Key,
-                            Name = item.Value.Name, 
-                            CreationDateTime = item.Value.CreationTime, 
+                            Name = item.Value.Name,
+                            CreationDateTime = item.Value.CreationTime,
                             Size =
                                 (new Func<long, string>(
                                     (length) =>
@@ -303,13 +286,25 @@ namespace PhotoFiler.Helper
                             PreviewUrl = $"Preview?hash={item.Key}",
                         }
                     )
-                    .OrderBy(item => item.Name)
+                    .OrderBy(item => item.Name);
+
+            return value;
+        }
+
+        /// <summary>
+        /// Generates a page of IEnumerable<FileHash> with a no. of items.
+        /// </summary>
+        /// <param name="page">Page to show</param>
+        /// <param name="count">No. of items per page</param>
+        /// <returns></returns>
+        public IEnumerable<FileHash> List(int page = 1, int count = 10)
+        {
+            var value =
+                _List
                     .Skip((page - 1) * count)
                     .Take(count);
 
             return value;
         }
-
-        #endregion
     }
 }
