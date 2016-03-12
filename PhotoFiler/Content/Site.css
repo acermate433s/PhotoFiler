@@ -22,3 +22,7 @@ select,
 textarea {
     max-width: 280px;
 }
+
+span.image-preview {
+	padding-bottom: 15px;
+}

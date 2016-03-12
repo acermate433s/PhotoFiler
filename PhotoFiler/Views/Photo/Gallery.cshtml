@@ -12,8 +12,8 @@
     @foreach (var item in Model)
     {
         <a href="@Url.Action("Index", new { hash = item.Hash})">
-            <span class="col-xs-12 col-sm-6 col-md-4 col-md-3">
-                @Html.Image(Url.Action("Preview", new { hash = item.Hash }), item.Name)
+            <span class="col-xs-12 col-sm-6 col-md-4 col-md-3 image-preview">
+                @Html.Image(Url.Action("Preview", new { hash = item.Hash }), item.Name, "img-thumbnail img-responsive")
             </span>
         </a>
     }
