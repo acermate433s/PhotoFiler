@@ -1,8 +1,7 @@
-﻿using ImageProcessor;
+﻿using ImageResizer;
 using PhotoFiler.Models;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -90,30 +89,16 @@ namespace PhotoFiler.Helper
             name = this[hash].FullName;
 
             byte[] photoBytes = File.ReadAllBytes(this[hash].FullName);
-            int quality = QUALITY;
-            var format = new ImageProcessor.Imaging.Formats.JpegFormat();
-
             using (MemoryStream inStream = new MemoryStream(photoBytes))
             using (MemoryStream outStream = new MemoryStream())
-            using (ImageFactory imageFactory = new ImageFactory())
             {
-                var factory =
-                        imageFactory
-                            .Load(inStream);
-
-                var image = factory.Image;
-
-                factory
-                    .Resize(
-                        new ImageProcessor.Imaging.ResizeLayer(
-                            new Size(MAX, MAX),
-                            ImageProcessor.Imaging.ResizeMode.Crop,
-                            ImageProcessor.Imaging.AnchorPosition.Center
-                        )
-                    )
-                    .Format(format)
-                    .Quality(quality)
-                    .Save(outStream);
+                var job = 
+                    new ImageJob(
+                        inStream, 
+                        outStream, 
+                        new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
+                    );
+                job.Build();
 
                 return outStream.ToArray();
             }
@@ -287,7 +272,7 @@ namespace PhotoFiler.Helper
                         }
                     )
                     .OrderBy(item => item.Name);
-
+                
             return value;
         }
 
