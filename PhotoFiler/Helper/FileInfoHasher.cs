@@ -299,10 +299,17 @@ namespace PhotoFiler.Helper
         /// <returns></returns>
         public IEnumerable<FileHash> List(int page = 1, int count = 10)
         {
-            var value =
-                _List
-                    .Skip((page - 1) * count)
-                    .Take(count);
+            IEnumerable<FileHash> value;
+
+            if (_List.Count() > 0)
+            {
+                value =
+                    _List
+                        .Skip((page - 1) * count)
+                        .Take(count);
+            }
+            else
+                value = Enumerable.Empty<FileHash>();
 
             return value;
         }
