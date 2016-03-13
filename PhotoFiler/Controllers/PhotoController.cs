@@ -31,7 +31,7 @@ namespace PhotoFiler.Controllers
         {
             if (hash != null)
                 return Retrieve(hash, false);
-            else
+                else
                 return RedirectToAction("Index", "Home");            
         }
 
@@ -76,7 +76,6 @@ namespace PhotoFiler.Controllers
             ViewBag.Current = page;
             ViewBag.Max = total / count + (total % count == 0 ? 0 : 1);
             ViewBag.Next = page + 1;
-            ViewBag.Count = count;
 
             return View(_FileInfoHasher.List(page, count));
         }
@@ -91,7 +90,6 @@ namespace PhotoFiler.Controllers
             ViewBag.Current = page;
             ViewBag.Max = total / count + (total % count == 0 ? 0 : 1);
             ViewBag.Next = page + 1;
-            ViewBag.Count = count;
 
             return View(_FileInfoHasher.List(page, count));
         }

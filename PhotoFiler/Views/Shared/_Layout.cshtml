@@ -20,8 +20,18 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("List", "List", "Photo", new { page = 1, count = 12 }, null)</li>
-                    <li>@Html.ActionLink("Gallery", "Gallery", "Photo", new { page = 1, count = 12 }, null)</li>
+                    <li>
+                        <a href="@Url.Action("List", "Photo", new { page = 1, count = 12 })">    
+                            <span class="glyphicon glyphicon-th-list"></span>
+                            List
+                        </a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Gallery", "Photo", new { page = 1, count = 12 })">
+                            <span class="glyphicon glyphicon-th"></span>
+                            Gallery
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

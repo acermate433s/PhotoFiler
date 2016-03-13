@@ -4,8 +4,6 @@
     ViewBag.Title = "List";
 }
 
-<h2>@ViewBag.Total files found</h2>
-
 <table class="table">
     <tr>
         <th>
@@ -19,33 +17,38 @@
         </th>
         <th></th>
     </tr>
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreationDateTime)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Size)
-        </td>
-        <td>
-            @Html.ActionLink("View", "Index", new { hash = item.Hash }) |
-            @Html.ActionLink("Download", "Download", new { hash = item.Hash })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Size)
+            </td>
+            <td>
+                @Html.ActionLink("View", "Index", new { hash = item.Hash }) |
+                @Html.ActionLink("Download", "Download", new { hash = item.Hash })
+            </td>
+        </tr>
+    }
 </table>
 
-@if (ViewBag.Previous > 0) {
-    @Html.ActionLink("<<", "List", new { page = ViewBag.Previous, count = ViewBag.Count });
-}
+<div class="row">
+    <div class="col-xs-12 text-center">
+        @if (ViewBag.Previous > 0)
+        {
+            @Html.ActionLink(" ", "List", new { page = ViewBag.Previous, count = ViewBag.Count }, new { @class = "glyphicon glyphicon-backward" });
+        }
 
-<span>Page @ViewBag.Current / @ViewBag.Max</span>
+        <span>Page @ViewBag.Current / @ViewBag.Max</span>
 
-@if (ViewBag.Next <= ViewBag.Max)
-{
-    @Html.ActionLink(">>", "List", new { page = ViewBag.Next, count = ViewBag.Count })
-}
-
+        @if (ViewBag.Next <= ViewBag.Max)
+        {
+            @Html.ActionLink(" ", "List", new { page = ViewBag.Next, count = ViewBag.Count }, new { @class = "glyphicon glyphicon-forward" })
+        }
+    </div>
+</div>
