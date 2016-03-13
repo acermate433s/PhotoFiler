@@ -92,10 +92,10 @@ namespace PhotoFiler.Helper
             using (MemoryStream inStream = new MemoryStream(photoBytes))
             using (MemoryStream outStream = new MemoryStream())
             {
-                var job = 
+                var job =
                     new ImageJob(
-                        inStream, 
-                        outStream, 
+                        inStream,
+                        outStream,
                         new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
                     );
                 job.Build();
