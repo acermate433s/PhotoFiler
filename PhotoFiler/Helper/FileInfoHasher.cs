@@ -1,4 +1,5 @@
-﻿using ImageResizer;
+﻿using ExifLib;
+using ImageResizer;
 using PhotoFiler.Models;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace PhotoFiler.Helper
                 var files = FileInfo(_RootPath);
                 _HashTable = FileInfoHash(files);
 
-                _List = ScanFiles();
+                _List = Files().ToList();
             }
             catch
             {
@@ -63,12 +64,10 @@ namespace PhotoFiler.Helper
             }   
         }
 
-        public byte[] View(string hash, out string name)
+        public byte[] View(string hash)
         {
-            name = null;
             if (!_HashTable.ContainsKey(hash))
                 return null;
-            name = Items[hash].FullName;
 
             return System.IO.File.ReadAllBytes(this[hash].FullName);
         }
@@ -78,30 +77,12 @@ namespace PhotoFiler.Helper
         /// </summary>
         /// <param name="hash"></param>
         /// <returns>Byte array of the resized image</returns>
-        public byte[] Preview(string hash, out string name)
+        public byte[] Preview(string hash)
         {
-            const int QUALITY = 50;             // JPEG compression quality
-            const int MAX = 300;                // Maximum height or width
-
-            name = null;
             if (!_HashTable.ContainsKey(hash))
                 return null;
-            name = this[hash].FullName;
 
-            byte[] photoBytes = File.ReadAllBytes(this[hash].FullName);
-            using (MemoryStream inStream = new MemoryStream(photoBytes))
-            using (MemoryStream outStream = new MemoryStream())
-            {
-                var job =
-                    new ImageJob(
-                        inStream,
-                        outStream,
-                        new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
-                    );
-                job.Build();
-
-                return outStream.ToArray();
-            }
+            return _List.FirstOrDefault(item => item.Hash == hash).Preview.Invoke();
         }
 
         /// <summary>
@@ -240,7 +221,7 @@ namespace PhotoFiler.Helper
             return digits;
         }
 
-        private IEnumerable<FileHash> ScanFiles()
+        private IEnumerable<FileHash> Files()
         {
             var value =
                 Items
@@ -249,7 +230,25 @@ namespace PhotoFiler.Helper
                         {
                             Hash = item.Key,
                             Name = item.Value.Name,
-                            CreationDateTime = item.Value.CreationTime,
+                            CreationDateTime =
+                                (new Func<FileInfo, DateTime>(
+                                    (file) =>
+                                    {
+                                        try {
+                                            var reader = new ExifReader(file.FullName);
+                                            DateTime exifCreationDate;
+                                            if (reader.GetTagValue(ExifTags.DateTime, out exifCreationDate))
+                                                return exifCreationDate;
+                                            else
+                                                return file.CreationTime;
+                                        }
+                                        catch
+                                        {
+                                            return file.CreationTime;
+                                        }
+                                    })
+                                )
+                                .Invoke(item.Value),
                             Size =
                                 (new Func<long, string>(
                                     (length) =>
@@ -264,10 +263,35 @@ namespace PhotoFiler.Helper
                                         }
 
                                         return String.Format("{0}{1}", length, suffixes[index]);
-                                    }
-                                    )
+                                    })
                                 )
                                 .Invoke(item.Value.Length),
+                            Preview =
+                                (new Func<byte[]>(
+                                    () =>
+                                    {
+                                        const int QUALITY = 50;             // JPEG compression quality
+                                        const int MAX = 300;                // Maximum height or width
+
+                                        if (!_HashTable.ContainsKey(item.Key))
+                                            return null;
+
+                                        byte[] photoBytes = File.ReadAllBytes(this[item.Key].FullName);
+                                        using (MemoryStream inStream = new MemoryStream(photoBytes))
+                                        using (MemoryStream outStream = new MemoryStream())
+                                        {
+                                            var job =
+                                                new ImageJob(
+                                                    inStream,
+                                                    outStream,
+                                                    new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
+                                                );
+                                            job.Build();
+
+                                            return outStream.ToArray();
+                                        }
+                                    })
+                                ),
                             PreviewUrl = $"Preview?hash={item.Key}",
                         }
                     )

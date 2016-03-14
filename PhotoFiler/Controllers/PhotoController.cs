@@ -1,4 +1,5 @@
 ﻿using PhotoFiler.Helper;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,7 +10,7 @@ namespace PhotoFiler.Controllers
     {
         const int DEFAULT_COUNT = 12;
 
-        delegate byte[] FileBytes<T, U>(T input, out T name);
+        delegate byte[] FileBytes<T, U>(T input);
 
         FileInfoHasher _FileInfoHasher = (FileInfoHasher) System.Web.HttpContext.Current.Application["FileHashes"];
 
@@ -31,7 +32,7 @@ namespace PhotoFiler.Controllers
         {
             if (hash != null)
                 return Retrieve(hash, false);
-                else
+            else
                 return RedirectToAction("Index", "Home");            
         }
 
@@ -48,14 +49,14 @@ namespace PhotoFiler.Controllers
 
         private ActionResult ImageFile(string hash, bool inline, FileBytes<string, string> action)
         {
-            string name = "";
-            var fileData = action(hash, out name);
+            var fileData = action(hash);
             if (fileData == null)
                 return new HttpNotFoundResult("Hash not found");
 
+            var name = _FileInfoHasher.Items[hash].Name;
             var cd = new System.Net.Mime.ContentDisposition()
             {
-                FileName = name,
+                FileName = hash + "." + Path.GetExtension(name),
                 Inline = inline,
             };
 

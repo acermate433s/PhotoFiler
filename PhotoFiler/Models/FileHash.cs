@@ -24,5 +24,7 @@ namespace PhotoFiler.Models
         [DisplayName("Created On")]
         [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime CreationDateTime { get; set; }
+
+        public Func<byte[]> Preview { get; set; }
     }
 }
