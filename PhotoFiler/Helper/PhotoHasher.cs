@@ -20,17 +20,21 @@ namespace PhotoFiler.Helper
         private DictionaryHash _HashTable = null;               // Dictionary of all the hashed filename of the root path
         private IEnumerable<Photo> _List = null;
 
+        public string PreviewLocation = "";
+
         /// <param name="path">Root path to recursively scan all files</param>
         /// <param name="hashLength">Maximum lenght of the filename hash</param>
-        public PhotoHasher(string path, int hashLength)
+        public PhotoHasher(string path, int hashLength, string previewLocation = "")
         {
             _RootPath = path;
             _HashLength =  hashLength <= MAX_LENGTH ? hashLength : MAX_LENGTH;
+
+            PreviewLocation = previewLocation;
                 
             try
             {
                 var files = FileInfo(_RootPath);
-                _HashTable = FileInfoHash(files);
+                _HashTable = Hash(files);
 
                 _List = Files().ToList();
             }
@@ -129,15 +133,15 @@ namespace PhotoFiler.Helper
         /// <summary>
         /// Computes the MD5 hash of the filenames in the list of FileInfo
         /// </summary>
-        /// <param name="fileInfos">List of FileInfo whose filenames were are going to hash</param>
+        /// <param name="files">List of FileInfo whose filenames were are going to hash</param>
         /// <returns>Returns a Dictionary of the hash of the filename</returns>
         /// <remarks>The hash would be truncated to the hash length</remarks>
-        private DictionaryHash FileInfoHash(List<FileInfo> fileInfos)
+        private DictionaryHash Hash(List<FileInfo> files)
         {
             var algorithm = (HashAlgorithm) MD5.Create();
 
             var value =
-                fileInfos
+                files
                     .Select(item =>
                         new
                         {
@@ -267,28 +271,45 @@ namespace PhotoFiler.Helper
                                 )
                                 .Invoke(item.Value.Length),
                             Preview =
+                                // returns a byte array of the preview of the image.  1st checks
+                                // if the preview file has been created before creating a preview
                                 (new Func<byte[]>(
                                     () =>
                                     {
-                                        const int QUALITY = 50;             // JPEG compression quality
-                                        const int MAX = 300;                // Maximum height or width
+                                        bool previewCreated = false;
+                                        string previewFile = "";
 
-                                        if (!_HashTable.ContainsKey(item.Key))
-                                            return null;
-
-                                        byte[] photoBytes = File.ReadAllBytes(this[item.Key].FullName);
-                                        using (MemoryStream inStream = new MemoryStream(photoBytes))
-                                        using (MemoryStream outStream = new MemoryStream())
+                                        if (Directory.Exists(PreviewLocation))
                                         {
-                                            var job =
-                                                new ImageJob(
-                                                    inStream,
-                                                    outStream,
-                                                    new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
-                                                );
-                                            job.Build();
+                                            previewFile = Path.ChangeExtension(Path.Combine(PreviewLocation, item.Key), "prev");
+                                            if(File.Exists(previewFile))
+                                                previewCreated = true;
+                                        }
 
-                                            return outStream.ToArray();
+                                        if (previewCreated)
+                                            return File.ReadAllBytes(previewFile);
+                                        else
+                                        {
+                                            const int QUALITY = 50;             // JPEG compression quality
+                                            const int MAX = 300;                // Maximum height or width
+
+                                            if (!_HashTable.ContainsKey(item.Key))
+                                                return null;
+
+                                            byte[] photoBytes = File.ReadAllBytes(this[item.Key].FullName);
+                                            using (MemoryStream inStream = new MemoryStream(photoBytes))
+                                            using (MemoryStream outStream = new MemoryStream())
+                                            {
+                                                var job =
+                                                    new ImageJob(
+                                                        inStream,
+                                                        outStream,
+                                                        new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
+                                                    );
+                                                job.Build();
+
+                                                return outStream.ToArray();
+                                            }
                                         }
                                     })
                                 ),
@@ -318,6 +339,40 @@ namespace PhotoFiler.Helper
             }
             else
                 value = Enumerable.Empty<Photo>();
+
+            return value;
+        }
+
+        public IEnumerable<Photo> List()
+        {
+            return _List;
+        }
+
+        public bool CreatePreviews()
+        {
+            bool value = true;
+
+            if (Directory.Exists(PreviewLocation))
+            {
+                try
+                {
+                    List()
+                        .AsParallel()
+                        .ForAll(item =>
+                        {
+                            File.WriteAllBytes(
+                                Path.ChangeExtension(Path.Combine(PreviewLocation, item.Hash), "prev"),
+                                item.Preview.Invoke()
+                            );
+                        });
+                } 
+                catch
+                {
+                    value = false;
+                }
+            }
+            else
+                value = false;
 
             return value;
         }
