@@ -12,7 +12,7 @@ namespace PhotoFiler.Controllers
 
         delegate byte[] FileBytes<T, U>(T input);
 
-        FileInfoHasher _FileInfoHasher = (FileInfoHasher) System.Web.HttpContext.Current.Application["FileHashes"];
+        PhotoHasher _FileInfoHasher = (PhotoHasher) System.Web.HttpContext.Current.Application["FileHashes"];
 
         public PhotoController()
         {

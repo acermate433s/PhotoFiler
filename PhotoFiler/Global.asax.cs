@@ -17,7 +17,7 @@ namespace PhotoFiler
 
             var configuration = new Configuration();
             HttpContext.Current.Application["FileHashes"] = 
-                new FileInfoHasher(
+                new PhotoHasher(
                     configuration.RootPath, 
                     configuration.HashLength
                 );

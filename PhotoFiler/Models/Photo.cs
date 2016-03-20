@@ -7,7 +7,7 @@ using System.Web;
 
 namespace PhotoFiler.Models
 {
-    public class FileHash
+    public class Photo
     {
         public string Hash { get; set; } 
 
@@ -17,9 +17,6 @@ namespace PhotoFiler.Models
         [DisplayName("Size")]
         [DisplayFormat(DataFormatString = "{0:###,###,###}")]
         public string Size { get; set; }
-
-        [DisplayName("Preview")]
-        public string PreviewUrl { get; set; }
 
         [DisplayName("Created On")]
         [DisplayFormat(DataFormatString = "{0:d}")]

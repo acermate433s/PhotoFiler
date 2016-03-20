@@ -11,18 +11,18 @@ using DictionaryHash = System.Collections.Generic.Dictionary<string, System.IO.F
 
 namespace PhotoFiler.Helper
 {
-    public class FileInfoHasher 
+    public class PhotoHasher 
     {
         const int MAX_LENGTH = 19;                              // Maximum hash length return by the algorithm
 
         private string _RootPath = "";                          // Root path to recursively scan all files
         private int _HashLength = 10;                           // Maximum length of the filename hash
         private DictionaryHash _HashTable = null;               // Dictionary of all the hashed filename of the root path
-        private IEnumerable<FileHash> _List = null;
+        private IEnumerable<Photo> _List = null;
 
         /// <param name="path">Root path to recursively scan all files</param>
         /// <param name="hashLength">Maximum lenght of the filename hash</param>
-        public FileInfoHasher(string path, int hashLength)
+        public PhotoHasher(string path, int hashLength)
         {
             _RootPath = path;
             _HashLength =  hashLength <= MAX_LENGTH ? hashLength : MAX_LENGTH;
@@ -221,12 +221,12 @@ namespace PhotoFiler.Helper
             return digits;
         }
 
-        private IEnumerable<FileHash> Files()
+        private IEnumerable<Photo> Files()
         {
             var value =
                 Items
                     .Select(item =>
-                        new FileHash()
+                        new Photo()
                         {
                             Hash = item.Key,
                             Name = item.Value.Name,
@@ -292,7 +292,6 @@ namespace PhotoFiler.Helper
                                         }
                                     })
                                 ),
-                            PreviewUrl = $"Preview?hash={item.Key}",
                         }
                     )
                     .OrderBy(item => item.Name);
@@ -306,9 +305,9 @@ namespace PhotoFiler.Helper
         /// <param name="page">Page to show</param>
         /// <param name="count">No. of items per page</param>
         /// <returns></returns>
-        public IEnumerable<FileHash> List(int page = 1, int count = 10)
+        public IEnumerable<Photo> List(int page = 1, int count = 10)
         {
-            IEnumerable<FileHash> value;
+            IEnumerable<Photo> value;
 
             if (_List.Count() > 0)
             {
@@ -318,7 +317,7 @@ namespace PhotoFiler.Helper
                         .Take(count);
             }
             else
-                value = Enumerable.Empty<FileHash>();
+                value = Enumerable.Empty<Photo>();
 
             return value;
         }
