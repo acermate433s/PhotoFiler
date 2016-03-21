@@ -30,9 +30,14 @@
                 @Html.DisplayFor(modelItem => item.Size)
             </td>
             <td>
-                @Html.ActionLink("View", "Index", new { hash = item.Hash }) |
-                @Html.ActionLink("Download", "Download", new { hash = item.Hash })
-            </td>
+                <a href="@Url.Action("Index", new { hash = item.Hash })">
+                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true" title="View"></span>
+                </a>
+
+                <a href="@Url.Action("Download", new { hash = item.Hash })">
+                    <span class="glyphicon glyphicon-download" aria-hidden="true" title="Download"></span>
+                </a>
+            </td>   
         </tr>
     }
 </table>

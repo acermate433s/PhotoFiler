@@ -9,7 +9,7 @@
 <div class="row image-preview">
     @foreach (var item in Model)
     {
-        <a href="@Url.Action("Index", new { hash = item.Hash})">
+        <a href="@Url.Action("Index", new { hash = item.Hash})" title="@item.Name">
             <span class="col-xs-12 col-sm-6 col-md-4 col-md-3 image-preview">
                 @Html.Image(Url.Action("Preview", new { hash = item.Hash }), item.Name, "img-thumbnail img-responsive")
             </span>
