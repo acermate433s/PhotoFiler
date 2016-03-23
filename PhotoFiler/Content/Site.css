@@ -29,4 +29,6 @@ span.image-preview {
 
 div.row.image-preview{
     padding-top: 30px;
+    height: 300px;
+    width: 300px;
 }

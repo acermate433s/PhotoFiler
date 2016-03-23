@@ -12,8 +12,10 @@ namespace PhotoFiler.Models
         public string Name { get; set; }
 
         [DisplayName("Size")]
-        [DisplayFormat(DataFormatString = "{0:###,###,###}")]
         public string Size { get; set; }
+
+        [DisplayName("Resolution")]
+        public string Resolution { get; set; }
 
         [DisplayName("Created On")]
         [DisplayFormat(DataFormatString = "{0:d}")]

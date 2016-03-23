@@ -3,6 +3,7 @@ using ImageResizer;
 using PhotoFiler.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -270,6 +271,16 @@ namespace PhotoFiler.Helper
                                     })
                                 )
                                 .Invoke(item.Value.Length),
+                            Resolution = 
+                                (new Func<string, string>(
+                                    (filename) =>
+                                    {
+                                        using (var buffer = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                                        using (var image = Image.FromStream(buffer, false, false))
+                                            return $"{image.Width}x{image.Height}";
+                                    })
+                                )
+                                .Invoke(item.Value.FullName),
                             Preview =
                                 // returns a byte array of the preview of the image.  1st checks
                                 // if the preview file has been created before creating a preview
