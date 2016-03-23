@@ -27,8 +27,10 @@ span.image-preview {
 	padding-bottom: 30px;
 }
 
-div.row.image-preview{
+div.row.image-preview {
     padding-top: 30px;
-    height: 300px;
-    width: 300px;
+}
+
+span.image-preview img.img-thumbnail {
+    height: 100%;
 }
