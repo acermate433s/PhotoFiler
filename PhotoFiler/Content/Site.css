@@ -30,7 +30,3 @@ span.image-preview {
 div.row.image-preview {
     padding-top: 30px;
 }
-
-span.image-preview img.img-thumbnail {
-    height: 100%;
-}

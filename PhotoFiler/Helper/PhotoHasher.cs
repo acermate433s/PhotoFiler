@@ -275,9 +275,16 @@ namespace PhotoFiler.Helper
                                 (new Func<string, string>(
                                     (filename) =>
                                     {
-                                        using (var buffer = new FileStream(filename, FileMode.Open, FileAccess.Read))
-                                        using (var image = Image.FromStream(buffer, false, false))
-                                            return $"{image.Width}x{image.Height}";
+                                        try
+                                        {
+                                            using (var buffer = new FileStream(filename, FileMode.Open, FileAccess.Read))
+                                            using (var image = Image.FromStream(buffer, false, false))
+                                                return $"{image.Width}x{image.Height}";
+                                        }
+                                        catch
+                                        {
+                                            return "Unknown";
+                                        }
                                     })
                                 )
                                 .Invoke(item.Value.FullName),
@@ -297,30 +304,44 @@ namespace PhotoFiler.Helper
                                                 previewCreated = true;
                                         }
 
-                                        if (previewCreated)
-                                            return File.ReadAllBytes(previewFile);
-                                        else
+                                        try
                                         {
-                                            const int QUALITY = 50;             // JPEG compression quality
-                                            const int MAX = 300;                // Maximum height or width
-
-                                            if (!_HashTable.ContainsKey(item.Key))
-                                                return null;
-
-                                            byte[] photoBytes = File.ReadAllBytes(this[item.Key].FullName);
-                                            using (MemoryStream inStream = new MemoryStream(photoBytes))
-                                            using (MemoryStream outStream = new MemoryStream())
+                                            if (previewCreated)
+                                                return File.ReadAllBytes(previewFile);
+                                            else
                                             {
-                                                var job =
-                                                    new ImageJob(
-                                                        inStream,
-                                                        outStream,
-                                                        new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
-                                                    );
-                                                job.Build();
+                                                try
+                                                {
+                                                    const int QUALITY = 50;             // JPEG compression quality
+                                                    const int MAX = 300;                // Maximum height or width
 
-                                                return outStream.ToArray();
+                                                    if (!_HashTable.ContainsKey(item.Key))
+                                                        return null;
+
+                                                    byte[] photoBytes = File.ReadAllBytes(this[item.Key].FullName);
+                                                    using (MemoryStream inStream = new MemoryStream(photoBytes))
+                                                    using (MemoryStream outStream = new MemoryStream())
+                                                    {
+                                                        var job =
+                                                            new ImageJob(
+                                                                inStream,
+                                                                outStream,
+                                                                new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
+                                                            );
+                                                        job.Build();
+
+                                                        return outStream.ToArray();
+                                                    }
+                                                }
+                                                catch
+                                                {
+                                                    return null;
+                                                }
                                             }
+                                        }
+                                        catch
+                                        {
+                                            return null;
                                         }
                                     })
                                 ),
@@ -369,12 +390,14 @@ namespace PhotoFiler.Helper
                 {
                     List()
                         .AsParallel()
-                        .ForAll(item =>
+                        .ForAll(item => 
                         {
-                            File.WriteAllBytes(
-                                Path.ChangeExtension(Path.Combine(PreviewLocation, item.Hash), "prev"),
-                                item.Preview.Invoke()
-                            );
+                            var buffer = item.Preview.Invoke();
+                            if(buffer != null)
+                                File.WriteAllBytes(
+                                    Path.ChangeExtension(Path.Combine(PreviewLocation, item.Hash), "prev"),
+                                    buffer
+                                );
                         });
                 } 
                 catch

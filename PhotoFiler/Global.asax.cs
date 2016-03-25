@@ -24,9 +24,10 @@ namespace PhotoFiler
                     configuration.HashLength,
                     previewPath
                 );
-            hasher.CreatePreviews();
+            if(configuration.CreatePreview)
+                hasher.CreatePreviews();
 
             HttpContext.Current.Application["FileHashes"] = hasher;
-        }
+        }   
     }
 }
