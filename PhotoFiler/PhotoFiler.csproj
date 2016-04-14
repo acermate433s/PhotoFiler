@@ -133,6 +133,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\Configuration.cs" />
+    <Compile Include="Helper\Hasher.cs" />
     <Compile Include="Helper\HtmlExtensions.cs" />
     <Compile Include="Helper\PhotoHasher.cs" />
     <Compile Include="Models\Photo.cs" />
@@ -165,7 +166,9 @@
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
