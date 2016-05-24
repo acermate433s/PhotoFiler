@@ -95,7 +95,7 @@ namespace Telemetry
         {
             TraceSource
                 .TraceEvent(
-                    entry.Severity,
+                    (TraceEventType) entry.Severity,
                     entry.ID,
                     entry.Exception?.Message ?? entry.Message,
                     entry.Datum

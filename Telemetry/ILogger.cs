@@ -6,6 +6,15 @@ namespace Telemetry
     /// <summary>
     /// Based on http://stackoverflow.com/questions/5646820/logger-wrapper-best-practice
     /// </summary>
+    public enum Severity
+    {
+        Critical = TraceEventType.Critical,
+        Error = TraceEventType.Error,
+        Information = TraceEventType.Information,
+        Verbose = TraceEventType.Verbose,
+        Warning = TraceEventType.Warning,
+    }
+
     public interface ILogger
     {
         void Log(LogEntry entry);
@@ -13,14 +22,14 @@ namespace Telemetry
 
     public class LogEntry
     {
-        public readonly TraceEventType Severity;
+        public readonly Severity Severity;
         public readonly string Message;
         public readonly int ID = 0;
         public readonly object[] Datum = null;
         public readonly Exception Exception = null;
 
         public LogEntry(
-            TraceEventType severity,
+            Severity severity,
             string message = null, 
             int id = 0,
             object[] datum = null,
@@ -41,7 +50,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Critical, 
+                    Severity.Critical, 
                     message, 
                     id,
                     exception: exception
@@ -53,7 +62,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Critical, 
+                    Severity.Critical, 
                     message, 
                     id, 
                     datum,
@@ -66,7 +75,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Critical,
+                    Severity.Critical,
                     datum: new object[] { data },
                     exception: exception
                 )
@@ -77,7 +86,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Critical, 
+                    Severity.Critical, 
                     datum: datum,
                     exception: exception
                 )
@@ -88,7 +97,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Error,
+                    Severity.Error,
                     message,
                     id,
                     exception: exception
@@ -100,7 +109,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Error,
+                    Severity.Error,
                     message,
                     id,
                     datum,
@@ -113,7 +122,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Error,
+                    Severity.Error,
                     datum: new object[] { data },
                     exception: exception
                 )
@@ -124,7 +133,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Error,
+                    Severity.Error,
                     datum: datum,
                     exception: exception
                 )
@@ -135,7 +144,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Information,
+                    Severity.Information,
                     message,
                     id
                 )
@@ -146,7 +155,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Information,
+                    Severity.Information,
                     message,
                     id,
                     datum
@@ -158,7 +167,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Information,
+                    Severity.Information,
                     datum: new object[] { data }
                 )
             );
@@ -168,7 +177,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Information,
+                    Severity.Information,
                     datum: datum
                 )
             );
@@ -178,7 +187,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Verbose,
+                    Severity.Verbose,
                     message,
                     id
                 )
@@ -189,7 +198,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Verbose,
+                    Severity.Verbose,
                     message,
                     id,
                     datum
@@ -201,7 +210,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Information,
+                    Severity.Information,
                     datum: new object[] { data }
                 )
             );
@@ -211,7 +220,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Information,
+                    Severity.Information,
                     datum: datum
                 )
             );
@@ -221,7 +230,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Warning,
+                    Severity.Warning,
                     message,
                     id
                 )
@@ -232,7 +241,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Warning,
+                    Severity.Warning,
                     message,
                     id,
                     datum
@@ -244,7 +253,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Warning,
+                    Severity.Warning,
                     datum: new object[] { data }
                 )
             );
@@ -254,7 +263,7 @@ namespace Telemetry
         {
             logger.Log(
                 new LogEntry(
-                    TraceEventType.Warning,
+                    Severity.Warning,
                     datum: datum
                 )
             );
