@@ -6,7 +6,7 @@ namespace Telemetry
     /// <summary>
     /// Base on http://www.codeproject.com/Articles/185666/ActivityTracerScope-Easy-activity-tracing-with
     /// </summary>
-    public class ActivityTracerScope : IDisposable
+    public class ActivityTracerScope : IDisposable, ILogger
     {
         /// <summary>
         /// Previous ID before TransferTrace
@@ -88,83 +88,18 @@ namespace Telemetry
             Trace.CorrelationManager.ActivityId = PreviousID;
         }
 
-        #region " TraceSource method short cuts "
-
-        public void Data(TraceEventType eventType, object data)
+        /// <summary>
+        /// Log activity
+        /// </summary>
+        public void Log(LogEntry entry)
         {
-            TraceSource.TraceData(eventType, ActivityID, data);
+            TraceSource
+                .TraceEvent(
+                    entry.Severity,
+                    entry.ID,
+                    entry.Exception?.Message ?? entry.Message,
+                    entry.Datum
+                );
         }
-
-        public void Data(TraceEventType eventType, params object[] data)
-        {
-            TraceSource.TraceData(eventType, ActivityID, data);
-        }
-
-        private void Event(TraceEventType eventType)
-        {
-            TraceSource.TraceEvent(eventType, ActivityID);
-        }
-
-        private void Event(TraceEventType eventType, string message)
-        {
-            TraceSource.TraceEvent(eventType, ActivityID, message);
-        }
-
-        private void Event(TraceEventType eventType, string message, params object[] args)
-        {
-            TraceSource.TraceEvent(eventType, ActivityID, message, args);
-        }
-
-        public void Critical(string message)
-        {
-            Event(TraceEventType.Critical, message);
-        }
-
-        public void Critical(string message, params object[] args)
-        {
-            Event(TraceEventType.Critical, message, args);
-        }
-
-        public void Error(string message)
-        {
-            Event(TraceEventType.Error, message);
-        }
-
-        public void Error(string message, params object[] args)
-        {
-            Event(TraceEventType.Error, message, args);
-        }
-
-        public void Warning(string message)
-        {
-            Event(TraceEventType.Warning, message);
-        }
-
-        public void Warning(string message, params object[] args)
-        {
-            Event(TraceEventType.Warning, message, args);
-        }
-
-        public void Information(string message)
-        {
-            TraceSource.TraceInformation(message);
-        }
-
-        public void Information(string message, params object[] args)
-        {
-            TraceSource.TraceInformation(message, args);
-        }
-
-        public void Verbose(string message)
-        {
-            Event(TraceEventType.Verbose, message);
-        }
-
-        public void Verbose(string message, params object[] args)
-        {
-            Event(TraceEventType.Verbose, message, args);
-        }
-
-        #endregion
     }
 }
