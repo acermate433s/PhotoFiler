@@ -7,7 +7,7 @@ namespace Telemetry
     /// <summary>
     /// Base on http://www.codeproject.com/Articles/185666/ActivityTracerScope-Easy-activity-tracing-with
     /// </summary>
-    public class ActivityTracerTypeScope<ActivityEnumType> : ActivityTracerScope where ActivityEnumType : struct, IConvertible, IComparable, IFormattable
+    public class ActivityTracerScope<ActivityEnumType> : ActivityTracerScope where ActivityEnumType : struct, IConvertible, IComparable, IFormattable
     {
         public readonly ActivityEnumType Activity;
 
@@ -48,11 +48,17 @@ namespace Telemetry
             return result;
         }
 
+        static ActivityTracerScope()
+        {
+            if (!typeof(ActivityEnumType).IsEnum)
+                throw new NotSupportedException($"{nameof(ActivityEnumType)} must be an enumerated type");
+        }
+
         /// <summary>
         /// </summary>
         /// <param name="traceSource">TraceSource to use to log activity</param>
         /// <param name="activityType">Activity type of the current activity</param>
-        public ActivityTracerTypeScope(
+        public ActivityTracerScope(
             TraceSource traceSource,
             ActivityEnumType activityType = default(ActivityEnumType)
         ) : base(
@@ -61,24 +67,7 @@ namespace Telemetry
                 activityType.ToInt32(null)
         )
         {
-            if (!typeof(ActivityEnumType).IsEnum)
-                throw new NotSupportedException($"{nameof(ActivityEnumType)} must be an enumerated type");
-
             Activity = activityType;
-
-            // remember the previous activity ID so we could come back to it 
-            // later when we switch back to the previous activity before this
-            PreviousID = Trace.CorrelationManager.ActivityId;
-
-            // create a new ID for the current activity; we would need this 
-            // when we when call TraceEvent with TraceEventType.Stop
-            CurrentID = Guid.NewGuid();
-
-            // transfer to a new activity and then start the trace event
-            if (PreviousID != Guid.Empty)
-                TraceSource.TraceTransfer(ActivityID, "Transferring to new activity", CurrentID);
-            Trace.CorrelationManager.ActivityId = CurrentID;
-            TraceSource.TraceEvent(TraceEventType.Start, ActivityID, ActivityName);
         }
 
         /// <summary>
@@ -86,7 +75,7 @@ namespace Telemetry
         /// </summary>
         /// <param name="traceName">Activity name of the current activity</param>
         /// <param name="activityType">Activity type of the current activity</param>
-        public ActivityTracerTypeScope(
+        public ActivityTracerScope(
             string traceName,
             ActivityEnumType activityType = default(ActivityEnumType)
         ) : this(new TraceSource(traceName), activityType)

@@ -93,13 +93,28 @@ namespace Telemetry
         /// </summary>
         public void Log(LogEntry entry)
         {
-            TraceSource
-                .TraceEvent(
-                    (TraceEventType) entry.Severity,
-                    entry.ID,
-                    entry.Exception?.Message ?? entry.Message,
-                    entry.Datum
-                );
+            if (entry.Exception != null)
+            {
+                TraceSource.TraceData((TraceEventType) entry.Severity, ActivityID, entry.Exception);
+            }
+            else if (entry.IsData())
+            {
+                TraceSource.TraceData((TraceEventType) entry.Severity, ActivityID, entry.Datum);
+
+            }
+            else
+            {
+                TraceSource
+                    .TraceEvent(
+                        (TraceEventType) entry.Severity,
+                        ActivityID,
+                        entry.Message,
+                        entry.Datum
+                    );
+            }
+
+            
         }
     }
 }
+    
