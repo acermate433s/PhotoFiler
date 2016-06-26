@@ -34,18 +34,7 @@ namespace PhotoFiler.Models
                 FileInfo = new System.IO.FileInfo(path);
                 Name = FileInfo.Name;
                 Hash = (new Hasher()).Hash(FileInfo.FullName, hashLength);
-
-                // set the size of the file to a human-readable format
-                long length = FileInfo.Length;
-                var suffixes = new[] { "bytes", "KB", "MB", "GB" };
-                int index = 0;
-
-                while (length > 1024)
-                {
-                    length /= 1024;
-                    index++;
-                }
-                Size = String.Format("{0}{1}", length, suffixes[index]);
+                Size = ComputeSize(FileInfo); 
 
                 DateTime? creationDateTime = null;
                 string resolution = "Unknown";
@@ -89,6 +78,27 @@ namespace PhotoFiler.Models
         [DisplayName("Created On")]
         [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? CreationDateTime { get; private set; }
+
+        /// <summary>
+        /// Get the size of the file to a human-readable format
+        /// </summary>
+        /// <param name="file">File to get the size</param>
+        /// <returns>The size of the file in a human-readable format</returns>
+        private string ComputeSize(FileInfo file)
+        {
+            // set the size of the file to a human-readable format
+            long length = FileInfo.Length;
+            var suffixes = new[] { "bytes", "KB", "MB", "GB" };
+            int index = 0;
+
+            while (length > 1024)
+            {
+                length /= 1024;
+                index++;
+            }
+
+            return $"{length}{suffixes[index]}";
+        }
 
         /// <summary>
         /// Generates the preview of the image file
@@ -197,6 +207,8 @@ namespace PhotoFiler.Models
             }
             catch
             {
+                creationDateTime = null;
+                resolution = "";
             }
         }
     }
