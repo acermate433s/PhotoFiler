@@ -4,7 +4,6 @@ using System.Diagnostics;
 /// <summary>
 /// Based on http://stackoverflow.com/questions/5646820/logger-wrapper-best-practice
 /// </summary>
-/// 
 namespace Telemetry
 {
     internal class Constants
