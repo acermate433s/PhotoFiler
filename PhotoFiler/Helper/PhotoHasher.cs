@@ -109,7 +109,7 @@ namespace PhotoFiler.Helper
                 .AddRange(
                     directory
                         .EnumerateFiles()
-                        .Where(item => (new[] { ".jpg", ".png" }).Contains(item.Extension))
+                        .Where(item => (new[] { ".jpg", ".png" }).Contains(item.Extension.ToLower()))
                         .Cast<FileInfo>()
                 );
 
