@@ -135,7 +135,8 @@
     <Compile Include="Helper\Configuration.cs" />
     <Compile Include="Helper\Hasher.cs" />
     <Compile Include="Helper\HtmlExtensions.cs" />
-    <Compile Include="Helper\PhotoHasher.cs" />
+    <Compile Include="Helper\Photo\Photos.cs" />
+    <Compile Include="Helper\Photo\PhotosPreviewer.cs" />
     <Compile Include="Models\Photo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

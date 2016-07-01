@@ -19,18 +19,18 @@ namespace PhotoFiler
              
             var configuration = new Configuration();
             var previewPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
-            var hasher =
-                new PhotoHasher(
+            var photos =
+                new PhotosPreviewer(
                     configuration.RootPath,
                     configuration.HashLength,
                     previewPath
                 );
             if (configuration.CreatePreview)
             {
-                hasher.CreatePreviews();
+                photos.CreatePreviews();
             }
 
-            HttpContext.Current.Application["FileHashes"] = hasher;
+            HttpContext.Current.Application["Photos"] = photos;
         }   
     }
 }

@@ -12,7 +12,7 @@ namespace PhotoFiler.Controllers
 
         delegate byte[] FileBytes<T, U>(T input);
 
-        PhotoHasher _FileInfoHasher = (PhotoHasher) System.Web.HttpContext.Current.Application["FileHashes"];
+        PhotosPreviewer _Photos = (PhotosPreviewer) System.Web.HttpContext.Current.Application["Photos"];
 
         public PhotoController()
         {
@@ -39,12 +39,12 @@ namespace PhotoFiler.Controllers
         [Route("Preview/{hash}")]
         public ActionResult Preview(string hash)
         {
-            return ImageFile(hash, true, _FileInfoHasher.Preview);
+            return ImageFile(hash, true, _Photos.Preview);
         }
 
         private ActionResult Retrieve(string hash, bool inline)
         {
-            return ImageFile(hash, inline, _FileInfoHasher.View);
+            return ImageFile(hash, inline, _Photos.View);
         }
 
         private ActionResult ImageFile(string hash, bool inline, FileBytes<string, string> action)
@@ -53,7 +53,7 @@ namespace PhotoFiler.Controllers
             if (fileData == null)
                 return new HttpNotFoundResult("Hash not found");
 
-            var name = _FileInfoHasher.Items[hash].Name;
+            var name = _Photos[hash].Name;
             var cd = new System.Net.Mime.ContentDisposition()
             {
                 FileName = hash + "." + Path.GetExtension(name),
@@ -70,7 +70,7 @@ namespace PhotoFiler.Controllers
         [Route("List")]
         public ActionResult List(int page = 1, int count = DEFAULT_COUNT)
         {
-            int total = _FileInfoHasher.Items.Count();
+            int total = _Photos.Count();
 
             ViewBag.Total = total;
             ViewBag.Previous = page - 1;
@@ -79,13 +79,13 @@ namespace PhotoFiler.Controllers
             ViewBag.Next = page + 1;
             ViewBag.Count = count;
 
-            return View(_FileInfoHasher.List(page, count));
+            return View(_Photos.List(page, count));
         }
 
         [Route("")]
         public ActionResult Gallery(int page = 1, int count = DEFAULT_COUNT)
         {
-            int total = _FileInfoHasher.Items.Count();
+            int total = _Photos.Count();
 
             ViewBag.Total = total;
             ViewBag.Previous = page - 1;
@@ -94,7 +94,7 @@ namespace PhotoFiler.Controllers
             ViewBag.Next = page + 1;
             ViewBag.Count = count;
 
-            return View(_FileInfoHasher.List(page, count));
+            return View(_Photos.List(page, count));
         }
     }
 }
