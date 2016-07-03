@@ -19,7 +19,7 @@ namespace Telemetry
         protected Guid CurrentID { get; set; }
 
         /// <summary>
-        /// Current TraceSource 
+        /// Current TraceSource
         /// </summary>
         public TraceSource TraceSource { get; protected set; }
 
@@ -42,17 +42,17 @@ namespace Telemetry
             TraceSource traceSource,
             string activityName = "",
             int activityID = 0
-        ) 
-        {   
+        )
+        {
             TraceSource = traceSource;
             ActivityID = activityID;
             ActivityName = activityName;
 
-            // remember the previous activity ID so we could come back to it 
+            // remember the previous activity ID so we could come back to it
             // later when we switch back to the previous activity before this
             PreviousID = Trace.CorrelationManager.ActivityId;
 
-            // create a new ID for the current activity; we would need this 
+            // create a new ID for the current activity; we would need this
             // when we when call TraceEvent with TraceEventType.Stop
             CurrentID = Guid.NewGuid();
 
@@ -100,7 +100,6 @@ namespace Telemetry
             else if (entry.IsData())
             {
                 TraceSource.TraceData((TraceEventType) entry.Severity, ActivityID, entry.Datum);
-
             }
             else
             {
@@ -112,9 +111,6 @@ namespace Telemetry
                         entry.Datum
                     );
             }
-
-            
         }
     }
 }
-    

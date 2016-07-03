@@ -1,5 +1,4 @@
-﻿using PhotoFiler.Helper;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace PhotoFiler.Helpers
 {
@@ -7,7 +6,7 @@ namespace PhotoFiler.Helpers
     {
         public MD5HashedPhoto(
             int hashLength,
-            string path 
+            string path
         ) : base(path)
         {
             var hasher = new MD5Hasher();

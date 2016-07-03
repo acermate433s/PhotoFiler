@@ -7,15 +7,15 @@ namespace PhotoFiler.Controllers
 {
     public class PhotoController : Controller
     {
-        const int DEFAULT_COUNT = 12;
+        private const int DEFAULT_COUNT = 12;
 
-        delegate byte[] FileBytes<T, U>(T input);
+        private delegate byte[] FileBytes<T, U>(T input);
 
-        MD5HashedAlbum Album = (MD5HashedAlbum) System.Web.HttpContext.Current.Application["Album"];
+        private MD5HashedAlbum Album = (MD5HashedAlbum) System.Web.HttpContext.Current.Application["Album"];
 
         public PhotoController()
         {
-        } 
+        }
 
         [Route("{hash}")]
         public ActionResult Index(string hash)
@@ -32,7 +32,7 @@ namespace PhotoFiler.Controllers
             if (hash != null)
                 return Retrieve(hash, false);
             else
-                return RedirectToAction("Index", "Home");            
+                return RedirectToAction("Index", "Home");
         }
 
         [Route("Preview/{hash}")]

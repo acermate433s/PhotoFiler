@@ -6,11 +6,9 @@ namespace PhotoFiler.Helpers
 {
     public class InterfaceMetadataProvider : System.Web.Mvc.EmptyModelMetadataProvider
     {
-
         public override System.Web.Mvc.ModelMetadata GetMetadataForProperty(
             Func<object> modelAccessor, Type containerType, string propertyName)
         {
-
             if (containerType == null)
             {
                 throw new ArgumentNullException("containerType");
@@ -22,17 +20,17 @@ namespace PhotoFiler.Helpers
                 );
             }
 
-            var property = 
+            var property =
                 GetTypeDescriptor(containerType)
                     .GetProperties()
                     .Find(propertyName, true);
 
             if (property == null && containerType.IsInterface)
             {
-                property = 
+                property =
                     (
                         from t in containerType.GetInterfaces()
-                        let p = 
+                        let p =
                             GetTypeDescriptor(t)
                                 .GetProperties()
                                 .Find(propertyName, true)
@@ -48,7 +46,7 @@ namespace PhotoFiler.Helpers
                     String.Format(
                         CultureInfo.CurrentCulture,
                         "The property {0}.{1} could not be found",
-                        containerType.FullName, 
+                        containerType.FullName,
                         propertyName
                     )
                 );

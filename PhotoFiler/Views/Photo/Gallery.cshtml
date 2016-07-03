@@ -1,11 +1,8 @@
 ﻿@using PhotoFiler.Helper
-
 @model IEnumerable<PhotoFiler.Helpers.IHashedPhoto>
-
 @{
-    ViewBag.Title = "Gallery";  
+    ViewBag.Title = "Gallery";
 }
-
 <div class="row image-preview">
     @foreach (var item in Model)
     {
@@ -16,16 +13,13 @@
         </a>
     }
 </div>
-
 <div class="row">
     <div class="col-xs-12 text-center">
         @if (ViewBag.Previous > 0)
         {
             @Html.ActionLink(" ", "Gallery", new { page = ViewBag.Previous, count = ViewBag.Count }, new { @class = "glyphicon glyphicon-backward" });
         }
-
         <span>Page @ViewBag.Current / @ViewBag.Max</span>
-
         @if (ViewBag.Next <= ViewBag.Max)
         {
             @Html.ActionLink(" ", "Gallery", new { page = ViewBag.Next, count = ViewBag.Count }, new { @class = "glyphicon glyphicon-forward" })

@@ -3,13 +3,13 @@ using System.IO;
 
 namespace PhotoFiler.Helpers
 {
-    public class PhotoPreviewer<IHasher> 
+    public class PhotoPreviewer<IHasher>
     {
         // JPEG compression quality
-        const int QUALITY = 50;
+        private const int QUALITY = 50;
 
         // Maximum height and width
-        const int MAX = 300;
+        private const int MAX = 300;
 
         public IHashedPhoto Photo { get; set; }
         public DirectoryInfo PreviewLocation { get; set; }
@@ -41,7 +41,7 @@ namespace PhotoFiler.Helpers
         public byte[] Preview()
         {
             byte[] result = Preview(Photo.Hash);
-            if(result == null)
+            if (result == null)
             {
                 result = Preview(Photo.FileInfo);
             }
@@ -93,7 +93,7 @@ namespace PhotoFiler.Helpers
             byte[] result = null;
             byte[] buffer = File.ReadAllBytes(fileInfo.FullName);
 
-            // resize the image to MAX pixels by MAX  
+            // resize the image to MAX pixels by MAX
             // pixels to server as the preview image
             using (var input = new MemoryStream(buffer))
             using (var output = new MemoryStream())

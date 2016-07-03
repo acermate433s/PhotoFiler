@@ -62,8 +62,8 @@ namespace Telemetry
             TraceSource traceSource,
             ActivityEnumType activityType = default(ActivityEnumType)
         ) : base(
-                traceSource, 
-                GetDescription(activityType), 
+                traceSource,
+                GetDescription(activityType),
                 activityType.ToInt32(null)
         )
         {

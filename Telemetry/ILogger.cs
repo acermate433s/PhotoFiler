@@ -36,7 +36,7 @@ namespace Telemetry
 
         public LogEntry(
             Severity severity,
-            string message = Constants.DEFAULT_MESSAGE, 
+            string message = Constants.DEFAULT_MESSAGE,
             object[] datum = Constants.DEFAULT_DATUM,
             Exception exception = Constants.DEFAULT_EXCEPTION
         )
@@ -52,7 +52,7 @@ namespace Telemetry
             get
             {
                 if (IsData() && Datum.Length == 1)
-                        return Datum[0];
+                    return Datum[0];
                 else
                     return null;
             }
@@ -72,7 +72,7 @@ namespace Telemetry
         public static void Critical(
             this ILogger logger,
             Exception exception,
-            string message = Constants.DEFAULT_MESSAGE, 
+            string message = Constants.DEFAULT_MESSAGE,
             params object[] args
         )
         {
@@ -81,8 +81,8 @@ namespace Telemetry
 
             logger.Log(
                 new LogEntry(
-                    Severity.Critical, 
-                    message, 
+                    Severity.Critical,
+                    message,
                     args,
                     exception
                 )
@@ -99,7 +99,7 @@ namespace Telemetry
 
             logger.Log(
                 new LogEntry(
-                    Severity.Critical, 
+                    Severity.Critical,
                     exception: exception
                 )
             );

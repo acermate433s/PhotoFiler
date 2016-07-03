@@ -22,7 +22,7 @@ namespace PhotoFiler.Helpers
             {
                 FileInfo = new System.IO.FileInfo(path);
                 Name = FileInfo.Name;
-                Size = ComputeSize(FileInfo); 
+                Size = ComputeSize(FileInfo);
 
                 DateTime? creationDateTime = null;
                 string resolution = "Unknown";
@@ -116,7 +116,7 @@ namespace PhotoFiler.Helpers
             creationDateTime = file.CreationTime;
             resolution = "Unknown";
 
-            // Read the entire file into memory.  This would be used throughout 
+            // Read the entire file into memory.  This would be used throughout
             // the function to minimize reading the file multiple times
             byte[] buffer = null;
             try
@@ -129,7 +129,7 @@ namespace PhotoFiler.Helpers
                     using (var image = Image.FromStream(stream, false, false))
                         resolution = $"{image.Width}x{image.Height}";
 
-                    // Read the creation date from the EXIF. If we cannot, then 
+                    // Read the creation date from the EXIF. If we cannot, then
                     // set the creation date time to the file creation date time
                     using (var stream = new MemoryStream(buffer))
                     {

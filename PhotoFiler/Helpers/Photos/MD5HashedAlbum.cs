@@ -1,8 +1,6 @@
-﻿using PhotoFiler.Helper;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System;
 
 namespace PhotoFiler.Helpers
 {

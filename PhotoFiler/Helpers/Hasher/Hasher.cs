@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
-using System.Web;
 
 namespace PhotoFiler.Helpers
 {
     public class MD5Hasher : IHasher<MD5>
     {
-        MD5 Algorithm;
+        private MD5 Algorithm;
 
         public MD5Hasher()
         {
@@ -23,7 +22,7 @@ namespace PhotoFiler.Helpers
         /// <returns>An array of char of Base 62</returns>
         private IEnumerable<char> ConvertToBase62(BigInteger number)
         {
-            // There are the only allowed characters for a URL 
+            // There are the only allowed characters for a URL
             const string SYMBOLS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
             do
@@ -77,7 +76,7 @@ namespace PhotoFiler.Helpers
         }
 
         /// <summary>
-        /// Computes the hash of a string 
+        /// Computes the hash of a string
         /// </summary>
         /// <param name="text">String to hash</param>
         /// <param name="length">Length of hash to return</param>
@@ -86,7 +85,7 @@ namespace PhotoFiler.Helpers
         {
             var value = ComputeHash(ref Algorithm, text);
 
-            if(length > 0)
+            if (length > 0)
                 value = value.Substring(value.Length - length);
 
             return value;

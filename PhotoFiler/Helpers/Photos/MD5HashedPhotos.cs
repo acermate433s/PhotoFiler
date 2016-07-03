@@ -1,14 +1,12 @@
-﻿using PhotoFiler.Helpers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System;
 
 namespace PhotoFiler.Helpers
 {
     public class MD5HashedPhotos : Dictionary<string, MD5HashedPhoto>, IHashedPhotos<MD5HashedPhoto>
     {
-        const int MAX_LENGTH = 19;                              // Maximum hash length return by the algorithm
+        private const int MAX_LENGTH = 19;                              // Maximum hash length return by the algorithm
 
         private string _RootPath = "";                          // Root path to recursively scan all files
         private int _HashLength = 10;                           // Maximum length of the filename hash
@@ -30,7 +28,7 @@ namespace PhotoFiler.Helpers
             }
             catch
             {
-            }            
+            }
         }
 
         /// <summary>

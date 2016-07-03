@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace PhotoFiler.Helper
+﻿namespace PhotoFiler.Helper
 {
     public class Configuration
     {
-        const string ROOTH_PATH = "RoothPath";
-        const string HASH_LENGTH = "HashLength";
-        const string CREATE_PREVIEW = "CreatePreview";
+        private const string ROOTH_PATH = "RoothPath";
+        private const string HASH_LENGTH = "HashLength";
+        private const string CREATE_PREVIEW = "CreatePreview";
 
         public string RootPath { get; set; }
 

@@ -20,10 +20,10 @@ namespace PhotoFiler
             // hack to make model binding work for classes that
             // implements interfaces
             ModelMetadataProviders.Current = new InterfaceMetadataProvider();
-             
+
             var configuration = new Configuration();
             var previewPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
-            var album = 
+            var album =
                 new Helpers.MD5HashedAlbum(
                     configuration.RootPath,
                     configuration.HashLength,
@@ -35,6 +35,6 @@ namespace PhotoFiler
             }
 
             HttpContext.Current.Application["Album"] = album;
-        }   
+        }
     }
 }
