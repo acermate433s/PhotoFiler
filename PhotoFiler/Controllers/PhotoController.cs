@@ -1,6 +1,5 @@
-﻿using PhotoFiler.Helper;
+﻿using PhotoFiler.Helpers;
 using System.IO;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,7 +11,7 @@ namespace PhotoFiler.Controllers
 
         delegate byte[] FileBytes<T, U>(T input);
 
-        PhotosPreviewer _Photos = (PhotosPreviewer) System.Web.HttpContext.Current.Application["Photos"];
+        MD5HashedAlbum Album = (MD5HashedAlbum) System.Web.HttpContext.Current.Application["Album"];
 
         public PhotoController()
         {
@@ -39,21 +38,20 @@ namespace PhotoFiler.Controllers
         [Route("Preview/{hash}")]
         public ActionResult Preview(string hash)
         {
-            return ImageFile(hash, true, _Photos.Preview);
+            return ImageFile(hash, true, Album.Photo(hash), Album.Preview(hash));
         }
 
         private ActionResult Retrieve(string hash, bool inline)
         {
-            return ImageFile(hash, inline, _Photos.View);
+            return ImageFile(hash, inline, Album.Photo(hash), Album.View(hash));
         }
 
-        private ActionResult ImageFile(string hash, bool inline, FileBytes<string, string> action)
+        private ActionResult ImageFile(string hash, bool inline, IPhoto photo, byte[] content)
         {
-            var fileData = action(hash);
-            if (fileData == null)
-                return new HttpNotFoundResult("Hash not found");
+            if ((photo == null) || (content == null))
+                return new HttpNotFoundResult("Photo not found");
 
-            var name = _Photos[hash].Name;
+            var name = photo.Name;
             var cd = new System.Net.Mime.ContentDisposition()
             {
                 FileName = hash + "." + Path.GetExtension(name),
@@ -64,13 +62,13 @@ namespace PhotoFiler.Controllers
 
             var contentType = MimeMapping.GetMimeMapping(name);
 
-            return File(fileData, contentType);
+            return File(content, contentType);
         }
 
         [Route("List")]
         public ActionResult List(int page = 1, int count = DEFAULT_COUNT)
         {
-            int total = _Photos.Count();
+            int total = Album.Count();
 
             ViewBag.Total = total;
             ViewBag.Previous = page - 1;
@@ -79,13 +77,13 @@ namespace PhotoFiler.Controllers
             ViewBag.Next = page + 1;
             ViewBag.Count = count;
 
-            return View(_Photos.List(page, count));
+            return View(Album.List(page, count));
         }
 
         [Route("")]
         public ActionResult Gallery(int page = 1, int count = DEFAULT_COUNT)
         {
-            int total = _Photos.Count();
+            int total = Album.Count();
 
             ViewBag.Total = total;
             ViewBag.Previous = page - 1;
@@ -94,7 +92,7 @@ namespace PhotoFiler.Controllers
             ViewBag.Next = page + 1;
             ViewBag.Count = count;
 
-            return View(_Photos.List(page, count));
+            return View(Album.List(page, count));
         }
     }
 }

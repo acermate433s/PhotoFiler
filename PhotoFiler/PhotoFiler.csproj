@@ -132,12 +132,20 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helper\Configuration.cs" />
-    <Compile Include="Helper\Hasher.cs" />
-    <Compile Include="Helper\HtmlExtensions.cs" />
-    <Compile Include="Helper\Photo\Photos.cs" />
-    <Compile Include="Helper\Photo\PhotosPreviewer.cs" />
-    <Compile Include="Models\Photo.cs" />
+    <Compile Include="Helpers\Configuration.cs" />
+    <Compile Include="Helpers\Hasher\Hasher.cs" />
+    <Compile Include="Helpers\Hasher\IHasher.cs" />
+    <Compile Include="Helpers\HtmlExtensions.cs" />
+    <Compile Include="Helpers\Photos\IHashedPhotos.cs" />
+    <Compile Include="Helpers\Photos\MD5HashedAlbum.cs" />
+    <Compile Include="Helpers\Photos\IHashedAlbum.cs" />
+    <Compile Include="Helpers\Photos\MD5HashedPhotos.cs" />
+    <Compile Include="Helpers\Photos\MD5HashedPhoto.cs" />
+    <Compile Include="Helpers\Photos\IHashedPhoto.cs" />
+    <Compile Include="Helpers\Photos\IPhoto.cs" />
+    <Compile Include="Helpers\MetadataProvider.cs" />
+    <Compile Include="Helpers\Photos\Photo.cs" />
+    <Compile Include="Helpers\Photos\PhotoPreviewer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +205,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

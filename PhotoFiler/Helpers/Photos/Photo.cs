@@ -1,6 +1,4 @@
 ﻿using ExifLib;
-using ImageResizer;
-using PhotoFiler.Helper;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -8,32 +6,22 @@ using System.Drawing;
 using System.IO;
 using System.Web.Mvc;
 
-namespace PhotoFiler.Models
+namespace PhotoFiler.Helpers
 {
-    [Bind(Exclude = "Preview,FileInfo")]
-    public class Photo
+    /// <summary>
+    /// Represents a photo in the Album
+    /// </summary>
+    [Bind(Exclude = "FileInfo")]
+    public class Photo : IPhoto
     {
-        // JPEG compression quality
-        const int QUALITY = 50;
-
-        // Maximum height and width
-        const int MAX = 300;
-
-        string _PreviewLocation;
-
         public Photo(
-            string previewLocation,
-            int hashLength,
             string path
         )
         {
             try
             {
-                _PreviewLocation = previewLocation;
-
                 FileInfo = new System.IO.FileInfo(path);
                 Name = FileInfo.Name;
-                Hash = (new Hasher()).Hash(FileInfo.FullName, hashLength);
                 Size = ComputeSize(FileInfo); 
 
                 DateTime? creationDateTime = null;
@@ -41,7 +29,6 @@ namespace PhotoFiler.Models
 
                 ReadFileData(
                     FileInfo,
-                    Hash,
                     out creationDateTime,
                     out resolution
                 );
@@ -60,21 +47,33 @@ namespace PhotoFiler.Models
             }
         }
 
+        /// <summary>
+        /// FileInfo object that represents the photo
+        /// </summary>
         [DisplayName("FileInfo")]
         public FileInfo FileInfo { get; private set; }
 
-        [DisplayName("Hash")]
-        public string Hash { get; private set; }
-
+        /// <summary>
+        /// Filename of the photo
+        /// </summary>
         [DisplayName("Name")]
         public string Name { get; private set; }
 
+        /// <summary>
+        /// File size of the photo in human readable format
+        /// </summary>
         [DisplayName("Size")]
         public string Size { get; private set; }
 
+        /// <summary>
+        /// Resolution of the photo
+        /// </summary>
         [DisplayName("Resolution")]
         public string Resolution { get; private set; }
 
+        /// <summary>
+        /// Date when the photo was created
+        /// </summary>
         [DisplayName("Created On")]
         [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? CreationDateTime { get; private set; }
@@ -101,67 +100,6 @@ namespace PhotoFiler.Models
         }
 
         /// <summary>
-        /// Generates the preview of the image file
-        /// </summary>
-        /// <returns>
-        /// A byte array of the preview image
-        /// </returns>
-        public byte[] Preview()
-        {
-            byte[] result = null;
-
-            // Read the entire file into memory.  This would be used throughout 
-            // the function to minimize reading the file multiple times
-            byte[] buffer = null;
-            try
-            {
-                buffer = File.ReadAllBytes(FileInfo.FullName);
-            }
-            catch
-            {
-                buffer = null;
-            }
-
-            if (buffer != null && Directory.Exists(_PreviewLocation))
-            {
-                // the preview file name should be the hash and the extension 'prev'
-                var previewFile = Path.ChangeExtension(Path.Combine(_PreviewLocation, Hash), "prev");
-                if (File.Exists(previewFile))
-                {
-                    // use the existing preview file if it's already in there
-                    result = File.ReadAllBytes(previewFile);
-                }
-                else
-                {
-                    try
-                    {
-                        // resize the image to MAX pixels by MAX  
-                        // pixels to server as the preview image
-                        using (var input = new MemoryStream(buffer))
-                        using (var output = new MemoryStream())
-                        {
-                            var job =
-                                new ImageJob(
-                                    input,
-                                    output,
-                                    new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
-                                );
-                            job.Build();
-                            result = output.ToArray();
-                        }
-                    }
-                    catch
-                    {
-                        result = null;
-                    }
-                }
-            }
-
-            return result;
-
-        }
-
-        /// <summary>
         /// Read the file and get the image file's creation date time, resolution and preview.
         /// </summary>
         /// <param name="file">FileInfo representing the file</param>
@@ -171,7 +109,6 @@ namespace PhotoFiler.Models
         /// <returns></returns>
         private void ReadFileData(
             FileInfo file,
-            string hash,
             out DateTime? creationDateTime,
             out string resolution
         )

@@ -1,6 +1,6 @@
 ﻿using PhotoFiler.Helper;
+using PhotoFiler.Helpers;
 using System;
-using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -16,21 +16,25 @@ namespace PhotoFiler
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            // hack to make model binding work for classes that
+            // implements interfaces
+            ModelMetadataProviders.Current = new InterfaceMetadataProvider();
              
             var configuration = new Configuration();
             var previewPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
-            var photos =
-                new PhotosPreviewer(
+            var album = 
+                new Helpers.MD5HashedAlbum(
                     configuration.RootPath,
                     configuration.HashLength,
                     previewPath
                 );
             if (configuration.CreatePreview)
             {
-                photos.CreatePreviews();
+                album.GeneratePreviews();
             }
 
-            HttpContext.Current.Application["Photos"] = photos;
+            HttpContext.Current.Application["Album"] = album;
         }   
     }
 }

@@ -5,21 +5,15 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Web;
 
-namespace PhotoFiler.Helper
+namespace PhotoFiler.Helpers
 {
-    public class Hasher
+    public class MD5Hasher : IHasher<MD5>
     {
-        HashAlgorithm _Algorithm = null;
+        MD5 Algorithm;
 
-        // Let the user define the algorith to use for the hashing function
-        public Hasher(HashAlgorithm algorithm)
+        public MD5Hasher()
         {
-            _Algorithm = algorithm;
-        }
-
-        // Use MD5 as the default hashing algorithm
-        public Hasher() : this((HashAlgorithm) MD5.Create())
-        {
+            Algorithm = MD5.Create();
         }
 
         /// <summary>
@@ -71,7 +65,7 @@ namespace PhotoFiler.Helper
         /// <param name="algorithm">Algorith to use to computer the hash</param>
         /// <param name="text">String to be hashed</param>
         /// <returns></returns>
-        private string ComputeHash(ref HashAlgorithm algorithm, string text)
+        private string ComputeHash(ref MD5 algorithm, string text)
         {
             var bytes = GetBytes(text);
             var hashCode = algorithm.ComputeHash(bytes);
@@ -90,7 +84,7 @@ namespace PhotoFiler.Helper
         /// <returns>A Base62 string</returns>
         public string Hash(string text, int length = 0)
         {
-            var value = ComputeHash(ref _Algorithm, text);
+            var value = ComputeHash(ref Algorithm, text);
 
             if(length > 0)
                 value = value.Substring(value.Length - length);

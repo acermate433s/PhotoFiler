@@ -1,35 +1,36 @@
-﻿using PhotoFiler.Models;
-using System;
+﻿using PhotoFiler.Helpers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
+using System;
 
 namespace PhotoFiler.Helpers
 {
-    public class Photos : Dictionary<string, Photo>
+    public class MD5HashedPhotos : Dictionary<string, MD5HashedPhoto>, IHashedPhotos<MD5HashedPhoto>
     {
         const int MAX_LENGTH = 19;                              // Maximum hash length return by the algorithm
 
         private string _RootPath = "";                          // Root path to recursively scan all files
         private int _HashLength = 10;                           // Maximum length of the filename hash
 
-        public string PreviewLocation = "";
-
         /// <param name="path">Root path to recursively scan all files</param>
         /// <param name="hashLength">Maximum lenght of the filename hash</param>
-        public Photos(string path, int hashLength, string previewLocation = "")
+        public MD5HashedPhotos(string path, int hashLength)
         {
             _RootPath = path;
             _HashLength = hashLength <= MAX_LENGTH ? hashLength : MAX_LENGTH;
 
-            PreviewLocation = previewLocation;
-
-            var photos = GetPhotos(_RootPath);
-            photos
-                .Select(item => new Photo(PreviewLocation, _HashLength, item.FullName))
-                .AsParallel()
-                .ForAll(item => this.Add(item.Hash, item));
+            try
+            {
+                var photos = GetPhotos(_RootPath);
+                photos
+                    .Select(item => new MD5HashedPhoto(_HashLength, item.FullName))
+                    .ToList()
+                    .ForEach(item => this.Add(item.Hash, item));
+            }
+            catch
+            {
+            }            
         }
 
         /// <summary>
@@ -38,7 +39,7 @@ namespace PhotoFiler.Helpers
         /// <param name="page">Page to show</param>
         /// <param name="count">No. of items per page</param>
         /// <returns></returns>
-        public IEnumerable<Photo> List(int page = 1, int count = 10)
+        public IEnumerable<MD5HashedPhoto> List(int page = 1, int count = 10)
         {
             if (this.Count() > 0)
             {
@@ -50,11 +51,16 @@ namespace PhotoFiler.Helpers
                         .Select(item => item);
             }
             else
-                return Enumerable.Empty<Photo>();
+                return Enumerable.Empty<MD5HashedPhoto>();
+        }
+
+        public IEnumerable<MD5HashedPhoto> All()
+        {
+            return this.Values;
         }
 
         /// <summary>
-        /// Recursively get the files in a given path
+        /// Recursively get the photo files in a given path
         /// </summary>
         /// <param name="root">Root path</param>
         /// <returns>A list of all files in a path scanned recursively</returns>
