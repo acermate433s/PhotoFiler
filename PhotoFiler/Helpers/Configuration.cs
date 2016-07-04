@@ -1,4 +1,4 @@
-﻿namespace PhotoFiler.Helper
+﻿namespace PhotoFiler.Helpers
 {
     public class Configuration
     {

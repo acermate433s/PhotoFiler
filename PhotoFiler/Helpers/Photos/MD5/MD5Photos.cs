@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Helpers.MD5
 {
     public class MD5HashedPhotos : Dictionary<string, MD5HashedPhoto>, IHashedPhotos<MD5HashedPhoto>
     {

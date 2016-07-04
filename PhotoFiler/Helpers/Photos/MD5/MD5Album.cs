@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Helpers.MD5
 {
     public class MD5HashedAlbum : IHashedAlbum<MD5HashedPhoto>
     {
@@ -29,7 +29,7 @@ namespace PhotoFiler.Helpers
         {
             foreach (var photo in Photos.Values)
             {
-                var previewer = new PhotoPreviewer<MD5Hasher>(photo, PreviewLocation);
+                var previewer = new MD5PhotoPreviewer(photo, PreviewLocation);
                 previewer.Generate();
             }
         }
@@ -47,14 +47,14 @@ namespace PhotoFiler.Helpers
         public byte[] Preview(string hash)
         {
             var photo = Photo(hash);
-            var previewer = new PhotoPreviewer<MD5Hasher>(photo, PreviewLocation);
+            var previewer = new MD5PhotoPreviewer((MD5HashedPhoto) photo, PreviewLocation);
             return previewer.Preview();
         }
 
         public byte[] View(string hash)
         {
             var photo = Photo(hash);
-            var previewer = new PhotoPreviewer<MD5Hasher>(photo, PreviewLocation);
+            var previewer = new MD5PhotoPreviewer((MD5HashedPhoto) photo, PreviewLocation);
             return previewer.View();
         }
     }

@@ -1,5 +1,5 @@
-﻿using PhotoFiler.Helper;
-using PhotoFiler.Helpers;
+﻿using PhotoFiler.Helpers;
+using PhotoFiler.Helpers.MD5;
 using System;
 using System.Web;
 using System.Web.Mvc;
@@ -24,7 +24,7 @@ namespace PhotoFiler
             var configuration = new Configuration();
             var previewPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             var album =
-                new Helpers.MD5HashedAlbum(
+                new MD5HashedAlbum(
                     configuration.RootPath,
                     configuration.HashLength,
                     previewPath

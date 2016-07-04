@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using System.Security.Cryptography;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Helpers.MD5
 {
-    public class MD5Hasher : IHasher<MD5>
+    public class MD5Hasher : IHasher<System.Security.Cryptography.MD5>
     {
-        private MD5 Algorithm;
+        private System.Security.Cryptography.MD5 Algorithm;
 
         public MD5Hasher()
         {
-            Algorithm = MD5.Create();
+            Algorithm = System.Security.Cryptography.MD5.Create();
         }
 
         /// <summary>
@@ -64,7 +63,7 @@ namespace PhotoFiler.Helpers
         /// <param name="algorithm">Algorith to use to computer the hash</param>
         /// <param name="text">String to be hashed</param>
         /// <returns></returns>
-        private string ComputeHash(ref MD5 algorithm, string text)
+        private string ComputeHash(ref System.Security.Cryptography.MD5 algorithm, string text)
         {
             var bytes = GetBytes(text);
             var hashCode = algorithm.ComputeHash(bytes);

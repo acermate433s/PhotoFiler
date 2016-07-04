@@ -1,4 +1,5 @@
 ﻿using PhotoFiler.Helpers;
+using PhotoFiler.Helpers.MD5;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
@@ -7,6 +8,7 @@ namespace PhotoFiler.Controllers
 {
     public class PhotoController : Controller
     {
+        private const int DEFAULT_PAGE = 1;
         private const int DEFAULT_COUNT = 12;
 
         private delegate byte[] FileBytes<T, U>(T input);
@@ -66,7 +68,7 @@ namespace PhotoFiler.Controllers
         }
 
         [Route("List")]
-        public ActionResult List(int page = 1, int count = DEFAULT_COUNT)
+        public ActionResult List(int page = DEFAULT_PAGE, int count = DEFAULT_COUNT)
         {
             int total = Album.Count();
 
@@ -81,7 +83,7 @@ namespace PhotoFiler.Controllers
         }
 
         [Route("")]
-        public ActionResult Gallery(int page = 1, int count = DEFAULT_COUNT)
+        public ActionResult Gallery(int page = DEFAULT_PAGE, int count = DEFAULT_COUNT)
         {
             int total = Album.Count();
 

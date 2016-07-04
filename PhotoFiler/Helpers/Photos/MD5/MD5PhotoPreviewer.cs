@@ -1,9 +1,10 @@
 ﻿using ImageResizer;
 using System.IO;
+using System;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Helpers.MD5
 {
-    public class PhotoPreviewer<IHasher>
+    public class MD5PhotoPreviewer : IHashedPhotoPreviewer<MD5HashedPhoto> 
     {
         // JPEG compression quality
         private const int QUALITY = 50;
@@ -11,11 +12,12 @@ namespace PhotoFiler.Helpers
         // Maximum height and width
         private const int MAX = 300;
 
-        public IHashedPhoto Photo { get; set; }
+        public MD5HashedPhoto Photo { get; set; }
+
         public DirectoryInfo PreviewLocation { get; set; }
 
-        public PhotoPreviewer(
-            IHashedPhoto photo,
+        public MD5PhotoPreviewer(
+            MD5HashedPhoto photo,
             DirectoryInfo previewLocation
         )
         {

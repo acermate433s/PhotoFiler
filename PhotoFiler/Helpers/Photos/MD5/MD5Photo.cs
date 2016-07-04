@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Helpers.MD5
 {
     public class MD5HashedPhoto : Photo, IHashedPhoto
     {

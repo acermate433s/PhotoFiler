@@ -133,19 +133,20 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
-    <Compile Include="Helpers\Hasher\Hasher.cs" />
-    <Compile Include="Helpers\Hasher\IHasher.cs" />
+    <Compile Include="Helpers\Photos\MD5\MD5Hasher.cs" />
+    <Compile Include="Helpers\IHasher.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\Photos\IHashedPhotos.cs" />
-    <Compile Include="Helpers\Photos\MD5HashedAlbum.cs" />
+    <Compile Include="Helpers\Photos\IHashedPhotoPreviewer.cs" />
+    <Compile Include="Helpers\Photos\MD5\MD5Album.cs" />
     <Compile Include="Helpers\Photos\IHashedAlbum.cs" />
-    <Compile Include="Helpers\Photos\MD5HashedPhotos.cs" />
-    <Compile Include="Helpers\Photos\MD5HashedPhoto.cs" />
+    <Compile Include="Helpers\Photos\MD5\MD5Photos.cs" />
+    <Compile Include="Helpers\Photos\MD5\MD5Photo.cs" />
     <Compile Include="Helpers\Photos\IHashedPhoto.cs" />
     <Compile Include="Helpers\Photos\IPhoto.cs" />
     <Compile Include="Helpers\MetadataProvider.cs" />
     <Compile Include="Helpers\Photos\Photo.cs" />
-    <Compile Include="Helpers\Photos\PhotoPreviewer.cs" />
+    <Compile Include="Helpers\Photos\MD5\MD5PhotoPreviewer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
