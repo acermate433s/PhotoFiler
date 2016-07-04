@@ -1,4 +1,4 @@
-﻿using PhotoFiler.Helpers;
+﻿using PhotoFiler.Models;
 using PhotoFiler.Helpers.MD5;
 using System.IO;
 using System.Web;

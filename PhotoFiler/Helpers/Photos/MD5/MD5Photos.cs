@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using PhotoFiler.Models;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -8,8 +9,8 @@ namespace PhotoFiler.Helpers.MD5
     {
         private const int MAX_LENGTH = 19;                              // Maximum hash length return by the algorithm
 
-        private string _RootPath = "";                          // Root path to recursively scan all files
-        private int _HashLength = 10;                           // Maximum length of the filename hash
+        private string _RootPath = "";                                  // Root path to recursively scan all files
+        private int _HashLength = 10;                                   // Maximum length of the filename hash
 
         /// <param name="path">Root path to recursively scan all files</param>
         /// <param name="hashLength">Maximum lenght of the filename hash</param>

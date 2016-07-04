@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Models
 {
     public interface IHashedPhotos<THashedPhoto> : IDictionary<string, THashedPhoto> where THashedPhoto : IHashedPhoto
     {

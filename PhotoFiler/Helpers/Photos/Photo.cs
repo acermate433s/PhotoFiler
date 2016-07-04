@@ -1,4 +1,5 @@
 ﻿using ExifLib;
+using PhotoFiler.Models;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;

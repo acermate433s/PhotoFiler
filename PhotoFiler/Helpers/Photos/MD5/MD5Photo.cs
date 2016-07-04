@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using PhotoFiler.Models;
+using System.ComponentModel;
 
 namespace PhotoFiler.Helpers.MD5
 {

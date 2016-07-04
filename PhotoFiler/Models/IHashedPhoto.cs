@@ -1,4 +1,4 @@
-﻿namespace PhotoFiler.Helpers
+﻿namespace PhotoFiler.Models
 {
     public interface IHashedPhoto : IPhoto
     {

@@ -134,16 +134,16 @@
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
     <Compile Include="Helpers\Photos\MD5\MD5Hasher.cs" />
-    <Compile Include="Helpers\IHasher.cs" />
+    <Compile Include="Models\IHasher.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
-    <Compile Include="Helpers\Photos\IHashedPhotos.cs" />
-    <Compile Include="Helpers\Photos\IHashedPhotoPreviewer.cs" />
+    <Compile Include="Models\IHashedPhotos.cs" />
+    <Compile Include="Models\IHashedPhotoPreviewer.cs" />
     <Compile Include="Helpers\Photos\MD5\MD5Album.cs" />
-    <Compile Include="Helpers\Photos\IHashedAlbum.cs" />
+    <Compile Include="Models\IHashedAlbum.cs" />
     <Compile Include="Helpers\Photos\MD5\MD5Photos.cs" />
     <Compile Include="Helpers\Photos\MD5\MD5Photo.cs" />
-    <Compile Include="Helpers\Photos\IHashedPhoto.cs" />
-    <Compile Include="Helpers\Photos\IPhoto.cs" />
+    <Compile Include="Models\IHashedPhoto.cs" />
+    <Compile Include="Models\IPhoto.cs" />
     <Compile Include="Helpers\MetadataProvider.cs" />
     <Compile Include="Helpers\Photos\Photo.cs" />
     <Compile Include="Helpers\Photos\MD5\MD5PhotoPreviewer.cs" />
@@ -206,7 +206,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

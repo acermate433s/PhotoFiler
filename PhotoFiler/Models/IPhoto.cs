@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Models
 {
     public interface IPhoto
     {

@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Models
 {
     public interface IHasher<THashAlgorithm> where THashAlgorithm : HashAlgorithm
     {

@@ -1,6 +1,6 @@
 ﻿using ImageResizer;
+using PhotoFiler.Models;
 using System.IO;
-using System;
 
 namespace PhotoFiler.Helpers.MD5
 {
