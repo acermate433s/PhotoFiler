@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace PhotoFiler.Helpers.MD5
 {
-    public class MD5HashedPhotos : Dictionary<string, MD5HashedPhoto>, IHashedPhotos<MD5HashedPhoto>
+    public class MD5HashedPhotos : Dictionary<string, IHashedPhoto>, IHashedPhotos<IHashedPhoto>
     {
         private const int MAX_LENGTH = 19;                              // Maximum hash length return by the algorithm
 
@@ -38,7 +38,7 @@ namespace PhotoFiler.Helpers.MD5
         /// <param name="page">Page to show</param>
         /// <param name="count">No. of items per page</param>
         /// <returns></returns>
-        public IEnumerable<MD5HashedPhoto> List(int page = 1, int count = 10)
+        public IEnumerable<IHashedPhoto> List(int page = 1, int count = 10)
         {
             if (this.Count() > 0)
             {
@@ -53,7 +53,7 @@ namespace PhotoFiler.Helpers.MD5
                 return Enumerable.Empty<MD5HashedPhoto>();
         }
 
-        public IEnumerable<MD5HashedPhoto> All()
+        public IEnumerable<IHashedPhoto> All()
         {
             return this.Values;
         }

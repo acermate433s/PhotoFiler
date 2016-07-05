@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace PhotoFiler.Helpers.MD5
 {
-    public class MD5HashedAlbum : IHashedAlbum<MD5HashedPhoto>
+    public class MD5HashedAlbum : IHashedAlbum<IHashedPhoto>
     {
-        public IHashedPhotos<MD5HashedPhoto> Photos { get; private set; }
+        public IHashedPhotos<IHashedPhoto> Photos { get; private set; }
 
         public DirectoryInfo PreviewLocation { get; private set; }
 
@@ -28,7 +28,7 @@ namespace PhotoFiler.Helpers.MD5
 
         public void GeneratePreviews()
         {
-            foreach (var photo in Photos.Values)
+            foreach (var photo in Photos.Values.Cast<IHashedPhoto>())
             {
                 var previewer = new MD5PhotoPreviewer(photo, PreviewLocation);
                 previewer.Generate();

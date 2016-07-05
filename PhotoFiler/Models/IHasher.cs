@@ -2,7 +2,7 @@
 
 namespace PhotoFiler.Models
 {
-    public interface IHasher<THashAlgorithm> where THashAlgorithm : HashAlgorithm
+    public interface IHasher
     {
         string Hash(string text, int length = 0);
     }

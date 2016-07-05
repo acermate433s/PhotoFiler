@@ -3,18 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 
 namespace PhotoFiler.Helpers.MD5
 {
-    public class MD5Hasher : IHasher<System.Security.Cryptography.MD5>
+    public class MD5Hasher : IHasher
     {
-        private System.Security.Cryptography.MD5 Algorithm;
-
-        public MD5Hasher()
-        {
-            Algorithm = System.Security.Cryptography.MD5.Create();
-        }
-
         /// <summary>
         /// Converts a number to Base 62
         /// </summary>
@@ -64,7 +58,7 @@ namespace PhotoFiler.Helpers.MD5
         /// <param name="algorithm">Algorith to use to computer the hash</param>
         /// <param name="text">String to be hashed</param>
         /// <returns></returns>
-        private string ComputeHash(ref System.Security.Cryptography.MD5 algorithm, string text)
+        private string ComputeHash(HashAlgorithm algorithm, string text)
         {
             var bytes = GetBytes(text);
             var hashCode = algorithm.ComputeHash(bytes);
@@ -83,7 +77,7 @@ namespace PhotoFiler.Helpers.MD5
         /// <returns>A Base62 string</returns>
         public string Hash(string text, int length = 0)
         {
-            var value = ComputeHash(ref Algorithm, text);
+            var value = ComputeHash(System.Security.Cryptography.MD5.Create(), text);
 
             if (length > 0)
                 value = value.Substring(value.Length - length);

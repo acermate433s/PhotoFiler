@@ -13,7 +13,7 @@ namespace PhotoFiler.Controllers
 
         private delegate byte[] FileBytes<T, U>(T input);
 
-        private MD5HashedAlbum Album = (MD5HashedAlbum) System.Web.HttpContext.Current.Application["Album"];
+        private IHashedAlbum<IHashedPhoto> Album = (IHashedAlbum<IHashedPhoto>) System.Web.HttpContext.Current.Application["Album"];
 
         public PhotoController()
         {
