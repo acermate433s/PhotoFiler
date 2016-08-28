@@ -133,9 +133,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
+    <Compile Include="Helpers\Photos\Logged\LoggedHashedAlbum.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedHashedPhoto.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedHashedPhotos.cs" />
-    <Compile Include="Helpers\Photos\Logged\LoggedPhotoPreviewerBase.cs" />
+    <Compile Include="Helpers\Photos\Logged\LoggedHashedPhotoPreviewer.cs" />
     <Compile Include="Helpers\Photos\Hasher\MD5.cs" />
     <Compile Include="Models\IHasher.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />

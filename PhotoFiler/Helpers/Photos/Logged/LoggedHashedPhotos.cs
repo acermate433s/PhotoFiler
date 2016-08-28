@@ -1,55 +1,48 @@
 ﻿using PhotoFiler.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Web;
 using Telemetry;
 
 namespace PhotoFiler.Helpers.Photos.Logged
 {
     public class LoggedHashedPhotos : Dictionary<string, IHashedPhoto>, IHashedPhotos
     {
-        enum ActivityType
-        {
-            New = 0,
-            All = 1, 
-            List = 2,
-        }
-
-        TraceSource _TraceSource;
+        ILogger _Logger;
         IHashedPhotos _Photos;
 
-        public LoggedHashedPhotos(TraceSource source, IHashedPhotos photos)
+        public LoggedHashedPhotos(ILogger logger, IHashedPhotos photos)
         {
-            _TraceSource = source;
+            if (logger == null)
+                throw new ArgumentNullException("logger");
 
-            using (var scope = new ActivityTracerScope<ActivityType>(_TraceSource, ActivityType.New))
-            {
-                _Photos = photos;
-            }
+            if (photos == null)
+                throw new ArgumentNullException("photos");
+
+            _Logger = logger;
+            _Photos = photos;
+
+            foreach(var photo in photos)
+                this.Add(photo.Key, photo.Value);
+
+            _Logger.Information($"{_Photos.Count()} photos loaded");
+            _Logger.Verbose(_Photos.Select(item => item.Value.FileInfo.FullName).ToArray());
+            
         }
 
         public IEnumerable<IHashedPhoto> All()
         {
-            using (var scope = new ActivityTracerScope<ActivityType>(_TraceSource, ActivityType.All))
-            {
-                scope.Information("No. of photos: {0}", _Photos.Count());
-
-                var result = _Photos.All();
-                scope.Information(result.Select(item => item.FileInfo.FullName).ToArray());
-
-                return _Photos.All();
-            }
+            var result = _Photos.All();
+            return _Photos.All();
         }
 
         public IEnumerable<IHashedPhoto> List(int page = 1, int count = 10)
         {
-            using (var scope = new ActivityTracerScope<ActivityType>(_TraceSource, ActivityType.List))
-            {
-                scope.Information("Retrieving {0} items from page {0}", page, count);
-                return _Photos.List(page, count);
-            }
+            _Logger.Information($"Retrieving {count} items from page {page}");
+            var result = _Photos.List(page, count);
+            _Logger.Information($"Retrieved {result.Count()} items from page {page}");
+
+            return result;
         }
     }
 }

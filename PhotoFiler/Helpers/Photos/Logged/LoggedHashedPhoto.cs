@@ -1,22 +1,27 @@
-﻿using System;
+﻿using PhotoFiler.Models;
+using System;
 using System.IO;
-using PhotoFiler.Models;
-using System.Diagnostics;
 using Telemetry;
 
 namespace PhotoFiler.Helpers.Photos.Logged
 {
     public class LoggedHashedPhoto : IHashedPhoto
     {
+        ILogger _Logger;
         IHashedPhoto _Photo;
 
-        public LoggedHashedPhoto(TraceSource source, IHashedPhoto photo)
+        public LoggedHashedPhoto(ILogger logger, IHashedPhoto photo)
         {
-            using (var scope = new ActivityTracerScope(source, "Hashed Photo"))
-            {
-                scope.Information("Photo: {0}", photo.FileInfo.FullName);
-                _Photo = photo;
-            }
+            if (logger == null)
+                throw new ArgumentNullException("logger");
+
+            if (photo == null)
+                throw new ArgumentNullException("photo");
+
+            _Logger = logger;
+            _Photo = photo;
+
+            _Logger.Information($"Photo: \"{photo.FileInfo.FullName}\"");
         }
 
         public DateTime? CreationDateTime
