@@ -1,8 +1,4 @@
-﻿using PhotoFiler.Helpers.Hashed;
-using PhotoFiler.Helpers.MD5;
-using PhotoFiler.Helpers.Photos.Logged;
-using PhotoFiler.Models;
-using System;
+﻿using PhotoFiler.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

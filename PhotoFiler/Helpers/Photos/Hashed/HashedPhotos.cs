@@ -1,8 +1,6 @@
-﻿using PhotoFiler.Helpers.Photos.Logged;
-using PhotoFiler.Models;
+﻿using PhotoFiler.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 

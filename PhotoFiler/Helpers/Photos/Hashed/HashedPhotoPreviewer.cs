@@ -1,6 +1,5 @@
 ﻿using ImageResizer;
 using PhotoFiler.Models;
-using System;
 using System.IO;
 
 namespace PhotoFiler.Helpers.Hashed
