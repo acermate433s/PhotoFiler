@@ -3,9 +3,9 @@ using System.IO;
 
 namespace PhotoFiler.Models
 {
-    public interface IHashedAlbum<THashedPhoto> where THashedPhoto : IHashedPhoto
+    public interface IHashedAlbum
     {
-        IHashedPhotos<THashedPhoto> Photos { get; }
+        IHashedPhotos Photos { get; }
 
         DirectoryInfo PreviewLocation { get; }
 

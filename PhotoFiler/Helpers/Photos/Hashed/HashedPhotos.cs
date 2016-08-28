@@ -1,35 +1,38 @@
-﻿using PhotoFiler.Models;
+﻿using PhotoFiler.Helpers.Photos.Logged;
+using PhotoFiler.Models;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-namespace PhotoFiler.Helpers.MD5
+namespace PhotoFiler.Helpers.Hashed
 {
-    public class MD5HashedPhotos : Dictionary<string, IHashedPhoto>, IHashedPhotos<IHashedPhoto>
+    public class HashedPhotos : Dictionary<string, IHashedPhoto>, IHashedPhotos
     {
-        private const int MAX_LENGTH = 19;                              // Maximum hash length return by the algorithm
-
-        private string _RootPath = "";                                  // Root path to recursively scan all files
-        private int _HashLength = 10;                                   // Maximum length of the filename hash
+        // Root path to recursively scan all files
+        private string _RootPath = "";
 
         /// <param name="path">Root path to recursively scan all files</param>
         /// <param name="hashLength">Maximum lenght of the filename hash</param>
-        public MD5HashedPhotos(string path, int hashLength)
+        public HashedPhotos(
+            string path, 
+            int hashLength,
+            Func<string, IHashedPhoto> instantiator
+        )
         {
             _RootPath = path;
-            _HashLength = hashLength <= MAX_LENGTH ? hashLength : MAX_LENGTH;
 
-            try
-            {
-                var photos = GetPhotos(_RootPath);
-                photos
-                    .Select(item => new MD5HashedPhoto(_HashLength, item.FullName))
-                    .ToList()
-                    .ForEach(item => this.Add(item.Hash, item));
-            }
-            catch
-            {
-            }
+            var photos = GetPhotos(_RootPath);
+            photos
+                .Select(item => instantiator.Invoke(item.FullName))
+                .ToList()
+                .ForEach(item =>
+                {
+                    // discard items with an existing key
+                    if(!this.ContainsKey(item.Hash))
+                        this.Add(item.Hash, item);
+                });
         }
 
         /// <summary>
@@ -50,7 +53,7 @@ namespace PhotoFiler.Helpers.MD5
                         .Select(item => item);
             }
             else
-                return Enumerable.Empty<MD5HashedPhoto>();
+                return Enumerable.Empty<IHashedPhoto>();
         }
 
         public IEnumerable<IHashedPhoto> All()

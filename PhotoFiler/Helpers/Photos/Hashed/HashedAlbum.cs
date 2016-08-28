@@ -1,23 +1,27 @@
-﻿using PhotoFiler.Models;
+﻿using PhotoFiler.Helpers.Hashed;
+using PhotoFiler.Helpers.MD5;
+using PhotoFiler.Helpers.Photos.Logged;
+using PhotoFiler.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace PhotoFiler.Helpers.MD5
+namespace PhotoFiler.Helpers.Hashed
 {
-    public class MD5HashedAlbum : IHashedAlbum<IHashedPhoto>
+    public class HashedAlbum : IHashedAlbum
     {
-        public IHashedPhotos<IHashedPhoto> Photos { get; private set; }
+        public IHashedPhotos Photos { get; private set; }
 
         public DirectoryInfo PreviewLocation { get; private set; }
 
-        public MD5HashedAlbum(
-            string path,
-            int hashLength,
-            string previewLocation
+        public HashedAlbum(
+            string previewLocation,
+            IHashedPhotos photos
         )
         {
-            Photos = new MD5HashedPhotos(path, hashLength);
+            Photos = photos;
+
             PreviewLocation = new DirectoryInfo(previewLocation);
         }
 
@@ -28,11 +32,17 @@ namespace PhotoFiler.Helpers.MD5
 
         public void GeneratePreviews()
         {
+            var errors = new List<IHashedPhoto>();
+
             foreach (var photo in Photos.Values.Cast<IHashedPhoto>())
             {
-                var previewer = new MD5PhotoPreviewer(photo, PreviewLocation);
-                previewer.Generate();
+                var previewer = new HashedPhotoPreviewer(photo, PreviewLocation);
+                if (!previewer.Generate())
+                    errors.Add(photo);
             }
+
+            foreach (var error in errors)
+                Photos.Remove(error.Hash);
         }
 
         public IEnumerable<IHashedPhoto> List(int page = 1, int count = 10)
@@ -48,14 +58,14 @@ namespace PhotoFiler.Helpers.MD5
         public byte[] Preview(string hash)
         {
             var photo = Photo(hash);
-            var previewer = new MD5PhotoPreviewer((MD5HashedPhoto) photo, PreviewLocation);
+            var previewer = new HashedPhotoPreviewer((HashedPhoto) photo, PreviewLocation);
             return previewer.Preview();
         }
 
         public byte[] View(string hash)
         {
             var photo = Photo(hash);
-            var previewer = new MD5PhotoPreviewer((MD5HashedPhoto) photo, PreviewLocation);
+            var previewer = new HashedPhotoPreviewer((HashedPhoto) photo, PreviewLocation);
             return previewer.View();
         }
     }

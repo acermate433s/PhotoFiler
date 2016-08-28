@@ -2,10 +2,10 @@
 
 namespace PhotoFiler.Models
 {
-    public interface IHashedPhotos<THashedPhoto> : IDictionary<string, THashedPhoto> where THashedPhoto : IHashedPhoto
+    public interface IHashedPhotos : IDictionary<string, IHashedPhoto> 
     {
-        IEnumerable<THashedPhoto> List(int page = 1, int count = 10);
+        IEnumerable<IHashedPhoto> List(int page = 1, int count = 10);
 
-        IEnumerable<THashedPhoto> All();
+        IEnumerable<IHashedPhoto> All();
     }
 }

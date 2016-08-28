@@ -2,12 +2,13 @@
 
 namespace PhotoFiler.Models
 {
-    public interface IHashedPhotoPreviewer<THashedPhoto> where THashedPhoto : IHashedPhoto
+    public interface IHashedPhotoPreviewer
     {
-        THashedPhoto Photo { get; set; }
+        IHashedPhoto Photo { get; set; }
+
         DirectoryInfo PreviewLocation { get; set; }
 
-        void Generate();
+        bool Generate();
 
         byte[] Preview();
 

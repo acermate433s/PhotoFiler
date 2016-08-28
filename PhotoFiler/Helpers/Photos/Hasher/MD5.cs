@@ -16,7 +16,7 @@ namespace PhotoFiler.Helpers.MD5
         /// <returns>An array of char of Base 62</returns>
         private IEnumerable<char> ConvertToBase62(BigInteger number)
         {
-            // There are the only allowed characters for a URL
+            // This are the only allowed characters for a URL
             const string SYMBOLS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
             do
@@ -77,7 +77,8 @@ namespace PhotoFiler.Helpers.MD5
         /// <returns>A Base62 string</returns>
         public string Hash(string text, int length = 0)
         {
-            var value = ComputeHash(System.Security.Cryptography.MD5.Create(), text);
+            var algorithm = System.Security.Cryptography.MD5.Create();
+            var value = ComputeHash(algorithm, text);
 
             if (length > 0)
                 value = value.Substring(value.Length - length);

@@ -1,10 +1,11 @@
 ﻿using ImageResizer;
 using PhotoFiler.Models;
+using System;
 using System.IO;
 
-namespace PhotoFiler.Helpers.MD5
+namespace PhotoFiler.Helpers.Hashed
 {
-    public class MD5PhotoPreviewer : IHashedPhotoPreviewer<IHashedPhoto> 
+    public class HashedPhotoPreviewer : IHashedPhotoPreviewer
     {
         // JPEG compression quality
         private const int QUALITY = 50;
@@ -16,7 +17,7 @@ namespace PhotoFiler.Helpers.MD5
 
         public DirectoryInfo PreviewLocation { get; set; }
 
-        public MD5PhotoPreviewer(
+        public HashedPhotoPreviewer(
             IHashedPhoto photo,
             DirectoryInfo previewLocation
         )
@@ -59,12 +60,20 @@ namespace PhotoFiler.Helpers.MD5
             }
         }
 
-        public void Generate()
+        public bool Generate()
         {
+            var result = true;
+
             if (!File.Exists(PreviewFile))
             {
-                File.WriteAllBytes(PreviewFile, Preview(Photo.FileInfo));
+                var preview = Preview(Photo.FileInfo);
+                if(preview != null)
+                    File.WriteAllBytes(PreviewFile, preview);
+
+                result = preview != null;
             }
+
+            return result;
         }
 
         /// <summary>
@@ -93,21 +102,29 @@ namespace PhotoFiler.Helpers.MD5
         private byte[] Preview(FileInfo fileInfo)
         {
             byte[] result = null;
-            byte[] buffer = File.ReadAllBytes(fileInfo.FullName);
 
-            // resize the image to MAX pixels by MAX
-            // pixels to server as the preview image
-            using (var input = new MemoryStream(buffer))
-            using (var output = new MemoryStream())
+            try
             {
-                var job =
-                    new ImageJob(
-                        input,
-                        output,
-                        new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
-                    );
-                job.Build();
-                result = output.ToArray();
+                byte[] buffer = File.ReadAllBytes(fileInfo.FullName);
+
+                // resize the image to MAX pixels by MAX
+                // pixels to server as the preview image
+                using (var input = new MemoryStream(buffer))
+                using (var output = new MemoryStream())
+                {
+                    var job =
+                        new ImageJob(
+                            input,
+                            output,
+                            new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
+                        );
+                    job.Build();
+                    result = output.ToArray();
+                }
+            }
+            catch
+            {
+                result = null;
             }
 
             return result;

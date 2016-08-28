@@ -133,20 +133,23 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
-    <Compile Include="Helpers\Photos\MD5\MD5Hasher.cs" />
+    <Compile Include="Helpers\Photos\Logged\LoggedHashedPhoto.cs" />
+    <Compile Include="Helpers\Photos\Logged\LoggedHashedPhotos.cs" />
+    <Compile Include="Helpers\Photos\Logged\LoggedPhotoPreviewerBase.cs" />
+    <Compile Include="Helpers\Photos\Hasher\MD5.cs" />
     <Compile Include="Models\IHasher.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Models\IHashedPhotos.cs" />
     <Compile Include="Models\IHashedPhotoPreviewer.cs" />
-    <Compile Include="Helpers\Photos\MD5\MD5Album.cs" />
+    <Compile Include="Helpers\Photos\Hashed\HashedAlbum.cs" />
     <Compile Include="Models\IHashedAlbum.cs" />
-    <Compile Include="Helpers\Photos\MD5\MD5Photos.cs" />
-    <Compile Include="Helpers\Photos\MD5\MD5Photo.cs" />
+    <Compile Include="Helpers\Photos\Hashed\HashedPhotos.cs" />
+    <Compile Include="Helpers\Photos\Hashed\HashedPhoto.cs" />
     <Compile Include="Models\IHashedPhoto.cs" />
     <Compile Include="Models\IPhoto.cs" />
     <Compile Include="Helpers\MetadataProvider.cs" />
     <Compile Include="Helpers\Photos\Photo.cs" />
-    <Compile Include="Helpers\Photos\MD5\MD5PhotoPreviewer.cs" />
+    <Compile Include="Helpers\Photos\Hashed\HashedPhotoPreviewer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +213,12 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Telemetry\Telemetry.csproj">
+      <Project>{090c192b-8b49-4d13-9e9b-d9040533e63c}</Project>
+      <Name>Telemetry</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
