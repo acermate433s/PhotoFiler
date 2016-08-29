@@ -5,10 +5,17 @@ using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
 
-namespace PhotoFiler.Helpers.MD5
+namespace PhotoFiler.Helpers.Hasher
 {
-    public class MD5Hasher : IHasher
+    public class Base62HasherBase<THashAlgorithm> : IHasher where THashAlgorithm : HashAlgorithm, new()
     {
+        protected THashAlgorithm _Algorithm;
+
+        public Base62HasherBase()
+        {
+            _Algorithm = new THashAlgorithm();
+        }
+
         /// <summary>
         /// Converts a number to Base 62
         /// </summary>
@@ -55,13 +62,12 @@ namespace PhotoFiler.Helpers.MD5
         /// <summary>
         /// Computes the hash of the text using the hashing algorithm and convert result to Base62
         /// </summary>
-        /// <param name="algorithm">Algorith to use to computer the hash</param>
         /// <param name="text">String to be hashed</param>
         /// <returns></returns>
-        private string ComputeHash(HashAlgorithm algorithm, string text)
+        private string ComputeHash(string text)
         {
             var bytes = GetBytes(text);
-            var hashCode = algorithm.ComputeHash(bytes);
+            var hashCode = _Algorithm.ComputeHash(bytes);
             var hashNumber = String.Join("", hashCode.Select(item => String.Format("{0}", item)));
             var number = BigInteger.Abs(BigInteger.Parse(hashNumber));
             var digits = (new String(ConvertToBase62(number).ToArray()));
@@ -77,8 +83,7 @@ namespace PhotoFiler.Helpers.MD5
         /// <returns>A Base62 string</returns>
         public string Hash(string text, int length = 0)
         {
-            var algorithm = System.Security.Cryptography.MD5.Create();
-            var value = ComputeHash(algorithm, text);
+            var value = ComputeHash(text);
 
             if (length > 0)
                 value = value.Substring(value.Length - length);

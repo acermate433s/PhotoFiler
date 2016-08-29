@@ -1,11 +1,10 @@
 ﻿using PhotoFiler.Helpers;
 using PhotoFiler.Helpers.Hashed;
-using PhotoFiler.Helpers.MD5;
+using PhotoFiler.Helpers.Hasher;
 using PhotoFiler.Helpers.Photos.Logged;
 using PhotoFiler.Models;
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -49,7 +48,7 @@ namespace PhotoFiler
                                                 new HashedPhoto(
                                                     configuration.HashLength,
                                                     filename,
-                                                    new MD5Hasher()
+                                                    new SHA512()
                                                 )
                                             );
                                     }
