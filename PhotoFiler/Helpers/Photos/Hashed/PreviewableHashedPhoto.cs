@@ -1,10 +1,11 @@
 ﻿using ImageResizer;
 using PhotoFiler.Models;
+using System;
 using System.IO;
 
-namespace PhotoFiler.Helpers.Hashed
+namespace PhotoFiler.Helpers.Photos.Hashed
 {
-    public class HashedPhotoPreviewer : IHashedPhotoPreviewer
+    public class PreviewableHashedPhoto : HashedPhoto, IPreviewableHashedPhoto
     {
         // JPEG compression quality
         private const int QUALITY = 50;
@@ -12,17 +13,19 @@ namespace PhotoFiler.Helpers.Hashed
         // Maximum height and width
         private const int MAX = 300;
 
-        public IHashedPhoto Photo { get; set; }
+        private DirectoryInfo _PreviewLocation;
 
-        public DirectoryInfo PreviewLocation { get; set; }
-
-        public HashedPhotoPreviewer(
-            IHashedPhoto photo,
+        public PreviewableHashedPhoto(
+            int hashLength,
+            string path,
+            IHasher hasher,
             DirectoryInfo previewLocation
-        )
+        ) : base(hashLength, path, hasher)
         {
-            Photo = photo;
-            PreviewLocation = previewLocation;
+            if (previewLocation == null)
+                throw new ArgumentNullException("path");
+
+            _PreviewLocation = previewLocation;
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace PhotoFiler.Helpers.Hashed
         /// <returns></returns>
         public byte[] View()
         {
-            return System.IO.File.ReadAllBytes(Photo.FileInfo.FullName);
+            return System.IO.File.ReadAllBytes(FileInfo.FullName);
         }
 
         /// <summary>
@@ -42,10 +45,10 @@ namespace PhotoFiler.Helpers.Hashed
         /// <returns>Byte array content of the photo preview</returns>
         public byte[] Preview()
         {
-            byte[] result = Preview(Photo.Hash);
+            byte[] result = Preview(Hash);
             if (result == null)
             {
-                result = Preview(Photo.FileInfo);
+                result = Preview(FileInfo);
             }
 
             return result;
@@ -55,24 +58,8 @@ namespace PhotoFiler.Helpers.Hashed
         {
             get
             {
-                return Path.ChangeExtension(Path.Combine(PreviewLocation.FullName, Photo.Hash), "prev");
+                return Path.ChangeExtension(Path.Combine(_PreviewLocation.FullName, Hash), "prev");
             }
-        }
-
-        public bool Generate()
-        {
-            var result = true;
-
-            if (!File.Exists(PreviewFile))
-            {
-                var preview = Preview(Photo.FileInfo);
-                if(preview != null)
-                    File.WriteAllBytes(PreviewFile, preview);
-
-                result = preview != null;
-            }
-
-            return result;
         }
 
         /// <summary>
@@ -84,7 +71,7 @@ namespace PhotoFiler.Helpers.Hashed
         {
             byte[] result = null;
 
-            var previewFile = Path.ChangeExtension(Path.Combine(PreviewLocation.FullName, hash), "prev");
+            var previewFile = Path.ChangeExtension(Path.Combine(_PreviewLocation.FullName, hash), "prev");
             if (File.Exists(PreviewFile))
             {
                 result = File.ReadAllBytes(previewFile);

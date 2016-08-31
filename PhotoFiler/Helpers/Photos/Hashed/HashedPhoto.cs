@@ -1,7 +1,8 @@
 ﻿using PhotoFiler.Models;
+using System;
 using System.ComponentModel;
 
-namespace PhotoFiler.Helpers.Hashed
+namespace PhotoFiler.Helpers.Photos.Hashed
 {
     public class HashedPhoto : Photo, IHashedPhoto
     {
@@ -11,6 +12,15 @@ namespace PhotoFiler.Helpers.Hashed
             IHasher hasher
         ) : base(path)
         {
+            if (hashLength == 0)
+                throw new ArgumentException("Hash length cannot be zero", "hashLength");
+
+            if (path == null)
+                throw new ArgumentNullException("path");
+
+            if (path == null)
+                throw new ArgumentNullException("hasher");
+
             Hash = hasher.Hash(path, hashLength);
         }
 

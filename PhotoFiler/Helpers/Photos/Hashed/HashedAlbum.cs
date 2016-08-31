@@ -4,76 +4,91 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace PhotoFiler.Helpers.Hashed
+namespace PhotoFiler.Helpers.Photos.Hashed
 {
     public class HashedAlbum : IHashedAlbum
     {
-        Dictionary<string, IHashedPhotoPreviewer> _HashedPhotoPreviewer = new Dictionary<string, IHashedPhotoPreviewer>();
-
-        public IHashedPhotos Photos { get; private set; }
+        public IList<IPreviewableHashedPhoto> Photos { get; private set; }
 
         public DirectoryInfo PreviewLocation { get; private set; }
 
         public HashedAlbum(
             string previewLocation,
-            IHashedPhotos photos,
-            Func<IHashedPhoto, DirectoryInfo, IHashedPhotoPreviewer> initiator
+            List<IPreviewableHashedPhoto> photos
         )
         {
+            if (previewLocation == null)
+                throw new ArgumentNullException("previewLocation");
+
+            if (photos == null)
+                throw new ArgumentNullException("photos");
+
             Photos = photos;
             PreviewLocation = new DirectoryInfo(previewLocation);
-
-            foreach(var photo in photos)
-                _HashedPhotoPreviewer.Add(
-                    photo.Key,
-                    initiator.Invoke(photo.Value, PreviewLocation)
-                );
         }
 
         public int Count()
         {
-            return Photos.All().Count();
+            return Photos.Count();
         }
 
         public void GeneratePreviews()
         {
             var errors = new List<string>();
 
-            foreach (var previewer in _HashedPhotoPreviewer)
+            foreach (var photo in Photos)
             {
-                if (!previewer.Value.Generate())
-                    errors.Add(previewer.Key);
+                try
+                {
+                    var filename = Path.Combine(PreviewLocation.FullName, photo.Name);
+                    filename = Path.ChangeExtension(filename, "prev");
+
+                    if(!File.Exists(filename))
+                        File.WriteAllBytes(filename, photo.Preview());
+                }
+                catch
+                {
+                    errors.Add(photo.Hash);
+                }
             }
 
             foreach (var error in errors)
-                Photos.Remove(error);
+                Photos.Remove(Photos.First(item => item.Hash == error));
         }
 
-        public IEnumerable<IHashedPhoto> List(int page = 1, int count = 10)
+        public IEnumerable<IPreviewableHashedPhoto> List(int page = 1, int count = 10)
         {
-            return Photos.List(page, count);
-        }
-
-        public IHashedPhoto Photo(string hash)
-        {
-            if (Photos.ContainsKey(hash))
-                return Photos[hash];
+            if (this.Count() > 0)
+            {
+                return
+                    Photos
+                        .Skip((page - 1) * count)
+                        .Take(count)
+                        .Select(item => item);
+            }
             else
-                return null;
+                return Enumerable.Empty<IPreviewableHashedPhoto>();
+        }
+
+        public IPreviewableHashedPhoto Photo(string hash)
+        {
+            return Photos.FirstOrDefault(item => item.Hash == hash);
         }
 
         public byte[] Preview(string hash)
         {
-            var photo = Photo(hash);
-            var previewer = _HashedPhotoPreviewer[hash];
-            return previewer.Preview();
+            return 
+                Photos?
+                    .FirstOrDefault(item => item.Hash == hash)?
+                    .Preview();
         }
 
         public byte[] View(string hash)
         {
-            var photo = Photo(hash);
-            var previewer = _HashedPhotoPreviewer[hash];
-            return previewer.View();
+            return
+                Photos?
+                    .FirstOrDefault(item => item.Hash == hash)?
+                    .View();
         }
     }
 }

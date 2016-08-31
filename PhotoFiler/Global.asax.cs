@@ -1,10 +1,13 @@
 ﻿using PhotoFiler.Helpers;
-using PhotoFiler.Helpers.Hashed;
 using PhotoFiler.Helpers.Hasher;
+using PhotoFiler.Helpers.Photos.Hashed;
 using PhotoFiler.Helpers.Photos.Logged;
 using PhotoFiler.Models;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -28,6 +31,9 @@ namespace PhotoFiler
             var configuration = new Configuration();
             var previewPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
 
+            if (!Directory.Exists(configuration.RootPath))
+                return;
+
             using (var logger = new ActivityTracerScope(new TraceSource("PhotoFiler")))
             {
                 IHashedAlbum album =
@@ -35,36 +41,22 @@ namespace PhotoFiler
                         logger,
                         new HashedAlbum(
                             previewPath,
-                            new LoggedHashedPhotos(
-                                logger,
-                                new HashedPhotos(
-                                    configuration.RootPath,
-                                    configuration.HashLength,
-                                    (filename) =>
-                                    {
-                                        return
-                                            new LoggedHashedPhoto(
-                                                logger,
-                                                new HashedPhoto(
-                                                    configuration.HashLength,
-                                                    filename,
-                                                    new SHA512()
-                                                )
-                                            );
-                                    }
+                            GetPhotoFiles(new DirectoryInfo(configuration.RootPath))
+                                .Select(photo =>
+
+                                    (IPreviewableHashedPhoto)
+                                        (new LoggedPreviewableHashedPhoto(
+                                            logger,
+                                            new PreviewableHashedPhoto(
+                                                configuration.HashLength,
+                                                photo.FullName,
+                                                new SHA512(),
+                                                new DirectoryInfo(previewPath)
+                                            )
+                                        ))
+
                                 )
-                            ),
-                            (photo, directory) =>
-                            {
-                                return 
-                                    new LoggedHashedPhotoPreviewer(
-                                        logger, 
-                                        new HashedPhotoPreviewer(
-                                            photo, 
-                                            directory
-                                        )
-                                    );
-                            }
+                                .ToList()
                         )
                     );
                 if (configuration.CreatePreview)
@@ -74,6 +66,31 @@ namespace PhotoFiler
 
                 HttpContext.Current.Application["Album"] = album;
             }
+        }
+
+        private List<FileInfo> GetPhotoFiles(DirectoryInfo root)
+        {
+            var value = new List<FileInfo>();
+
+            // add files in the current directory
+            value
+                .AddRange(
+                    root
+                        .EnumerateFiles()
+                        .Where(file => (new[] { ".jpg", ".png" }).Contains(file.Extension.ToLower()))
+                        .Cast<FileInfo>()
+                );
+
+            // iterate all directories and add files in that directory
+            value
+                .AddRange(
+                    root
+                        .EnumerateDirectories()
+                        .SelectMany(directory => GetPhotoFiles(directory)
+                    )
+                );
+
+            return value;
         }
     }
 }

@@ -5,7 +5,7 @@ namespace PhotoFiler.Models
 {
     public interface IHashedAlbum
     {
-        IHashedPhotos Photos { get; }
+        IList<IPreviewableHashedPhoto> Photos { get; }
 
         DirectoryInfo PreviewLocation { get; }
 
@@ -13,9 +13,9 @@ namespace PhotoFiler.Models
 
         void GeneratePreviews();
 
-        IEnumerable<IHashedPhoto> List(int page = 1, int count = 10);
+        IEnumerable<IPreviewableHashedPhoto> List(int page = 1, int count = 10);
 
-        IHashedPhoto Photo(string hash);
+        IPreviewableHashedPhoto Photo(string hash);
 
         byte[] Preview(string hash);
 

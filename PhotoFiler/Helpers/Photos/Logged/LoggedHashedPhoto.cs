@@ -10,7 +10,10 @@ namespace PhotoFiler.Helpers.Photos.Logged
         ILogger _Logger;
         IHashedPhoto _Photo;
 
-        public LoggedHashedPhoto(ILogger logger, IHashedPhoto photo)
+        public LoggedHashedPhoto(
+            ILogger logger, 
+            IHashedPhoto photo
+        )
         {
             if (logger == null)
                 throw new ArgumentNullException("logger");
