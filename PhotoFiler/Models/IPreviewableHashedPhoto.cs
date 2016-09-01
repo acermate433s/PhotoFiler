@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace PhotoFiler.Models
+﻿namespace PhotoFiler.Models
 {
     public interface IPreviewableHashedPhoto : IHashedPhoto
     {

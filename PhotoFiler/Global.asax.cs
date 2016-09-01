@@ -36,61 +36,49 @@ namespace PhotoFiler
 
             using (var logger = new ActivityTracerScope(new TraceSource("PhotoFiler")))
             {
+                var photos =
+                    new LoggedPreviewableHashedPhotos(
+                        logger,
+                        new PreviewableHashedPhotos(
+                            new DirectoryInfo(configuration.RootPath),
+                            (file) =>
+                            {
+                                var photo =
+                                    new LoggedPreviewableHashedPhoto(
+                                        logger,
+                                        new PreviewableHashedPhoto(
+                                            configuration.HashLength,
+                                            file.FullName,
+                                            new SHA512(),
+                                            new DirectoryInfo(previewPath)
+                                        )
+                                    );
+
+                                var result =
+                                    new LoggedPreviewableHashedPhoto(
+                                        logger,
+                                        photo
+                                    );
+
+                                return result;
+                            }
+                        )
+                    );
+
                 IHashedAlbum album =
                     new LoggedHashedAlbum(
                         logger,
                         new HashedAlbum(
                             previewPath,
-                            GetPhotoFiles(new DirectoryInfo(configuration.RootPath))
-                                .Select(photo =>
-
-                                    (IPreviewableHashedPhoto)
-                                        (new LoggedPreviewableHashedPhoto(
-                                            logger,
-                                            new PreviewableHashedPhoto(
-                                                configuration.HashLength,
-                                                photo.FullName,
-                                                new SHA512(),
-                                                new DirectoryInfo(previewPath)
-                                            )
-                                        ))
-
-                                )
-                                .ToList()
+                            photos.Retrieve()
                         )
                     );
+
                 if (configuration.CreatePreview)
-                {
                     album.GeneratePreviews();
-                }
 
                 HttpContext.Current.Application["Album"] = album;
             }
-        }
-
-        private List<FileInfo> GetPhotoFiles(DirectoryInfo root)
-        {
-            var value = new List<FileInfo>();
-
-            // add files in the current directory
-            value
-                .AddRange(
-                    root
-                        .EnumerateFiles()
-                        .Where(file => (new[] { ".jpg", ".png" }).Contains(file.Extension.ToLower()))
-                        .Cast<FileInfo>()
-                );
-
-            // iterate all directories and add files in that directory
-            value
-                .AddRange(
-                    root
-                        .EnumerateDirectories()
-                        .SelectMany(directory => GetPhotoFiles(directory)
-                    )
-                );
-
-            return value;
         }
     }
 }
