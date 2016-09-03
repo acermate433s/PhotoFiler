@@ -6,7 +6,7 @@ namespace Telemetry
     /// <summary>
     /// Base on http://www.codeproject.com/Articles/185666/ActivityTracerScope-Easy-activity-tracing-with
     /// </summary>
-    public class ActivityTracerScope : IDisposable, ILogger
+    public class ActivityTracerScope : ILogger
     {
         /// <summary>
         /// Previous ID before TransferTrace
@@ -111,6 +111,11 @@ namespace Telemetry
                         entry.Datum
                     );
             }
+        }
+
+        public ILogger Create(string activityName = "", int activityID = 0)
+        {
+            return new ActivityTracerScope(this.TraceSource, activityName, activityID);
         }
     }
 }

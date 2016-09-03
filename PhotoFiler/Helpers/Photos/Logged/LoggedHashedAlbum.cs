@@ -12,6 +12,8 @@ namespace PhotoFiler.Helpers.Photos.Logged
         Telemetry.ILogger _Logger;
         IHashedAlbum _HashedAlbum;
 
+        public event EventHandler<IPreviewableHashedPhoto> ErrorGeneratePreview;
+
         public LoggedHashedAlbum(
             Telemetry.ILogger logger, 
             IHashedAlbum album
@@ -25,8 +27,15 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
             _Logger = logger;
             _HashedAlbum = album;
+            _HashedAlbum.ErrorGeneratePreview +=
+                (sender, e) =>
+                {
+                    _Logger.Warning($"Error generating preview for photo \"{e.FileInfo.FullName}\" with hash \"{e.Hash}\".");
 
-            logger.Verbose(album.Photos?.Select(item => item.FileInfo.FullName).ToArray());
+                    ErrorGeneratePreview?.Invoke(sender, e);
+                };
+                
+            logger.Verbose(album.Photos?.Select(item => $"\"{item.FileInfo.FullName}\" ({item.Hash}).").ToArray());
         }
 
         public IList<IPreviewableHashedPhoto> Photos
@@ -52,16 +61,19 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public void GeneratePreviews()
         {
-            _Logger.Information($"Generating photo previews of {_HashedAlbum.Count()} photos in \"{_HashedAlbum.PreviewLocation.FullName}\"");
+            _Logger.Information($"Generating photo previews of {_HashedAlbum.Count()} photos in \"{_HashedAlbum.PreviewLocation.FullName}\".");
 
-            _HashedAlbum.GeneratePreviews();
+            using (var logger = _Logger.Create("Generate previews."))
+            {
+                _HashedAlbum.GeneratePreviews();
+            }
         }
 
         public IEnumerable<IPreviewableHashedPhoto> List(int page = 1, int count = 10)
         {
             var result =_HashedAlbum.List(page, count);
 
-            _Logger.Information($"Retrieved page {page} expecting {count} photos but retrieved {result.Count()}");
+            _Logger.Information($"Retrieved page {page} expecting {count} photos but retrieved {result.Count()}.");
 
             return result;
         }
@@ -70,7 +82,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
         {
             var result = _HashedAlbum.Photo(hash);
             if (result == null)
-                _Logger.Warning($"Cannot find photo for hash {hash}");
+                _Logger.Warning($"Cannot find photo for hash \"{hash}\".");
 
             return result;
         }
@@ -84,12 +96,12 @@ namespace PhotoFiler.Helpers.Photos.Logged
                 if (photo.FileInfo != null)
                 {
                     if (result != null)
-                        _Logger.Information($"Preview size for \"{photo.FileInfo.FullName}\" with hash \"{hash}\" is {result.Length} bytes");
+                        _Logger.Information($"Preview size for \"{photo.FileInfo.FullName}\" with hash \"{hash}\" is {result.Length} bytes.");
                     else
-                        _Logger.Warning($"Cannot generate preview for \"{photo.FileInfo.FullName} with hash \"{hash}\"");
+                        _Logger.Warning($"Cannot generate preview for \"{photo.FileInfo.FullName} with hash \"{hash}\".");
                 }
                 else
-                    _Logger.Warning($"Cannot find photo with hash \"{hash}\"");
+                    _Logger.Warning($"Cannot find photo with hash \"{hash}\".");
 
                 return result;
             }
@@ -106,12 +118,12 @@ namespace PhotoFiler.Helpers.Photos.Logged
                 if (photo.FileInfo != null)
                 {
                     if (result != null)
-                        _Logger.Information($"Full size for \"{photo.FileInfo.FullName}\" with hash \"{hash}\" is {result.Length} bytes");
+                        _Logger.Information($"Full size for \"{photo.FileInfo.FullName}\" with hash \"{hash}\" is {result.Length} bytes.");
                     else
-                        _Logger.Warning($"Cannot generate view for \"{photo.FileInfo.FullName} with hash \"{hash}\"");
+                        _Logger.Warning($"Cannot generate view for \"{photo.FileInfo.FullName} with hash \"{hash}\".");
                 }
                 else
-                    _Logger.Warning($"Cannot find photo with hash \"{hash}\"");
+                    _Logger.Warning($"Cannot find photo with hash \"{hash}\".");
 
                 return result;
             }

@@ -24,7 +24,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
             _Logger = logger;
             _Photo = photo;
 
-            _Logger.Information($"Photo: \"{photo.FileInfo.FullName}\"");
+            _Logger.Information($"Photo \"{photo.FileInfo.FullName}\" with hash \"{Hash}\"");
         }
 
         public DateTime? CreationDateTime
