@@ -8,6 +8,8 @@ namespace PhotoFiler.Helpers.Photos.Hashed
 {
     public class HashedAlbum : IHashedAlbum
     {
+        public event EventHandler<IPreviewableHashedPhoto> ErrorGeneratePreview;
+
         public IList<IPreviewableHashedPhoto> Photos { get; private set; }
 
         public DirectoryInfo PreviewLocation { get; private set; }
@@ -40,14 +42,22 @@ namespace PhotoFiler.Helpers.Photos.Hashed
             {
                 try
                 {
-                    var filename = Path.Combine(PreviewLocation.FullName, photo.Name);
+                    var filename = Path.Combine(PreviewLocation.FullName, photo.Hash);
                     filename = Path.ChangeExtension(filename, "prev");
 
-                    if(!File.Exists(filename))
-                        File.WriteAllBytes(filename, photo.Preview());
+                    if (!File.Exists(filename))
+                    {
+                        var preview = photo.Preview();
+                        if (preview != null)
+                            File.WriteAllBytes(filename, preview);
+                        else
+                            ErrorGeneratePreview?.Invoke(this, photo);
+                    }
                 }
                 catch
                 {
+                    ErrorGeneratePreview?.Invoke(this, photo);
+
                     errors.Add(photo.Hash);
                 }
             }

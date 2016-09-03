@@ -36,45 +36,59 @@ namespace PhotoFiler
 
             using (var logger = new ActivityTracerScope(new TraceSource("PhotoFiler")))
             {
-                var photos =
-                    new LoggedPreviewableHashedPhotos(
-                        logger,
-                        new PreviewableHashedPhotos(
-                            new DirectoryInfo(configuration.RootPath),
-                            (file) =>
-                            {
-                                var photo =
-                                    new LoggedPreviewableHashedPhoto(
-                                        logger,
-                                        new PreviewableHashedPhoto(
-                                            configuration.HashLength,
-                                            file.FullName,
-                                            new SHA512(),
-                                            new DirectoryInfo(previewPath)
-                                        )
-                                    );
+                LoggedPreviewableHashedPhotos photos = null;
+                IHashedAlbum album = null;
 
-                                var result =
-                                    new LoggedPreviewableHashedPhoto(
-                                        logger,
-                                        photo
-                                    );
+                using (var activityLogger = logger.Create($"Retrieving photos in folder \"{configuration.RootPath}\""))
+                {
+                    try
+                    {
+                        photos =
+                            new LoggedPreviewableHashedPhotos(
+                                logger,
+                                new PreviewableHashedPhotos(
+                                    new DirectoryInfo(configuration.RootPath),
+                                    (file) =>
+                                    {
+                                        var photo =
+                                            new LoggedPreviewableHashedPhoto(
+                                                logger,
+                                                new PreviewableHashedPhoto(
+                                                    configuration.HashLength,
+                                                    file.FullName,
+                                                    new SHA512(),
+                                                    new DirectoryInfo(previewPath)
+                                                )
+                                            );
 
-                                return result;
-                            }
-                        )
-                    );
+                                        var result =
+                                            new LoggedPreviewableHashedPhoto(
+                                                logger,
+                                                photo
+                                            );
 
-                IHashedAlbum album =
-                    new LoggedHashedAlbum(
-                        logger,
-                        new HashedAlbum(
-                            previewPath,
-                            photos.Retrieve()
-                        )
-                    );
+                                        return result;
+                                    }
+                                )
+                            );
 
-                if (configuration.CreatePreview)
+                        if (photos != null)
+                            album =
+                                new LoggedHashedAlbum(
+                                    logger,
+                                    new HashedAlbum(
+                                        previewPath,
+                                        photos.Retrieve()
+                                    )
+                                );
+                    }
+                    catch(ArgumentNullException arg)
+                    {
+                        logger.Error(arg);
+                    }
+                }
+
+                if ((album != null ) && (configuration.CreatePreview))
                     album.GeneratePreviews();
 
                 HttpContext.Current.Application["Album"] = album;

@@ -75,23 +75,30 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public byte[] Preview()
         {
-            var result = _PreviewableHashedPhoto.Preview();
-            if(result == null)
-                _Logger.Warning($"Cannot generate preview for photo \"{FileInfo.FullName}\"");
-            else
-                _Logger.Information($"Preview size for \"{FileInfo.FullName}\" is {result.Length} bytes");
+            using (var logger = _Logger.Create($"Previewing photo \"{FileInfo.FullName}\" with hash \"{Hash}\"."))
+            {
+                var result = _PreviewableHashedPhoto.Preview();
 
-            return result;
+                if (result == null)
+                    _Logger.Warning($"Cannot generate preview for photo \"{FileInfo.FullName}\" with hash \"{Hash}\".");
+                else
+                    _Logger.Information($"Preview size for \"{FileInfo.FullName}\" with hash \"{Hash}\" is {result.Length} bytes.");
+
+                return result;
+            }
         }
         public byte[] View()
         {
-            var result = _PreviewableHashedPhoto.View();
-            if(result == null)
-                _Logger.Warning($"Cannot generate full view for photo \"{FileInfo.FullName}\"");
-            else
-                _Logger.Information($"Full size for \"{FileInfo.FullName}\" is {result.Length} bytes");
+            using (var logger = _Logger.Create($"Viewing photo \"{FileInfo.FullName}\" with hash \"{Hash}\"."))
+            {
+                var result = _PreviewableHashedPhoto.View();
+                if (result == null)
+                    _Logger.Warning($"Cannot generate full view for photo \"{FileInfo.FullName}\" with hash \"{Hash}\".");
+                else
+                    _Logger.Information($"Full size for \"{FileInfo.FullName}\" with hash \"{Hash}\" is {result.Length} bytes.");
 
-            return result;
+                return result;
+            }
         }
     }
 }

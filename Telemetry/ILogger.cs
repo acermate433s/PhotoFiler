@@ -22,9 +22,11 @@ namespace Telemetry
         Warning = TraceEventType.Warning,
     }
 
-    public interface ILogger
+    public interface ILogger : IDisposable
     {
         void Log(LogEntry entry);
+
+        ILogger Create(string activityName = "", int activityID = 0);
     }
 
     public class LogEntry

@@ -34,7 +34,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
             if (result.Count() == 0)
                 _Logger.Warning("No photos retrieved!");
 
-            _Logger.Information($"Retrieved {result.Count()} photos");
+            _Logger.Information($"Retrieved {result.Count()} photos.");
             _Logger.Verbose(result.Select(item => item.FileInfo.FullName).ToArray());
 
             return result;
