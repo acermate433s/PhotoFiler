@@ -38,29 +38,31 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         {
             var errors = new List<string>();
 
-            foreach (var photo in Photos)
-            {
-                try
+            Photos
+                .AsParallel()
+                .ForAll(photo =>
                 {
-                    var filename = Path.Combine(PreviewLocation.FullName, photo.Hash);
-                    filename = Path.ChangeExtension(filename, "prev");
-
-                    if (!File.Exists(filename))
+                    try
                     {
-                        var preview = photo.Preview();
-                        if (preview != null)
-                            File.WriteAllBytes(filename, preview);
-                        else
-                            ErrorGeneratePreview?.Invoke(this, photo);
-                    }
-                }
-                catch
-                {
-                    ErrorGeneratePreview?.Invoke(this, photo);
+                        var filename = Path.Combine(PreviewLocation.FullName, photo.Hash);
+                        filename = Path.ChangeExtension(filename, "prev");
 
-                    errors.Add(photo.Hash);
-                }
-            }
+                        if (!File.Exists(filename))
+                        {
+                            var preview = photo.Preview();
+                            if (preview != null)
+                                File.WriteAllBytes(filename, preview);
+                            else
+                                ErrorGeneratePreview?.Invoke(this, photo);
+                        }
+                    }
+                    catch
+                    {
+                        ErrorGeneratePreview?.Invoke(this, photo);
+
+                        errors.Add(photo.Hash);
+                    }
+                });
 
             foreach (var error in errors)
                 Photos.Remove(Photos.First(item => item.Hash == error));
