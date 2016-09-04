@@ -45,7 +45,11 @@ namespace PhotoFiler
                         photos =
                             new LoggedPreviewablePhotos(
                                 logger,
+<<<<<<< HEAD
                                 new PreviewablePhotos(
+=======
+                                new PreviewableHashedPhotos(
+>>>>>>> 5130548398436efb6e619ad8a98416fc9b4c0055
                                     configuration.RootPath,
                                     (file) =>
                                     {

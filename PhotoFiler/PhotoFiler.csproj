@@ -134,8 +134,13 @@
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
     <Compile Include="Helpers\Hasher\Base62HasherBase.cs" />
+<<<<<<< HEAD
     <Compile Include="Models\IConfiguration.cs" />
     <Compile Include="Helpers\Photos\Hashed\PreviewablePhotos.cs" />
+=======
+    <Compile Include="Helpers\IConfiguration.cs" />
+    <Compile Include="Helpers\Photos\Hashed\PreviewableHashedPhotos.cs" />
+>>>>>>> 5130548398436efb6e619ad8a98416fc9b4c0055
     <Compile Include="Helpers\Photos\Logged\LoggedHashedAlbum.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedHashedPhoto.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedPreviewablePhoto.cs" />
