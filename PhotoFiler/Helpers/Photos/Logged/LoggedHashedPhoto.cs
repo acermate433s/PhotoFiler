@@ -16,10 +16,10 @@ namespace PhotoFiler.Helpers.Photos.Logged
         )
         {
             if (logger == null)
-                throw new ArgumentNullException("logger");
+                throw new ArgumentNullException(nameof(logger));
 
             if (photo == null)
-                throw new ArgumentNullException("photo");
+                throw new ArgumentNullException(nameof(photo));
 
             _Logger = logger;
             _Photo = photo;

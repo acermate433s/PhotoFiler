@@ -13,13 +13,13 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         ) : base(path)
         {
             if (hashLength == 0)
-                throw new ArgumentException("Hash length cannot be zero", "hashLength");
+                throw new ArgumentException("Hash length cannot be zero", nameof(hashLength));
 
             if (path == null)
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
 
             if (path == null)
-                throw new ArgumentNullException("hasher");
+                throw new ArgumentNullException(nameof(hasher));
 
             Hash = hasher.Hash(path, hashLength);
         }

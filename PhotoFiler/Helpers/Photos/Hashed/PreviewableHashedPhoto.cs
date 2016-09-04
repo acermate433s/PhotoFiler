@@ -23,7 +23,7 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         ) : base(hashLength, path, hasher)
         {
             if (previewLocation == null)
-                throw new ArgumentNullException("path");
+                throw new ArgumentNullException(nameof(path));
 
             _PreviewLocation = previewLocation;
         }

@@ -18,10 +18,10 @@ namespace PhotoFiler.Helpers.Photos.Logged
         )
         {
             if (logger == null)
-                throw new ArgumentNullException("logger");
+                throw new ArgumentNullException(nameof(logger));
 
             if (previewableHashedPhotos == null)
-                throw new ArgumentNullException("previewableHashedPhotos");
+                throw new ArgumentNullException(nameof(previewableHashedPhotos));
 
             _Logger = logger;
             _PreviewableHashedPhotos = previewableHashedPhotos;

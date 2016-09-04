@@ -20,10 +20,10 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         )
         {
             if (previewLocation == null)
-                throw new ArgumentNullException("previewLocation");
+                throw new ArgumentNullException(nameof(previewLocation));
 
             if (photos == null)
-                throw new ArgumentNullException("photos");
+                throw new ArgumentNullException(nameof(photos));
 
             Photos = photos;
             PreviewLocation = new DirectoryInfo(previewLocation);

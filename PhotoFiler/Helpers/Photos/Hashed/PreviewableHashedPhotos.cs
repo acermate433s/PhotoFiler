@@ -19,10 +19,10 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         )
         {
             if (source == null)
-                throw new ArgumentNullException("source");
+                throw new ArgumentNullException(nameof(source));
 
             if (source == null)
-                throw new ArgumentNullException("initiator");
+                throw new ArgumentNullException(nameof(initiator));
 
             _Source = source;
             _Initiator = initiator;
