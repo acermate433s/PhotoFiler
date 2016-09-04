@@ -8,14 +8,14 @@ using System.Web;
 
 namespace PhotoFiler.Helpers.Photos.Hashed
 {
-    public class PreviewablePhotos : IPreviewableHashedPhotos
+    public class PreviewablePhotos : IPreviewablePhotos
     {
         DirectoryInfo _Source = null;
-        Func<FileInfo, IPreviewableHashedPhoto> _Initiator;
+        Func<FileInfo, IPreviewablePhoto> _Initiator;
 
         public PreviewablePhotos(
             DirectoryInfo source,
-            Func<FileInfo, IPreviewableHashedPhoto> initiator
+            Func<FileInfo, IPreviewablePhoto> initiator
         )
         {
             if (source == null)
@@ -28,7 +28,7 @@ namespace PhotoFiler.Helpers.Photos.Hashed
             _Initiator = initiator;
         }
 
-        public List<IPreviewableHashedPhoto> Retrieve()
+        public List<IPreviewablePhoto> Retrieve()
         {
             var files = GetPhotoFiles(_Source);
 

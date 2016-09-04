@@ -143,7 +143,7 @@
     <Compile Include="Helpers\Photos\Logged\LoggedPreviewablePhotos.cs" />
     <Compile Include="Models\IHasher.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
-    <Compile Include="Models\IPreviewableHashedPhoto.cs" />
+    <Compile Include="Models\IPreviewablePhoto.cs" />
     <Compile Include="Helpers\Photos\Hashed\HashedAlbum.cs" />
     <Compile Include="Models\IHashedAlbum.cs" />
     <Compile Include="Helpers\Photos\Hashed\HashedPhoto.cs" />
@@ -152,7 +152,7 @@
     <Compile Include="Helpers\MetadataProvider.cs" />
     <Compile Include="Helpers\Photos\Photo.cs" />
     <Compile Include="Helpers\Photos\Hashed\PreviewablePhoto.cs" />
-    <Compile Include="Models\IPreviewableHashedPhotos.cs" />
+    <Compile Include="Models\IPreviewablePhotos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

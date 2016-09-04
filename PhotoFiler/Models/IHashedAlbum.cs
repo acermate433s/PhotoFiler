@@ -6,9 +6,9 @@ namespace PhotoFiler.Models
 {
     public interface IHashedAlbum
     {
-        event EventHandler<IPreviewableHashedPhoto> ErrorGeneratePreview;
+        event EventHandler<IPreviewablePhoto> ErrorGeneratePreview;
 
-        IList<IPreviewableHashedPhoto> Photos { get; }
+        IList<IPreviewablePhoto> Photos { get; }
 
         DirectoryInfo PreviewLocation { get; }
 
@@ -16,9 +16,9 @@ namespace PhotoFiler.Models
 
         void GeneratePreviews();
 
-        IEnumerable<IPreviewableHashedPhoto> List(int page = 1, int count = 10);
+        IEnumerable<IPreviewablePhoto> List(int page = 1, int count = 10);
 
-        IPreviewableHashedPhoto Photo(string hash);
+        IPreviewablePhoto Photo(string hash);
 
         byte[] Preview(string hash);
 

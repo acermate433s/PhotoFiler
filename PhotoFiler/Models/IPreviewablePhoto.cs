@@ -1,6 +1,6 @@
 ﻿namespace PhotoFiler.Models
 {
-    public interface IPreviewableHashedPhoto : IHashedPhoto
+    public interface IPreviewablePhoto : IHashedPhoto
     {
         byte[] Preview();
 

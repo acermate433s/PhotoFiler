@@ -5,7 +5,7 @@ using System.IO;
 
 namespace PhotoFiler.Helpers.Photos.Hashed
 {
-    public class PreviewablePhoto : HashedPhoto, IPreviewableHashedPhoto
+    public class PreviewablePhoto : HashedPhoto, IPreviewablePhoto
     {
         // JPEG compression quality
         private const int QUALITY = 50;

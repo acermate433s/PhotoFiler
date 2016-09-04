@@ -12,7 +12,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
         Telemetry.ILogger _Logger;
         IHashedAlbum _HashedAlbum;
 
-        public event EventHandler<IPreviewableHashedPhoto> ErrorGeneratePreview;
+        public event EventHandler<IPreviewablePhoto> ErrorGeneratePreview;
 
         public LoggedHashedAlbum(
             Telemetry.ILogger logger, 
@@ -38,7 +38,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
             logger.Verbose(album.Photos?.Select(item => $"\"{item.FileInfo.FullName}\" ({item.Hash}).").ToArray());
         }
 
-        public IList<IPreviewableHashedPhoto> Photos
+        public IList<IPreviewablePhoto> Photos
         {
             get
             {
@@ -69,7 +69,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
             }
         }
 
-        public IEnumerable<IPreviewableHashedPhoto> List(int page = 1, int count = 10)
+        public IEnumerable<IPreviewablePhoto> List(int page = 1, int count = 10)
         {
             var result =_HashedAlbum.List(page, count);
 
@@ -78,7 +78,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
             return result;
         }
 
-        public IPreviewableHashedPhoto Photo(string hash)
+        public IPreviewablePhoto Photo(string hash)
         {
             var result = _HashedAlbum.Photo(hash);
             if (result == null)
