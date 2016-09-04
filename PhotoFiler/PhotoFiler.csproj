@@ -134,12 +134,13 @@
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
     <Compile Include="Helpers\Hasher\Base62HasherBase.cs" />
-    <Compile Include="Helpers\Photos\Hashed\PreviewableHashedPhotos.cs" />
+    <Compile Include="Models\IConfiguration.cs" />
+    <Compile Include="Helpers\Photos\Hashed\PreviewablePhotos.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedHashedAlbum.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedHashedPhoto.cs" />
-    <Compile Include="Helpers\Photos\Logged\LoggedPreviewableHashedPhoto.cs" />
+    <Compile Include="Helpers\Photos\Logged\LoggedPreviewablePhoto.cs" />
     <Compile Include="Helpers\Hasher\HashFunctions.cs" />
-    <Compile Include="Helpers\Photos\Logged\LoggedPreviewableHashedPhotos.cs" />
+    <Compile Include="Helpers\Photos\Logged\LoggedPreviewablePhotos.cs" />
     <Compile Include="Models\IHasher.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Models\IPreviewableHashedPhoto.cs" />
@@ -150,7 +151,7 @@
     <Compile Include="Models\IPhoto.cs" />
     <Compile Include="Helpers\MetadataProvider.cs" />
     <Compile Include="Helpers\Photos\Photo.cs" />
-    <Compile Include="Helpers\Photos\Hashed\PreviewableHashedPhoto.cs" />
+    <Compile Include="Helpers\Photos\Hashed\PreviewablePhoto.cs" />
     <Compile Include="Models\IPreviewableHashedPhotos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

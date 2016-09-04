@@ -29,40 +29,39 @@ namespace PhotoFiler
             ModelMetadataProviders.Current = new InterfaceMetadataProvider();
 
             var configuration = new Configuration();
-            var previewPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
 
-            if (!Directory.Exists(configuration.RootPath))
+            if (configuration.RootPath == null)
                 return;
 
             using (var logger = new ActivityTracerScope(new TraceSource("PhotoFiler")))
             {
-                LoggedPreviewableHashedPhotos photos = null;
+                LoggedPreviewablePhotos photos = null;
                 IHashedAlbum album = null;
 
-                using (var activityLogger = logger.Create($"Retrieving photos in folder \"{configuration.RootPath}\""))
+                using (var activityLogger = logger.Create($"Retrieving photos in folder \"{configuration.RootPath.FullName}\""))
                 {
                     try
                     {
                         photos =
-                            new LoggedPreviewableHashedPhotos(
+                            new LoggedPreviewablePhotos(
                                 logger,
-                                new PreviewableHashedPhotos(
-                                    new DirectoryInfo(configuration.RootPath),
+                                new PreviewablePhotos(
+                                    configuration.RootPath,
                                     (file) =>
                                     {
                                         var photo =
-                                            new LoggedPreviewableHashedPhoto(
+                                            new LoggedPreviewablePhoto(
                                                 logger,
-                                                new PreviewableHashedPhoto(
+                                                new PreviewablePhoto(
                                                     configuration.HashLength,
                                                     file.FullName,
-                                                    new SHA512(),
-                                                    new DirectoryInfo(previewPath)
+                                                    configuration.HashingFunction,
+                                                    configuration.PreviewLocation
                                                 )
                                             );
 
                                         var result =
-                                            new LoggedPreviewableHashedPhoto(
+                                            new LoggedPreviewablePhoto(
                                                 logger,
                                                 photo
                                             );
@@ -77,7 +76,7 @@ namespace PhotoFiler
                                 new LoggedHashedAlbum(
                                     logger,
                                     new HashedAlbum(
-                                        previewPath,
+                                        configuration.PreviewLocation,
                                         photos.Retrieve()
                                     )
                                 );

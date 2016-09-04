@@ -15,7 +15,7 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         public DirectoryInfo PreviewLocation { get; private set; }
 
         public HashedAlbum(
-            string previewLocation,
+            DirectoryInfo previewLocation,
             List<IPreviewableHashedPhoto> photos
         )
         {
@@ -26,7 +26,7 @@ namespace PhotoFiler.Helpers.Photos.Hashed
                 throw new ArgumentNullException(nameof(photos));
 
             Photos = photos;
-            PreviewLocation = new DirectoryInfo(previewLocation);
+            PreviewLocation = previewLocation;
         }
 
         public int Count()
