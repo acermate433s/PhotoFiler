@@ -35,7 +35,7 @@ namespace PhotoFiler
 
             using (var logger = new ActivityTracerScope(new TraceSource("PhotoFiler")))
             {
-                LoggedPreviewableHashedPhotos photos = null;
+                LoggedPreviewablePhotos photos = null;
                 IHashedAlbum album = null;
 
                 using (var activityLogger = logger.Create($"Retrieving photos in folder \"{configuration.RootPath.FullName}\""))
@@ -43,16 +43,16 @@ namespace PhotoFiler
                     try
                     {
                         photos =
-                            new LoggedPreviewableHashedPhotos(
+                            new LoggedPreviewablePhotos(
                                 logger,
-                                new PreviewableHashedPhotos(
+                                new PreviewablePhotos(
                                     configuration.RootPath,
                                     (file) =>
                                     {
                                         var photo =
-                                            new LoggedPreviewableHashedPhoto(
+                                            new LoggedPreviewablePhoto(
                                                 logger,
-                                                new PreviewableHashedPhoto(
+                                                new PreviewablePhoto(
                                                     configuration.HashLength,
                                                     file.FullName,
                                                     configuration.HashingFunction,
@@ -61,7 +61,7 @@ namespace PhotoFiler
                                             );
 
                                         var result =
-                                            new LoggedPreviewableHashedPhoto(
+                                            new LoggedPreviewablePhoto(
                                                 logger,
                                                 photo
                                             );

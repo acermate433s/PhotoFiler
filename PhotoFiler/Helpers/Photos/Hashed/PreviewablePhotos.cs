@@ -8,12 +8,12 @@ using System.Web;
 
 namespace PhotoFiler.Helpers.Photos.Hashed
 {
-    public class PreviewableHashedPhotos : IPreviewableHashedPhotos
+    public class PreviewablePhotos : IPreviewableHashedPhotos
     {
         DirectoryInfo _Source = null;
         Func<FileInfo, IPreviewableHashedPhoto> _Initiator;
 
-        public PreviewableHashedPhotos(
+        public PreviewablePhotos(
             DirectoryInfo source,
             Func<FileInfo, IPreviewableHashedPhoto> initiator
         )
