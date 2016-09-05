@@ -134,6 +134,18 @@
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
     <Compile Include="Helpers\Hasher\Base62HasherBase.cs" />
+    <Compile Include="Helpers\Repositories\AlbumRepository.cs" />
+    <Compile Include="Helpers\Repositories\Interfaces\IAlbumRepository.cs" />
+    <Compile Include="Helpers\Repositories\Interfaces\IPhotoRepository.cs" />
+    <Compile Include="Helpers\Repositories\Interfaces\IPhotosRepository.cs" />
+    <Compile Include="Helpers\Repositories\Interfaces\IRepository.cs" />
+    <Compile Include="Helpers\Repositories\Logged\LoggedAlbumRepository.cs" />
+    <Compile Include="Helpers\Repositories\Logged\LoggedPhotoRepository.cs" />
+    <Compile Include="Helpers\Repositories\Logged\LoggedPhotosRepository.cs" />
+    <Compile Include="Helpers\Repositories\Logged\LoggedRepository.cs" />
+    <Compile Include="Helpers\Repositories\PhotoRepository.cs" />
+    <Compile Include="Helpers\Repositories\PhotosRepository.cs" />
+    <Compile Include="Helpers\Repositories\Repository.cs" />
     <Compile Include="Models\IConfiguration.cs" />
     <Compile Include="Helpers\Photos\Hashed\PreviewablePhotos.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedHashedAlbum.cs" />
