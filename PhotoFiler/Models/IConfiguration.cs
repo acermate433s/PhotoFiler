@@ -14,5 +14,7 @@ namespace PhotoFiler.Models
         DirectoryInfo PreviewLocation { get; set; }
 
         IHasher HashingFunction { get; set; }
+
+        bool EnableLogging { get; set; }
     }
 }

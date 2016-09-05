@@ -10,6 +10,7 @@ namespace PhotoFiler.Helpers
         private const string ROOTH_PATH = "RoothPath";
         private const string HASH_LENGTH = "HashLength";
         private const string CREATE_PREVIEW = "CreatePreview";
+        private const string ENABLE_LOGGING = "EnableLogging";
 
         public DirectoryInfo RootPath { get; set; }
 
@@ -20,6 +21,8 @@ namespace PhotoFiler.Helpers
         public DirectoryInfo PreviewLocation { get; set; }
 
         public IHasher HashingFunction { get; set; }
+
+        public bool EnableLogging { get; set; }
 
         public Configuration()
         {
@@ -40,6 +43,7 @@ namespace PhotoFiler.Helpers
                 throw new DirectoryNotFoundException("Preview location path not found!");
 
             HashingFunction = new MD5();
+            EnableLogging = bool.Parse(settings[ENABLE_LOGGING]);
         }
     }
 }

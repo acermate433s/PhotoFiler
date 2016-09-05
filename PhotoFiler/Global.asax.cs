@@ -33,17 +33,21 @@ namespace PhotoFiler
             using (var logger = new ActivityTracerScope(new TraceSource("PhotoFiler")))
             {
                 var configuration = new Configuration();
-                var loggedRepository = 
+                IRepository repository = new Repository(configuration);
+                if (configuration.EnableLogging)
+                {
+                    repository =
                         new LoggedRepository(
-                            logger, 
+                            logger,
                             new Repository(configuration)
                         );
+                }
 
                 IPreviewablePhotos retriever = null;
                 IHashedAlbum album = null;
 
-                var photosRepository = loggedRepository.CreatePhotosRepository();
-                var albumRepository = loggedRepository.CreateAlbumRepository();
+                var photosRepository = repository.CreatePhotosRepository();
+                var albumRepository = repository.CreateAlbumRepository();
 
                 try
                 {
