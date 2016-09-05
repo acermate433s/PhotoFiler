@@ -11,6 +11,12 @@ namespace Telemetry
     {
         public readonly ActivityEnumType Activity;
 
+        /// <summary>
+        /// Activity ID
+        /// </summary>
+        /// <remarks>
+        /// Integer representation of the enumeration
+        /// </remarks>
         public new int ActivityID
         {
             get
@@ -19,6 +25,12 @@ namespace Telemetry
             }
         }
 
+        /// <summary>
+        /// Activity name
+        /// </summary>
+        /// <remarks>
+        /// String represenation of the enumeration.  If there is a DescriptionAttribute it would be used, otherwise ToString() would be used.
+        /// </remarks>
         public new string ActivityName
         {
             get
@@ -27,6 +39,11 @@ namespace Telemetry
             }
         }
 
+        /// <summary>
+        /// Gets the string representation of the enumeration.  Uses the value of the DescriptionAttribute if there is one, otherwise ToString() would be used.
+        /// </summary>
+        /// <param name="activityType"></param>
+        /// <returns></returns>
         private static string GetDescription(
             ActivityEnumType activityType
         )
@@ -48,6 +65,9 @@ namespace Telemetry
             return result;
         }
 
+        /// <summary>
+        /// Makes sure that ActivityEnumType is an enumeration type
+        /// </summary>
         static ActivityTracerScope()
         {
             if (!typeof(ActivityEnumType).IsEnum)

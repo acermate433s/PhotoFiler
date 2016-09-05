@@ -113,6 +113,12 @@ namespace Telemetry
             }
         }
 
+        /// <summary>
+        /// Create a new instance.  The new instance could be enclosed inside a using statement to start an an activity.
+        /// </summary>
+        /// <param name="activityName">Name of the activity</param>
+        /// <param name="activityID">Optional activity ID</param>
+        /// <returns></returns>
         public ILogger Create(string activityName = "", int activityID = 0)
         {
             return new ActivityTracerScope(this.TraceSource, activityName, activityID);
