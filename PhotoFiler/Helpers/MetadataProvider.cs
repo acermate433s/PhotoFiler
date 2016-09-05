@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Web.Mvc;
 
 namespace PhotoFiler.Helpers
 {
     public class InterfaceMetadataProvider : System.Web.Mvc.EmptyModelMetadataProvider
     {
-        public override System.Web.Mvc.ModelMetadata GetMetadataForProperty(
-            Func<object> modelAccessor, Type containerType, string propertyName)
+        public override ModelMetadata GetMetadataForProperty(
+            Func<object> modelAccessor, 
+            Type containerType, 
+            string propertyName
+        )
         {
             if (containerType == null)
             {
@@ -52,7 +56,18 @@ namespace PhotoFiler.Helpers
                 );
             }
 
-            return GetMetadataForProperty(modelAccessor, containerType, property);
+            var result = 
+                base.GetMetadataForProperty(
+                    modelAccessor, 
+                    containerType,
+                    property
+                );
+
+            // retrieve the DisplayNameAttribute from the model defined
+            // in the view and not from the instantiated class
+            result.DisplayName = property.DisplayName;
+
+            return result;
         }
     }
 }

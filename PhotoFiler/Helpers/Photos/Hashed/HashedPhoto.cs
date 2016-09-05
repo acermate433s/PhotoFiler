@@ -24,7 +24,6 @@ namespace PhotoFiler.Helpers.Photos.Hashed
             Hash = hasher.Hash(path, hashLength);
         }
 
-        [DisplayName("Hash")]
         public string Hash { get; private set; }
     }
 }

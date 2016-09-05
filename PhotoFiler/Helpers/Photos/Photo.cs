@@ -51,32 +51,26 @@ namespace PhotoFiler.Helpers
         /// <summary>
         /// FileInfo object that represents the photo
         /// </summary>
-        [DisplayName("FileInfo")]
         public FileInfo FileInfo { get; private set; }
 
         /// <summary>
         /// Filename of the photo
         /// </summary>
-        [DisplayName("Name")]
         public string Name { get; private set; }
 
         /// <summary>
         /// File size of the photo in human readable format
         /// </summary>
-        [DisplayName("Size")]
         public string Size { get; private set; }
 
         /// <summary>
         /// Resolution of the photo
         /// </summary>
-        [DisplayName("Resolution")]
         public string Resolution { get; private set; }
 
         /// <summary>
         /// Date when the photo was created
         /// </summary>
-        [DisplayName("Created On")]
-        [DisplayFormat(DataFormatString = "{0:d}")]
         public DateTime? CreationDateTime { get; private set; }
 
         /// <summary>
