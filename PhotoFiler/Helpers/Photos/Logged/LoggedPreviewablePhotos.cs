@@ -29,15 +29,22 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public List<IPreviewablePhoto> Retrieve()
         {
-            var result =  _PreviewableHashedPhotos.Retrieve();
+            using (var logger = _Logger.Create("Retrieving photos."))
+            {
+                var result = _PreviewableHashedPhotos.Retrieve();
 
-            if (result.Count() == 0)
-                _Logger.Warning("No photos retrieved!");
+                if (result.Count() == 0)
+                {
+                    _Logger.Warning("No photos retrieved!");
+                }
+                else
+                {
+                    _Logger.Information($"Retrieved {result.Count()} photos.");
+                    _Logger.Verbose(result.Select(item => item.FileInfo.FullName).ToArray());
+                }
 
-            _Logger.Information($"Retrieved {result.Count()} photos.");
-            _Logger.Verbose(result.Select(item => item.FileInfo.FullName).ToArray());
-
-            return result;
+                return result;
+            }
         }
     }
 }
