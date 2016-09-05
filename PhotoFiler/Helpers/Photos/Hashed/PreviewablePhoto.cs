@@ -35,7 +35,10 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         /// <returns></returns>
         public byte[] View()
         {
-            return System.IO.File.ReadAllBytes(FileInfo.FullName);
+            if (File.Exists(FileInfo.FullName))
+                return System.IO.File.ReadAllBytes(FileInfo.FullName);
+            else
+                return null;
         }
 
         /// <summary>
@@ -47,9 +50,7 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         {
             byte[] result = Preview(Hash);
             if (result == null)
-            {
                 result = Preview(FileInfo);
-            }
 
             return result;
         }
@@ -91,6 +92,9 @@ namespace PhotoFiler.Helpers.Photos.Hashed
 
             try
             {
+                if(!File.Exists(fileInfo.FullName))
+                    return result;
+
                 byte[] buffer = File.ReadAllBytes(fileInfo.FullName);
 
                 // resize the image to MAX pixels by MAX

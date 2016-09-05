@@ -1,5 +1,6 @@
 ﻿using PhotoFiler.Models;
 using System.IO;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -39,15 +40,44 @@ namespace PhotoFiler.Controllers
         [Route("Preview/{hash}")]
         public ActionResult Preview(string hash)
         {
-            return ImageFile(hash, true, Album.Photo(hash), Album.Preview(hash));
+            var content = Album.Preview(hash);
+            if (content == null)
+                return new HttpNotFoundResult($"Cannot find preview for \"{hash}\"");
+
+            var result = 
+                ImageFile(
+                    hash, 
+                    true, 
+                    Album.Photo(hash), 
+                    content
+                );
+
+            return result;
         }
 
         private ActionResult Retrieve(string hash, bool inline)
         {
-            return ImageFile(hash, inline, Album.Photo(hash), Album.View(hash));
+            var content = Album.View(hash);
+            if (content == null)
+                return new HttpNotFoundResult($"Cannot find view for \"{hash}\"");
+
+            var result = 
+                ImageFile(
+                    hash, 
+                    inline, 
+                    Album.Photo(hash), 
+                    content
+                );
+
+            return result;
         }
 
-        private ActionResult ImageFile(string hash, bool inline, IPhoto photo, byte[] content)
+        private ActionResult ImageFile(
+            string hash, 
+            bool inline, 
+            IPhoto photo, 
+            byte[] content
+        )
         {
             if ((photo == null) || (content == null))
                 return new HttpNotFoundResult("Photo not found");
