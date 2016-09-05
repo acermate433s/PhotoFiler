@@ -1,4 +1,5 @@
 ﻿using PhotoFiler.Helpers.Photos.Logged;
+using PhotoFiler.Helpers.Repositories;
 using PhotoFiler.Models;
 using System;
 using System.Collections.Generic;
@@ -8,33 +9,33 @@ using System.Web;
 
 namespace PhotoFiler.Helpers.Photos.Hashed
 {
-    public class PreviewableHashedPhotos : IPreviewableHashedPhotos
+    public class PreviewablePhotos : IPreviewablePhotos
     {
         DirectoryInfo _Source = null;
-        Func<FileInfo, IPreviewableHashedPhoto> _Initiator;
+        IPhotoRepository _PhotoRepository = null;
 
-        public PreviewableHashedPhotos(
+        public PreviewablePhotos(
             DirectoryInfo source,
-            Func<FileInfo, IPreviewableHashedPhoto> initiator
+            IPhotoRepository photoRepository
         )
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
 
-            if (source == null)
-                throw new ArgumentNullException(nameof(initiator));
+            if (photoRepository == null)
+                throw new ArgumentNullException(nameof(photoRepository));
 
             _Source = source;
-            _Initiator = initiator;
+            _PhotoRepository = photoRepository;
         }
 
-        public List<IPreviewableHashedPhoto> Retrieve()
+        public List<IPreviewablePhoto> Retrieve()
         {
             var files = GetPhotoFiles(_Source);
 
             return
                 GetPhotoFiles(_Source)
-                    .Select(file => _Initiator.Invoke(file))
+                    .Select(file => _PhotoRepository.Create(file))
                     .ToList();
         }
 

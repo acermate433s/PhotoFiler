@@ -8,15 +8,15 @@ namespace PhotoFiler.Helpers.Photos.Hashed
 {
     public class HashedAlbum : IHashedAlbum
     {
-        public event EventHandler<IPreviewableHashedPhoto> ErrorGeneratePreview;
+        public event EventHandler<IPreviewablePhoto> ErrorGeneratePreview;
 
-        public IList<IPreviewableHashedPhoto> Photos { get; private set; }
+        public IList<IPreviewablePhoto> Photos { get; private set; }
 
         public DirectoryInfo PreviewLocation { get; private set; }
 
         public HashedAlbum(
-            string previewLocation,
-            List<IPreviewableHashedPhoto> photos
+            DirectoryInfo previewLocation,
+            List<IPreviewablePhoto> photos
         )
         {
             if (previewLocation == null)
@@ -26,7 +26,7 @@ namespace PhotoFiler.Helpers.Photos.Hashed
                 throw new ArgumentNullException(nameof(photos));
 
             Photos = photos;
-            PreviewLocation = new DirectoryInfo(previewLocation);
+            PreviewLocation = previewLocation;
         }
 
         public int Count()
@@ -68,7 +68,7 @@ namespace PhotoFiler.Helpers.Photos.Hashed
                 Photos.Remove(Photos.First(item => item.Hash == error));
         }
 
-        public IEnumerable<IPreviewableHashedPhoto> List(int page = 1, int count = 10)
+        public IEnumerable<IPreviewablePhoto> List(int page = 1, int count = 10)
         {
             if (this.Count() > 0)
             {
@@ -79,10 +79,10 @@ namespace PhotoFiler.Helpers.Photos.Hashed
                         .Select(item => item);
             }
             else
-                return Enumerable.Empty<IPreviewableHashedPhoto>();
+                return Enumerable.Empty<IPreviewablePhoto>();
         }
 
-        public IPreviewableHashedPhoto Photo(string hash)
+        public IPreviewablePhoto Photo(string hash)
         {
             return Photos.FirstOrDefault(item => item.Hash == hash);
         }

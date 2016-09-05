@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace PhotoFiler.Models
 {
-    public interface IPreviewableHashedPhotos
+    public interface IPreviewablePhotos
     {
-        List<IPreviewableHashedPhoto> Retrieve();
+        List<IPreviewablePhoto> Retrieve();
     }
 }

@@ -5,14 +5,14 @@ using Telemetry;
 
 namespace PhotoFiler.Helpers.Photos.Logged
 {
-    public class LoggedPreviewableHashedPhoto : IPreviewableHashedPhoto
+    public class LoggedPreviewablePhoto : IPreviewablePhoto
     {
         ILogger _Logger;
-        IPreviewableHashedPhoto _PreviewableHashedPhoto;
+        IPreviewablePhoto _PreviewableHashedPhoto;
 
-        public LoggedPreviewableHashedPhoto(
+        public LoggedPreviewablePhoto(
             ILogger logger, 
-            IPreviewableHashedPhoto photo
+            IPreviewablePhoto photo
         ) 
         {
             if (logger == null)
