@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using PhotoFiler.Helpers.Photos.Logged;
 using PhotoFiler.Models;
-using PhotoFiler.Helpers.Photos.Logged;
+using System;
 using System.IO;
 using Telemetry;
 
@@ -31,11 +28,14 @@ namespace PhotoFiler.Helpers.Repositories.Logged
 
         public  IPreviewablePhoto Create(FileInfo file)
         {
-            return
-                new LoggedPreviewablePhoto(
-                    _Logger,
-                    _PhotoRepository.Create(file)
-                );
+            using (var scope = _Logger.Create($"Creating instance photo for \"{file}\""))
+            {
+                return
+                    new LoggedPreviewablePhoto(
+                        _Logger,
+                        _PhotoRepository.Create(file)
+                    );
+            }
         }
     }
 }

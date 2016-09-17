@@ -2,9 +2,7 @@
 using PhotoFiler.Models;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Web;
 using Telemetry;
 
 namespace PhotoFiler.Helpers.Repositories.Logged
@@ -31,11 +29,20 @@ namespace PhotoFiler.Helpers.Repositories.Logged
 
         public IHashedAlbum Create(List<IPreviewablePhoto> photos)
         {
-            return
-                new LoggedHashedAlbum(
-                    _Logger,
-                    _AlbumRepository.Create(photos)
+            using (var scope = _Logger.Create($"Creating album with {photos.Count()} photos."))
+            {
+                scope.Verbose(
+                    photos
+                        .Select(photo => photo.ToString())
+                        .ToArray()
                 );
+
+                return
+                    new LoggedHashedAlbum(
+                        _Logger,
+                        _AlbumRepository.Create(photos)
+                    );
+            }
         }
     }
 }

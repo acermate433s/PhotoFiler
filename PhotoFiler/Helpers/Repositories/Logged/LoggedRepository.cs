@@ -1,5 +1,4 @@
-﻿using PhotoFiler.Models;
-using System;
+﻿using System;
 using Telemetry;
 
 namespace PhotoFiler.Helpers.Repositories.Logged
@@ -12,7 +11,7 @@ namespace PhotoFiler.Helpers.Repositories.Logged
         public LoggedRepository(
             ILogger logger,
             IRepository repository
-        ) 
+        )
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -26,29 +25,38 @@ namespace PhotoFiler.Helpers.Repositories.Logged
 
         public IAlbumRepository CreateAlbumRepository()
         {
-            return
-                new LoggedAlbumRepository(
-                    _Logger,
-                    _Repository.CreateAlbumRepository()
-                );
+            using (var scope = _Logger.Create("Creating IAlbumRepository instance"))
+            {
+                return
+                    new LoggedAlbumRepository(
+                        _Logger,
+                        _Repository.CreateAlbumRepository()
+                    );
+            }
         }
 
         public IPhotoRepository CreatePhotoRepository()
         {
-            return
-                new LoggedPhotoRepository(
-                    _Logger,
-                    _Repository.CreatePhotoRepository()
-                );
+            using (var scope = _Logger.Create("Creating IPhotoRepository instance"))
+            {
+                return
+                    new LoggedPhotoRepository(
+                        _Logger,
+                        _Repository.CreatePhotoRepository()
+                    );
+            }
         }
 
         public IPhotosRepository CreatePhotosRepository()
         {
-            return
-                new LoggedPhotosRepository(
-                    _Logger,
-                    _Repository.CreatePhotosRepository()
-                );
+            using (var scope = _Logger.Create("Creating IPhotosRepository instance"))
+            {
+                return
+                    new LoggedPhotosRepository(
+                        _Logger,
+                        _Repository.CreatePhotosRepository()
+                    );
+            }
         }
     }
 }

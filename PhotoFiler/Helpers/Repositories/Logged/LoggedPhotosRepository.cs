@@ -1,10 +1,6 @@
 ﻿using PhotoFiler.Helpers.Photos.Logged;
 using PhotoFiler.Models;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
 using Telemetry;
 
 namespace PhotoFiler.Helpers.Repositories.Logged
@@ -31,11 +27,14 @@ namespace PhotoFiler.Helpers.Repositories.Logged
 
         public IPreviewablePhotos Create()
         {
-            return
-                new LoggedPreviewablePhotos(
-                    _Logger,
-                    _PhotosRepository.Create()
-                );
+            using (var scope = _Logger.Create("Creating photo repository."))
+            {
+                return
+                    new LoggedPreviewablePhotos(
+                        _Logger,
+                        _PhotosRepository.Create()
+                    );
+            }
         }
     }
 }
