@@ -31,52 +31,61 @@ namespace PhotoFiler
 
             using (var logger = new ActivityTracerScope(new TraceSource("PhotoFiler")))
             {
-                var configuration = new Configuration();
-                logger.Verbose(configuration.ToString());
-
-                IRepository repository = new Repository(configuration);
-                if (configuration.EnableLogging)
-                {
-                    logger.Information("Logging enabled.");
-                    repository =
-                        new LoggedRepository(
-                            logger,
-                            new Repository(configuration)
-                        );
-                }
-
-                IPreviewablePhotos retriever = null;
-                IHashedAlbum album = null;
-
-                var photosRepository = repository.CreatePhotosRepository();
-                var albumRepository = repository.CreateAlbumRepository();
-
                 try
                 {
-                    retriever = photosRepository.Create();
-                    var photos = retriever.Retrieve();
+                    var configuration = new Configuration();
+                    logger.Verbose(configuration.ToString());
 
-                    if (retriever != null)
-                        album = albumRepository.Create(photos);
+                    IRepository repository = new Repository(configuration);
+                    if (configuration.EnableLogging)
+                    {
+                        logger.Information("Logging enabled.");
+                        repository =
+                            new LoggedRepository(
+                                logger,
+                                new Repository(configuration)
+                            );
+                    }
+
+                    IPreviewablePhotos retriever = null;
+                    IHashedAlbum album = null;
+
+                    var photosRepository = repository.CreatePhotosRepository();
+                    var albumRepository = repository.CreateAlbumRepository();
+
+                    try
+                    {
+                        retriever = photosRepository.Create();
+                        var photos = retriever.Retrieve();
+
+                        if (retriever != null)
+                            album = albumRepository.Create(photos);
+                    }
+                    catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
+                    {
+                        logger.Error(ex);
+                    }
+
+                    if ((album != null) && (configuration.CreatePreview))
+                    {
+                        logger.Information("Deleting old previews");
+                        configuration
+                                .PreviewLocation
+                                .GetFiles()
+                                .ToList()
+                                .ForEach(item => item.Delete());
+
+                        album.GeneratePreviews();
+                    }
+
+                    HttpContext.Current.Application["Album"] = album;
                 }
-                catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
+                catch(Exception ex)
                 {
-                    logger.Error(ex);
+                    logger.Critical(ex);
+
+                    throw new HttpUnhandledException("Cannot continue.  Check trace file for explanation.", ex);
                 }
-
-                if ((album != null) && (configuration.CreatePreview))
-                {
-                    logger.Information("Deleting old previews");
-                    configuration
-                            .PreviewLocation
-                            .GetFiles()
-                            .ToList()
-                            .ForEach(item => item.Delete());
-
-                    album.GeneratePreviews();
-                }
-
-                HttpContext.Current.Application["Album"] = album;
             }
         }
     }
