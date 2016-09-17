@@ -27,15 +27,17 @@ namespace PhotoFiler
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            // hack to make model binding work for models that implements interfaces
             ModelMetadataProviders.Current = new InterfaceMetadataProvider();
 
             using (var logger = new ActivityTracerScope(new TraceSource("PhotoFiler")))
             {
                 var configuration = new Configuration();
+                logger.Verbose(configuration.ToString());
+
                 IRepository repository = new Repository(configuration);
                 if (configuration.EnableLogging)
                 {
+                    logger.Information("Logging enabled.");
                     repository =
                         new LoggedRepository(
                             logger,
@@ -62,8 +64,17 @@ namespace PhotoFiler
                     logger.Error(ex);
                 }
 
-                if ((album != null ) && (configuration.CreatePreview))
+                if ((album != null) && (configuration.CreatePreview))
+                {
+                    logger.Information("Deleting old previews");
+                    configuration
+                            .PreviewLocation
+                            .GetFiles()
+                            .ToList()
+                            .ForEach(item => item.Delete());
+
                     album.GeneratePreviews();
+                }
 
                 HttpContext.Current.Application["Album"] = album;
             }

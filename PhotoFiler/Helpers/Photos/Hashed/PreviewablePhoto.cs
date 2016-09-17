@@ -1,4 +1,5 @@
-﻿using ImageResizer;
+﻿using ImageProcessor;
+using ImageProcessor.Imaging;
 using PhotoFiler.Models;
 using System;
 using System.IO;
@@ -102,13 +103,22 @@ namespace PhotoFiler.Helpers.Photos.Hashed
                 using (var input = new MemoryStream(buffer))
                 using (var output = new MemoryStream())
                 {
-                    var job =
-                        new ImageJob(
-                            input,
-                            output,
-                            new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
-                        );
-                    job.Build();
+                    using (var factory = new ImageFactory())
+                    {
+                        factory
+                            .Load(input)
+                            .Resize(
+                                new ResizeLayer(
+                                    new System.Drawing.Size(MAX, MAX),
+                                    ResizeMode.Crop
+                                )
+                                {
+                                    AnchorPosition = AnchorPosition.Center
+                                }
+                            )
+                            .Save(output);
+                    }
+
                     result = output.ToArray();
                 }
             }

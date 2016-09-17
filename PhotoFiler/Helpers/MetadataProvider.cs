@@ -5,6 +5,9 @@ using System.Web.Mvc;
 
 namespace PhotoFiler.Helpers
 {
+    /// <summary>
+    /// Hack to make model binding work for models that implements interfaces
+    /// </summary>
     public class InterfaceMetadataProvider : System.Web.Mvc.EmptyModelMetadataProvider
     {
         public override ModelMetadata GetMetadataForProperty(
