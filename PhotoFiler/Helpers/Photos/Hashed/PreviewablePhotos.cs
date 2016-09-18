@@ -31,8 +31,6 @@ namespace PhotoFiler.Helpers.Photos.Hashed
 
         public List<IPreviewablePhoto> Retrieve()
         {
-            var files = GetPhotoFiles(_Source);
-
             return
                 GetPhotoFiles(_Source)
                     .Select(file => _PhotoRepository.Create(file))
