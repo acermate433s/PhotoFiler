@@ -75,30 +75,28 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public byte[] Preview()
         {
-            using (var logger = _Logger.Create($"Previewing photo \"{FileInfo.FullName}\" with hash \"{Hash}\"."))
-            {
-                var result = _PreviewableHashedPhoto.Preview();
+            _Logger.Information($"Generating preview for \"{FileInfo.FullName}\" with hash \"{Hash}\".");
+            var result = _PreviewableHashedPhoto.Preview();
 
-                if (result == null)
-                    _Logger.Warning($"Cannot generate preview for photo \"{FileInfo.FullName}\" with hash \"{Hash}\".");
-                else
-                    _Logger.Information($"Preview size for \"{FileInfo.FullName}\" with hash \"{Hash}\" is {result.Length} bytes.");
+            if (result == null)
+                _Logger.Warning($"Cannot generate preview for photo \"{FileInfo.FullName}\" with hash \"{Hash}\".");
+            else
+                _Logger.Information($"Preview size for \"{FileInfo.FullName}\" with hash \"{Hash}\" is {result.Length} bytes.");
 
-                return result;
-            }
+            return result;
         }
         public byte[] View()
         {
-            using (var logger = _Logger.Create($"Viewing photo \"{FileInfo.FullName}\" with hash \"{Hash}\"."))
-            {
-                var result = _PreviewableHashedPhoto.View();
-                if (result == null)
-                    _Logger.Warning($"Cannot generate full view for photo \"{FileInfo.FullName}\" with hash \"{Hash}\".");
-                else
-                    _Logger.Information($"Full size for \"{FileInfo.FullName}\" with hash \"{Hash}\" is {result.Length} bytes.");
+            _Logger.Information($"Generating view for \"{FileInfo.FullName}\" with hash \"{Hash}\".");
+            var result = _PreviewableHashedPhoto.View();
 
-                return result;
-            }
+            if (result == null)
+                _Logger.Warning($"Cannot generate full view for photo \"{FileInfo.FullName}\" with hash \"{Hash}\".");
+            else
+                _Logger.Information($"Full size for \"{FileInfo.FullName}\" with hash \"{Hash}\" is {result.Length} bytes.");
+
+            return result;
+            
         }
     }
 }

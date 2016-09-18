@@ -28,14 +28,13 @@ namespace PhotoFiler.Helpers.Repositories.Logged
 
         public  IPreviewablePhoto Create(FileInfo file)
         {
-            using (var scope = _Logger.Create($"Creating instance photo for \"{file}\""))
-            {
-                return
-                    new LoggedPreviewablePhoto(
-                        _Logger,
-                        _PhotoRepository.Create(file)
-                    );
-            }
+            _Logger.Information($"Creating instance photo for \"{file}\"");
+            
+            return
+                new LoggedPreviewablePhoto(
+                    _Logger,
+                    _PhotoRepository.Create(file)
+                );            
         }
     }
 }

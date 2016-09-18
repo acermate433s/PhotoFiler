@@ -29,20 +29,19 @@ namespace PhotoFiler.Helpers.Repositories.Logged
 
         public IHashedAlbum Create(List<IPreviewablePhoto> photos)
         {
-            using (var scope = _Logger.Create($"Creating album with {photos.Count()} photos."))
-            {
-                scope.Verbose(
+            _Logger.Information($"Creating album with { photos.Count()} photos.");
+            _Logger
+                .Verbose(
                     photos
-                        .Select(photo => photo.ToString())
+                        .Select(photo => photo.FileInfo.ToString())
                         .ToArray()
                 );
 
-                return
-                    new LoggedHashedAlbum(
-                        _Logger,
-                        _AlbumRepository.Create(photos)
-                    );
-            }
+            return
+                new LoggedHashedAlbum(
+                    _Logger,
+                    _AlbumRepository.Create(photos)
+                );            
         }
     }
 }

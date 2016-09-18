@@ -30,7 +30,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
             _HashedAlbum.ErrorGeneratePreview +=
                 (sender, e) =>
                 {
-                    _Logger.Warning($"Error generating preview for photo \"{e.FileInfo.FullName}\" with hash \"{e.Hash}\".");
+                    _Logger.Warning($"Error generating preview for photo \"{e.FileInfo.FullName}\" with hash \"{e.Hash}\" in album.");
 
                     ErrorGeneratePreview?.Invoke(sender, e);
                 };
@@ -61,7 +61,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public void GeneratePreviews()
         {
-            using (var logger = _Logger.Create($"Generating photo previews of {_HashedAlbum.Count()} photos in \"{_HashedAlbum.PreviewLocation.FullName}\"."))
+            using (var logger = _Logger.Create($"Generating photo previews of {_HashedAlbum.Count()} photos in \"{_HashedAlbum.PreviewLocation.FullName}\" for album."))
             {
                 _HashedAlbum.GeneratePreviews();
             }
@@ -69,76 +69,81 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public IEnumerable<IPreviewablePhoto> List(int page = 1, int count = 10)
         {
-            using (var logger = _Logger.Create($"Generate list of photos."))
-            {
-                var result = _HashedAlbum.List(page, count);
+            _Logger.Information("Generate list of photos in album.");            
+            var result = _HashedAlbum.List(page, count);
 
+            if (result != null)
                 _Logger.Information($"Retrieved page {page} expecting {count} photos but retrieved {result.Count()}.");
+            else
+                _Logger.Warning($"No photos where retrieved.");
 
-                return result;
-            }
+            return result;
         }
 
         public IPreviewablePhoto Photo(string hash)
         {
-            using (var logger = _Logger.Create($"Get photo with \"{hash}\"."))
-            {
-                var result = _HashedAlbum.Photo(hash);
-                if (result == null)
-                    _Logger.Warning($"Cannot find photo for hash \"{hash}\".");
+            _Logger.Information($"Retrieving photo with hash \"{hash}\" in album.");            
+            var result = _HashedAlbum.Photo(hash);
 
-                return result;
-            }
+            if (result == null)
+                _Logger.Warning($"Cannot find photo for hash \"{hash}\".");
+
+            return result;            
         }
 
         public byte[] Preview(string hash)
         {
-            using (var logger = _Logger.Create($"Generate preview for \"{hash}\""))
+            _Logger.Information($"Generate preview for \"{hash}\" in album");
+            
+            var photo = Photos.FirstOrDefault(item => item.Hash == hash);
+            if (photo != null)
             {
-                var photo = Photos.FirstOrDefault(item => item.Hash == hash);
-                if (photo != null)
+                var result = photo.Preview();
+                if (photo.FileInfo != null)
                 {
-                    var result = photo.Preview();
-                    if (photo.FileInfo != null)
-                    {
-                        if (result != null)
-                            _Logger.Information($"Preview size for \"{photo.FileInfo.FullName}\" with hash \"{hash}\" is {result.Length} bytes.");
-                        else
-                            _Logger.Warning($"Cannot generate preview for \"{photo.FileInfo.FullName} with hash \"{hash}\".");
-                    }
+                    if (result != null)
+                        _Logger.Information($"Preview size for \"{photo.FileInfo.FullName}\" with hash \"{hash}\" is {result.Length} bytes.");
                     else
-                        _Logger.Warning($"Cannot find photo with hash \"{hash}\".");
-
-                    return result;
+                        _Logger.Warning($"Cannot generate preview for \"{photo.FileInfo.FullName} with hash \"{hash}\".");
                 }
                 else
-                    return null;
+                    _Logger.Warning($"Cannot find photo with hash \"{hash}\".");
+
+                return result;
+            }
+            else
+            {
+                _Logger.Warning("No photos can be found in the album.");
+                return null;
             }
         }
 
         public byte[] View(string hash)
         {
-            using (var logger = _Logger.Create($"Generate view for \"{hash}\""))
+            _Logger.Information($"Generate view for \"{hash}\"  in album.");
+            
+            var photo = Photos.FirstOrDefault(item => item.Hash == hash);
+            if (photo != null)
             {
-                var photo = Photos.FirstOrDefault(item => item.Hash == hash);
-                if (photo != null)
+                var result = photo.View();
+                if (photo.FileInfo != null)
                 {
-                    var result = photo.View();
-                    if (photo.FileInfo != null)
-                    {
-                        if (result != null)
-                            _Logger.Information($"Full size for \"{photo.FileInfo.FullName}\" with hash \"{hash}\" is {result.Length} bytes.");
-                        else
-                            _Logger.Warning($"Cannot generate view for \"{photo.FileInfo.FullName} with hash \"{hash}\".");
-                    }
+                    if (result != null)
+                        _Logger.Information($"Full size for \"{photo.FileInfo.FullName}\" with hash \"{hash}\" is {result.Length} bytes.");
                     else
-                        _Logger.Warning($"Cannot find photo with hash \"{hash}\".");
-
-                    return result;
+                        _Logger.Warning($"Cannot generate view for \"{photo.FileInfo.FullName} with hash \"{hash}\".");
                 }
                 else
-                    return null;
+                    _Logger.Warning($"Cannot find photo with hash \"{hash}\".");
+
+                return result;
             }
+            else
+            {
+                _Logger.Warning("No photos can be found in the album.");
+                return null;
+            }
+            
         }
     }
 }

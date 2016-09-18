@@ -20,6 +20,8 @@ namespace PhotoFiler
 {
     public class MvcApplication : System.Web.HttpApplication
     {
+        ILogger _Logger = new ActivityTracerScope(new TraceSource("PhotoFiler"));
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -29,7 +31,7 @@ namespace PhotoFiler
 
             ModelMetadataProviders.Current = new InterfaceMetadataProvider();
 
-            using (var logger = new ActivityTracerScope(new TraceSource("PhotoFiler")))
+            using (var logger = _Logger.Create("Application_Start"))
             {
                 try
                 {
@@ -42,7 +44,7 @@ namespace PhotoFiler
                         logger.Information("Logging enabled.");
                         repository =
                             new LoggedRepository(
-                                logger,
+                                _Logger,
                                 new Repository(configuration)
                             );
                     }
@@ -70,22 +72,31 @@ namespace PhotoFiler
                     {
                         logger.Information("Deleting old previews");
                         configuration
-                                .PreviewLocation
-                                .GetFiles()
-                                .ToList()
-                                .ForEach(item => item.Delete());
+                            .PreviewLocation
+                            .GetFiles()
+                            .ToList()
+                            .ForEach(item => item.Delete());
 
                         album.GeneratePreviews();
                     }
 
                     HttpContext.Current.Application["Album"] = album;
+                    HttpContext.Current.Application["Logger"] = _Logger;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.Critical(ex);
-
                     throw new HttpUnhandledException("Cannot continue.  Check trace file for explanation.", ex);
                 }
+            }          
+        }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            if (Server != null)
+            {
+                Exception ex = Server.GetLastError();
+                _Logger.Error(ex);
             }
         }
     }

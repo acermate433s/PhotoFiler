@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Telemetry;
 
 namespace PhotoFiler.Controllers
 {
@@ -11,9 +12,8 @@ namespace PhotoFiler.Controllers
         private const int DEFAULT_PAGE = 1;
         private const int DEFAULT_COUNT = 12;
 
-        private delegate byte[] FileBytes<T, U>(T input);
-
         private IHashedAlbum Album = (IHashedAlbum) System.Web.HttpContext.Current.Application["Album"];
+        private ILogger Logger = (ILogger) System.Web.HttpContext.Current.Application["Logger"];
 
         public PhotoController()
         {
@@ -22,37 +22,67 @@ namespace PhotoFiler.Controllers
         [Route("{hash}")]
         public ActionResult Index(string hash)
         {
-            if (hash != null)
-                return Retrieve(hash, true);
-            else
-                return RedirectToAction("Index", "Home");
+            using (var logger = Logger.Create($"PhotoController.Index(hash = \"{hash}\")"))
+            {
+                logger.Information(Request.Url.AbsoluteUri);
+
+                if (hash != null)
+                {
+                    logger.Information("Retrieve photo with hash \"{0}\".", hash);
+                    return Retrieve(hash, true);
+                }
+                else
+                {
+                    logger.Warning("Hash cannot be null.");
+                    return RedirectToAction("Index", "Home");
+                }
+            }
         }
 
         [Route("Download/{hash}")]
         public ActionResult Download(string hash)
         {
-            if (hash != null)
-                return Retrieve(hash, false);
-            else
-                return RedirectToAction("Index", "Home");
+            using (var logger = Logger.Create($"PhotoController.Download(hash = \"{hash}\")"))
+            {
+                logger.Information(Request.Url.AbsoluteUri);
+
+                if (hash != null)
+                {
+                    logger.Information("Retrieve photo with hash \"{0}\".", hash);
+                    return Retrieve(hash, false);
+                }
+                else
+                {
+                    logger.Warning("Hash cannot be null.");
+                    return RedirectToAction("Index", "Home");
+                }
+            }
         }
 
         [Route("Preview/{hash}")]
         public ActionResult Preview(string hash)
         {
-            var content = Album.Preview(hash);
-            if (content == null)
-                return new HttpNotFoundResult($"Cannot find preview for \"{hash}\"");
+            using (var logger = Logger.Create($"PhotoController.Preview(hash = \"{hash}\")"))
+            {
+                logger.Information(Request.Url.AbsoluteUri);
 
-            var result = 
-                ImageFile(
-                    hash, 
-                    true, 
-                    Album.Photo(hash), 
-                    content
-                );
+                var content = Album.Preview(hash);
+                if (content == null)
+                {
+                    logger.Warning("Cannot find preview for photo with hash {0}", hash);
+                    return new HttpNotFoundResult($"Cannot find preview for photo with \"{hash}\"");
+                }
 
-            return result;
+                var result =
+                    ImageFile(
+                        hash,
+                        true,
+                        Album.Photo(hash),
+                        content
+                    );
+
+                return result;
+            }
         }
 
         private ActionResult Retrieve(string hash, bool inline)
@@ -99,31 +129,41 @@ namespace PhotoFiler.Controllers
         [Route("List")]
         public ActionResult List(int page = DEFAULT_PAGE, int count = DEFAULT_COUNT)
         {
-            int total = Album.Count();
+            using (var logger = Logger.Create($"PhotoController.List(page = {page}, count = {count})"))
+            {
+                int total = Album.Count();
 
-            ViewBag.Total = total;
-            ViewBag.Previous = page - 1;
-            ViewBag.Current = page;
-            ViewBag.Max = total / count + (total % count == 0 ? 0 : 1);
-            ViewBag.Next = page + 1;
-            ViewBag.Count = count;
+                ViewBag.Total = total;
+                ViewBag.Previous = page - 1;
+                ViewBag.Current = page;
+                ViewBag.Max = total / count + (total % count == 0 ? 0 : 1);
+                ViewBag.Next = page + 1;
+                ViewBag.Count = count;
+            
+                logger.Information(Request.Url.AbsoluteUri);
 
-            return View(Album.List(page, count));
+                return View(Album.List(page, count));
+            }
         }
 
         [Route("")]
         public ActionResult Gallery(int page = DEFAULT_PAGE, int count = DEFAULT_COUNT)
         {
-            int total = Album.Count();
-
-            ViewBag.Total = total;
-            ViewBag.Previous = page - 1;
-            ViewBag.Current = page;
-            ViewBag.Max = total / count + (total % count == 0 ? 0 : 1);
-            ViewBag.Next = page + 1;
-            ViewBag.Count = count;
-
-            return View(Album.List(page, count));
+            using (var logger = Logger.Create($"PhotoController.Gallery(page = {page}, count = {count}"))
+            {
+                int total = Album.Count();
+                    
+                ViewBag.Total = total;
+                ViewBag.Previous = page - 1;
+                ViewBag.Current = page;
+                ViewBag.Max = total / count + (total % count == 0 ? 0 : 1);
+                ViewBag.Next = page + 1;
+                ViewBag.Count = count;
+            
+                logger.Information(Request.Url.AbsoluteUri);
+                    
+                return View(Album.List(page, count));
+            }
         }
     }
 }

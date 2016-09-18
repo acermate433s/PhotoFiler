@@ -25,38 +25,35 @@ namespace PhotoFiler.Helpers.Repositories.Logged
 
         public IAlbumRepository CreateAlbumRepository()
         {
-            using (var scope = _Logger.Create("Creating IAlbumRepository instance"))
-            {
-                return
-                    new LoggedAlbumRepository(
-                        _Logger,
-                        _Repository.CreateAlbumRepository()
-                    );
-            }
+            _Logger.Information("Creating IAlbumRepository instance");
+
+            return
+                new LoggedAlbumRepository(
+                    _Logger,
+                    _Repository.CreateAlbumRepository()
+                );
         }
 
         public IPhotoRepository CreatePhotoRepository()
         {
-            using (var scope = _Logger.Create("Creating IPhotoRepository instance"))
-            {
-                return
-                    new LoggedPhotoRepository(
-                        _Logger,
-                        _Repository.CreatePhotoRepository()
-                    );
-            }
+            _Logger.Information("Creating IPhotoRepository instance");
+
+            return
+                new LoggedPhotoRepository(
+                    _Logger,
+                    _Repository.CreatePhotoRepository()
+                );
         }
 
         public IPhotosRepository CreatePhotosRepository()
         {
-            using (var scope = _Logger.Create("Creating IPhotosRepository instance"))
-            {
-                return
-                    new LoggedPhotosRepository(
-                        _Logger,
-                        _Repository.CreatePhotosRepository()
-                    );
-            }
+            _Logger.Information("Creating IPhotosRepository instance");
+
+            return
+                new LoggedPhotosRepository(
+                    _Logger,
+                    _Repository.CreatePhotosRepository()
+                );
         }
     }
 }
