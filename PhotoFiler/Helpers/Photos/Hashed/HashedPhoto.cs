@@ -18,7 +18,7 @@ namespace PhotoFiler.Helpers.Photos.Hashed
             if (path == null)
                 throw new ArgumentNullException(nameof(path));
 
-            if (path == null)
+            if (hasher == null)
                 throw new ArgumentNullException(nameof(hasher));
 
             Hash = hasher.Hash(path, hashLength);

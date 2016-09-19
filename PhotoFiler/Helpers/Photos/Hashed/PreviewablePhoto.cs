@@ -3,11 +3,14 @@ using ImageProcessor.Imaging;
 using PhotoFiler.Models;
 using System;
 using System.IO;
+using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Photos.Hashed
 {
     public class PreviewablePhoto : HashedPhoto, IPreviewablePhoto
     {
+        public event ErrorGeneratingPreview ErrorGeneratingPreviewHandler;
+
         // JPEG compression quality
         private const int QUALITY = 50;
 
@@ -23,8 +26,17 @@ namespace PhotoFiler.Helpers.Photos.Hashed
             DirectoryInfo previewLocation
         ) : base(hashLength, path, hasher)
         {
-            if (previewLocation == null)
+            if (hashLength <= 0)
+                throw new ArgumentException("Hash length must be greater than zero.", nameof(path));
+
+            if (path == null)
                 throw new ArgumentNullException(nameof(path));
+
+            if (hasher == null)
+                throw new ArgumentNullException(nameof(hasher));
+
+            if (previewLocation == null)
+                throw new ArgumentNullException(nameof(previewLocation));
 
             _PreviewLocation = previewLocation;
         }
@@ -122,8 +134,9 @@ namespace PhotoFiler.Helpers.Photos.Hashed
                     result = output.ToArray();
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                ErrorGeneratingPreviewHandler?.Invoke(this, ex);
                 result = null;
             }
 
