@@ -119,7 +119,7 @@ namespace Telemetry
         /// <param name="activityName">Name of the activity</param>
         /// <param name="activityID">Optional activity ID</param>
         /// <returns></returns>
-        public ILogger Create(string activityName = "", int activityID = 0)
+        public ILogger CreateScope(string activityName = "", int activityID = 0)
         {
             return new ActivityTracerScope(this.TraceSource, activityName, activityID);
         }

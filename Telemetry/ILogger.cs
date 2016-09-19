@@ -26,7 +26,7 @@ namespace Telemetry
     {
         void Log(LogEntry entry);
 
-        ILogger Create(string activityName = "", int activityID = 0);
+        ILogger CreateScope(string activityName = "", int activityID = 0);
     }
 
     public class LogEntry
