@@ -2,34 +2,49 @@
 using System;
 using System.IO;
 using Telemetry;
+using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Photos.Logged
 {
     public class LoggedPreviewablePhoto : IPreviewablePhoto
     {
+        public event ErrorGeneratingPreview ErrorGeneratingPreviewHandler;
+
         ILogger _Logger;
-        IPreviewablePhoto _PreviewableHashedPhoto;
+        IPreviewablePhoto _PreviewablePhoto;
 
         public LoggedPreviewablePhoto(
             ILogger logger, 
-            IPreviewablePhoto photo
+            IPreviewablePhoto previewablePhoto
         ) 
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
-            if (photo == null)
-                throw new ArgumentNullException(nameof(photo));
+            if (previewablePhoto == null)
+                throw new ArgumentNullException(nameof(previewablePhoto));
 
             _Logger = logger;
-            _PreviewableHashedPhoto = photo;
+            _PreviewablePhoto = previewablePhoto;
+
+            _PreviewablePhoto.ErrorGeneratingPreviewHandler +=
+                (photo, exception) =>
+                {
+                    _Logger.Error(
+                        exception, 
+                        "Error generating preview from \"{0}\"", 
+                        photo.FileInfo.FullName
+                    );
+
+                    ErrorGeneratingPreviewHandler?.Invoke(photo, exception);
+                };
         }
 
         public DateTime? CreationDateTime
         {
             get
             {
-                return _PreviewableHashedPhoto.CreationDateTime;
+                return _PreviewablePhoto.CreationDateTime;
             }
         }
 
@@ -37,7 +52,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
         {
             get
             {
-                return _PreviewableHashedPhoto.FileInfo;
+                return _PreviewablePhoto.FileInfo;
             }
         }
 
@@ -45,7 +60,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
         {
             get
             {
-                return _PreviewableHashedPhoto.Hash;
+                return _PreviewablePhoto.Hash;
             }
         }
 
@@ -53,7 +68,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
         {
             get
             {
-                return _PreviewableHashedPhoto.Name;
+                return _PreviewablePhoto.Name;
             }
         }
 
@@ -61,7 +76,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
         {
             get
             {
-                return _PreviewableHashedPhoto.Resolution;
+                return _PreviewablePhoto.Resolution;
             }
         }
 
@@ -69,14 +84,14 @@ namespace PhotoFiler.Helpers.Photos.Logged
         {
             get
             {
-                return _PreviewableHashedPhoto.Size;
+                return _PreviewablePhoto.Size;
             }
         }
 
         public byte[] Preview()
         {
             _Logger.Information($"Generating preview for \"{FileInfo.FullName}\" with hash \"{Hash}\".");
-            var result = _PreviewableHashedPhoto.Preview();
+            var result = _PreviewablePhoto.Preview();
 
             if (result == null)
                 _Logger.Warning($"Cannot generate preview for photo \"{FileInfo.FullName}\" with hash \"{Hash}\".");
@@ -88,7 +103,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
         public byte[] View()
         {
             _Logger.Information($"Generating view for \"{FileInfo.FullName}\" with hash \"{Hash}\".");
-            var result = _PreviewableHashedPhoto.View();
+            var result = _PreviewablePhoto.View();
 
             if (result == null)
                 _Logger.Warning($"Cannot generate full view for photo \"{FileInfo.FullName}\" with hash \"{Hash}\".");

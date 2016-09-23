@@ -3,13 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Photos.Hashed
 {
     public class HashedAlbum : IHashedAlbum
     {
-        public event EventHandler<IPreviewablePhoto> ErrorGeneratePreview;
-
         public IList<IPreviewablePhoto> Photos { get; private set; }
 
         public DirectoryInfo PreviewLocation { get; private set; }
@@ -53,13 +52,12 @@ namespace PhotoFiler.Helpers.Photos.Hashed
                             if (preview != null)
                                 File.WriteAllBytes(filename, preview);
                             else
-                                ErrorGeneratePreview?.Invoke(this, photo);
+                                errors.Add(photo.Hash);
+
                         }
                     }
                     catch
                     {
-                        ErrorGeneratePreview?.Invoke(this, photo);
-
                         errors.Add(photo.Hash);
                     }
                 });

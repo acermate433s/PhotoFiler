@@ -3,6 +3,7 @@ using PhotoFiler.Models;
 using System;
 using System.IO;
 using Telemetry;
+using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Repositories.Logged
 {
@@ -26,14 +27,17 @@ namespace PhotoFiler.Helpers.Repositories.Logged
             _PhotoRepository = photoRepository;
         }
 
-        public  IPreviewablePhoto Create(FileInfo file)
+        public  IPreviewablePhoto Create(
+            FileInfo file, 
+            ErrorGeneratingPreview errorGeneratingPreviewHandler = null
+        )
         {
             _Logger.Information($"Creating instance photo for \"{file}\"");
             
             return
                 new LoggedPreviewablePhoto(
                     _Logger,
-                    _PhotoRepository.Create(file)
+                    _PhotoRepository.Create(file, errorGeneratingPreviewHandler)
                 );            
         }
     }

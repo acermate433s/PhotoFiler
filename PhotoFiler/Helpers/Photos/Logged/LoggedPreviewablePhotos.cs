@@ -4,33 +4,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Telemetry;
+using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Photos.Logged
 {
     public class LoggedPreviewablePhotos : IPreviewablePhotos
     {
         ILogger _Logger;
-        IPreviewablePhotos _PreviewableHashedPhotos;
+        IPreviewablePhotos _PreviewablePhotos;
 
         public LoggedPreviewablePhotos(
             ILogger logger,
-            IPreviewablePhotos previewableHashedPhotos
+            IPreviewablePhotos previewablePhotos
         )
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
 
-            if (previewableHashedPhotos == null)
-                throw new ArgumentNullException(nameof(previewableHashedPhotos));
+            if (previewablePhotos == null)
+                throw new ArgumentNullException(nameof(previewablePhotos));
 
             _Logger = logger;
-            _PreviewableHashedPhotos = previewableHashedPhotos;
+            _PreviewablePhotos = previewablePhotos;
         }
 
-        public List<IPreviewablePhoto> Retrieve()
+        public List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreview errorGeneratingPreviewHandler = null)
         {
             _Logger.Information($"Retrieving photos.");            
-            var result = _PreviewableHashedPhotos.Retrieve();
+            var result = _PreviewablePhotos.Retrieve(errorGeneratingPreviewHandler);
 
             if (result.Count() == 0)
             {

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Models
 {
     public interface IHashedAlbum
     {
-        event EventHandler<IPreviewablePhoto> ErrorGeneratePreview;
-
         IList<IPreviewablePhoto> Photos { get; }
 
         DirectoryInfo PreviewLocation { get; }

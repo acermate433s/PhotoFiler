@@ -2,6 +2,7 @@
 using PhotoFiler.Models;
 using System;
 using System.IO;
+using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Repositories
 {
@@ -31,15 +32,23 @@ namespace PhotoFiler.Helpers.Repositories
             _PreviewLocation = previewLocation;
         }
 
-        public IPreviewablePhoto Create(FileInfo file)
+        public IPreviewablePhoto Create(
+            FileInfo file,
+            ErrorGeneratingPreview errorGeneratingPreviewHandler = null
+        )
         {
-            return
+            var result =
                 new PreviewablePhoto(
                     _HashLength,
                     file.FullName,
                     _HashingFunction,
                     _PreviewLocation
                 );
+
+            result.ErrorGeneratingPreviewHandler += errorGeneratingPreviewHandler;
+
+            return result;
+                
         }
     }
 }

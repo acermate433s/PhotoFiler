@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Photos.Hashed
 {
@@ -29,11 +30,11 @@ namespace PhotoFiler.Helpers.Photos.Hashed
             _PhotoRepository = photoRepository;
         }
 
-        public List<IPreviewablePhoto> Retrieve()
+        public List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreview errorGeneratingPreviewHandler = null)
         {
             return
                 GetPhotoFiles(_Source)
-                    .Select(file => _PhotoRepository.Create(file))
+                    .Select(file => _PhotoRepository.Create(file, errorGeneratingPreviewHandler))
                     .ToList();
         }
 

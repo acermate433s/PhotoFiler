@@ -1,14 +1,9 @@
 ﻿using PhotoFiler.Helpers;
-using PhotoFiler.Helpers.Hasher;
-using PhotoFiler.Helpers.Photos.Hashed;
-using PhotoFiler.Helpers.Photos.Logged;
 using PhotoFiler.Helpers.Repositories;
 using PhotoFiler.Helpers.Repositories.Logged;
 using PhotoFiler.Models;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -20,7 +15,7 @@ namespace PhotoFiler
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        ILogger _Logger = new ActivityTracerScope(new TraceSource("PhotoFiler"));
+        ILogger _Logger = new ActivityTracerScope("PhotoFiler", "Global Logger");
 
         protected void Application_Start()
         {
@@ -31,20 +26,20 @@ namespace PhotoFiler
 
             ModelMetadataProviders.Current = new InterfaceMetadataProvider();
 
-            using (var logger = _Logger.Create("Application_Start"))
+            using (var scope = _Logger.CreateScope("Application initialization"))
             {
                 try
                 {
                     var configuration = new Configuration();
-                    logger.Verbose(configuration.ToString());
+                    scope.Verbose(configuration.ToString());
 
                     IRepository repository = new Repository(configuration);
                     if (configuration.EnableLogging)
                     {
-                        logger.Information("Logging enabled.");
+                        scope.Information("Logging enabled.");
                         repository =
                             new LoggedRepository(
-                                _Logger,
+                                new ActivityTracerScope(new TraceSource("PhotoFiler"), "Logger"),
                                 new Repository(configuration)
                             );
                     }
@@ -58,19 +53,25 @@ namespace PhotoFiler
                     try
                     {
                         retriever = photosRepository.Create();
-                        var photos = retriever.Retrieve();
+                        var photos = retriever.Retrieve(
+                            (p, e) =>
+                            {
+                                var logger = ((ILogger) HttpContext.Current?.Application["Logger"]) ?? scope;
+                                logger?.Error(e, "Error generating preview for photo \"{0}\"", p.FileInfo.FullName);
+                            }
+                        );
 
                         if (retriever != null)
                             album = albumRepository.Create(photos);
                     }
                     catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
                     {
-                        logger.Error(ex);
+                        scope.Error(ex);
                     }
 
                     if ((album != null) && (configuration.CreatePreview))
                     {
-                        logger.Information("Deleting old previews");
+                        scope.Information("Deleting old previews");
                         configuration
                             .PreviewLocation
                             .GetFiles()
@@ -80,15 +81,18 @@ namespace PhotoFiler
                         album.GeneratePreviews();
                     }
 
-                    HttpContext.Current.Application["Album"] = album;
-                    HttpContext.Current.Application["Logger"] = _Logger;
+                    var applicationState = HttpContext.Current.Application;
+                    applicationState.Lock();
+                    applicationState["Album"] = album;
+                    applicationState["Logger"] = _Logger;
+                    applicationState.UnLock();
                 }
                 catch (Exception ex)
                 {
-                    logger.Critical(ex);
+                    _Logger.Critical(ex);
                     throw new HttpUnhandledException("Cannot continue.  Check trace file for explanation.", ex);
                 }
-            }          
+            }
         }
 
         protected void Application_Error(object sender, EventArgs e)
@@ -96,7 +100,9 @@ namespace PhotoFiler
             if (Server != null)
             {
                 Exception ex = Server.GetLastError();
-                _Logger.Error(ex);
+
+                var logger = (ILogger) HttpContext.Current?.Application["Logger"];
+                logger?.Error(ex);
             }
         }
     }

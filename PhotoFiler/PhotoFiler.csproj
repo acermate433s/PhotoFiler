@@ -134,6 +134,7 @@
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
     <Compile Include="Helpers\Hasher\Base62HasherBase.cs" />
+    <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Helpers\Repositories\AlbumRepository.cs" />
     <Compile Include="Helpers\Repositories\Interfaces\IAlbumRepository.cs" />
     <Compile Include="Helpers\Repositories\Interfaces\IPhotoRepository.cs" />
