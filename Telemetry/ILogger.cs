@@ -63,7 +63,7 @@ namespace Telemetry
         public bool IsData()
         {
             return
-                Message == Constants.DEFAULT_MESSAGE
+                (Message == Constants.DEFAULT_MESSAGE || Exception == Constants.DEFAULT_EXCEPTION)
                 && Datum != Constants.DEFAULT_DATUM
                 && Datum.Length >= 1;
         }
@@ -80,6 +80,15 @@ namespace Telemetry
         {
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
+
+            if (message == null)
+                throw new ArgumentNullException(nameof(message));
+
+            if (message.Length > 0)
+                throw new ArgumentException("Message cannot be empty", nameof(message));
+
+            if (args == null)
+                throw new ArgumentNullException(nameof(args));
 
             logger.Log(
                 new LogEntry(
