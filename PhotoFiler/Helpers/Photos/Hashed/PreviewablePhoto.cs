@@ -1,5 +1,4 @@
-﻿using ImageProcessor;
-using ImageProcessor.Imaging;
+﻿using ImageResizer;
 using PhotoFiler.Models;
 using System;
 using System.IO;
@@ -105,7 +104,7 @@ namespace PhotoFiler.Helpers.Photos.Hashed
 
             try
             {
-                if(!File.Exists(fileInfo.FullName))
+                if (!File.Exists(fileInfo.FullName))
                     return result;
 
                 byte[] buffer = File.ReadAllBytes(fileInfo.FullName);
@@ -115,21 +114,13 @@ namespace PhotoFiler.Helpers.Photos.Hashed
                 using (var input = new MemoryStream(buffer))
                 using (var output = new MemoryStream())
                 {
-                    using (var factory = new ImageFactory())
-                    {
-                        factory
-                            .Load(input)
-                            .Resize(
-                                new ResizeLayer(
-                                    new System.Drawing.Size(MAX, MAX),
-                                    ResizeMode.Crop
-                                )
-                                {
-                                    AnchorPosition = AnchorPosition.Center
-                                }
-                            )
-                            .Save(output);
-                    }
+                    var job =
+                        new ImageJob(
+                            input,
+                            output,
+                            new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
+                        );
+                    job.Build();
 
                     result = output.ToArray();
                 }
