@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoFiler", "PhotoFiler\PhotoFiler.csproj", "{228C0CBF-1DF3-4D02-9C75-05690CB6107F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoFiler.Tests", "PhotoFiler.Tests\PhotoFiler.Tests.csproj", "{021236ED-C07D-47DC-A56E-F3577D874A36}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telemetry", "Telemetry\Telemetry.csproj", "{090C192B-8B49-4D13-9E9B-D9040533E63C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{021236ED-C07D-47DC-A56E-F3577D874A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{021236ED-C07D-47DC-A56E-F3577D874A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{021236ED-C07D-47DC-A56E-F3577D874A36}.Release|Any CPU.Build.0 = Release|Any CPU
-		{090C192B-8B49-4D13-9E9B-D9040533E63C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{090C192B-8B49-4D13-9E9B-D9040533E63C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{090C192B-8B49-4D13-9E9B-D9040533E63C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{090C192B-8B49-4D13-9E9B-D9040533E63C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
