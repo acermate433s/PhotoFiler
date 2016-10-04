@@ -106,10 +106,21 @@ namespace PhotoFiler
             }
         }
 
-        protected void Dispose(bool disposing)
+        public override void Dispose()
         {
-            if(disposing)
-                _Logger.Dispose();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_Logger != null)
+                {
+                    _Logger.Dispose();
+                    _Logger = null;
+                }
+            }
 
             base.Dispose();
         }
