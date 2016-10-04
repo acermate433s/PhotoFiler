@@ -7,15 +7,14 @@ using Telemetry;
 
 namespace PhotoFiler.Helpers.Photos.Logged
 {
-    public class LoggedHashedAlbum : IHashedAlbum
+    public class LoggedHashedAlbum : LoggedBase, IHashedAlbum
     {
-        ILogger _Logger;
         IHashedAlbum _HashedAlbum;
 
         public LoggedHashedAlbum(
             ILogger logger, 
             IHashedAlbum album
-        )
+        ) : base(logger)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -23,10 +22,9 @@ namespace PhotoFiler.Helpers.Photos.Logged
             if (album == null)
                 throw new ArgumentNullException(nameof(album));
 
-            _Logger = logger;
             _HashedAlbum = album;
 
-            _Logger.Verbose(album.Photos?.Select(item => $"\"{item.FileInfo.FullName}\" ({item.Hash}).").ToArray());
+            Logger.Verbose(album.Photos?.Select(item => $"\"{item.FileInfo.FullName}\" ({item.Hash}).").ToArray());
         }
 
         public IList<IPreviewablePhoto> Photos
@@ -52,7 +50,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public void GeneratePreviews()
         {
-            using (var scope = _Logger.CreateScope($"Generating photo previews of {_HashedAlbum.Count()} photos in \"{_HashedAlbum.PreviewLocation.FullName}\" for album."))
+            using (var scope = Logger.CreateScope($"Generating photo previews of {_HashedAlbum.Count()} photos in \"{_HashedAlbum.PreviewLocation.FullName}\" for album."))
             {
                 _HashedAlbum.GeneratePreviews();
             }
@@ -60,7 +58,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public IEnumerable<IPreviewablePhoto> List(int page = 1, int count = 10)
         {
-            using (var scope = _Logger.CreateScope("Generate list of photos in album."))
+            using (var scope = Logger.CreateScope("Generate list of photos in album."))
             {
                 var result = _HashedAlbum.List(page, count);
 
@@ -75,7 +73,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public IPreviewablePhoto Photo(string hash)
         {
-            using (var scope = _Logger.CreateScope($"Get photo with hash \"{hash}\"."))
+            using (var scope = Logger.CreateScope($"Get photo with hash \"{hash}\"."))
             {
                 var result = _HashedAlbum.Photo(hash);
 
@@ -88,7 +86,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public byte[] Preview(string hash)
         {
-            using (var scope = _Logger.CreateScope($"Generate preview for photo with \"{hash}\" in album."))
+            using (var scope = Logger.CreateScope($"Generate preview for photo with \"{hash}\" in album."))
             {
                 var photo = Photos.FirstOrDefault(item => item.Hash == hash);
                 if (photo != null)
@@ -116,7 +114,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public byte[] View(string hash)
         {
-            using (var scope = _Logger.CreateScope($"Generate full view for photo with \"{hash}\" in album."))
+            using (var scope = Logger.CreateScope($"Generate full view for photo with \"{hash}\" in album."))
             {
                 var photo = Photos.FirstOrDefault(item => item.Hash == hash);
                 if (photo != null)

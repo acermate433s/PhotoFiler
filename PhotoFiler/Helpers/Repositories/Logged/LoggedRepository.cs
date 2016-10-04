@@ -3,15 +3,14 @@ using Telemetry;
 
 namespace PhotoFiler.Helpers.Repositories.Logged
 {
-    public class LoggedRepository : IRepository
+    public class LoggedRepository : LoggedBase, IRepository
     {
-        ILogger _Logger;
         IRepository _Repository;
 
         public LoggedRepository(
             ILogger logger,
             IRepository repository
-        )
+        ) : base(logger)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -19,39 +18,38 @@ namespace PhotoFiler.Helpers.Repositories.Logged
             if (repository == null)
                 throw new ArgumentNullException(nameof(repository));
 
-            _Logger = logger;
             _Repository = repository;
         }
 
         public IAlbumRepository CreateAlbumRepository()
         {
-            _Logger.Information("Creating IAlbumRepository instance");
+            Logger.Information("Creating IAlbumRepository instance");
 
             return
                 new LoggedAlbumRepository(
-                    _Logger,
+                    Logger,
                     _Repository.CreateAlbumRepository()
                 );
         }
 
         public IPhotoRepository CreatePhotoRepository()
         {
-            _Logger.Information("Creating IPhotoRepository instance");
+            Logger.Information("Creating IPhotoRepository instance");
 
             return
                 new LoggedPhotoRepository(
-                    _Logger,
+                    Logger,
                     _Repository.CreatePhotoRepository()
                 );
         }
 
         public IPhotosRepository CreatePhotosRepository()
         {
-            _Logger.Information("Creating IPhotosRepository instance");
+            Logger.Information("Creating IPhotosRepository instance");
 
             return
                 new LoggedPhotosRepository(
-                    _Logger,
+                    Logger,
                     _Repository.CreatePhotosRepository()
                 );
         }

@@ -7,15 +7,14 @@ using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Repositories.Logged
 {
-    public class LoggedPhotoRepository : IPhotoRepository
+    public class LoggedPhotoRepository : LoggedBase, IPhotoRepository
     {
-        ILogger _Logger;
         IPhotoRepository _PhotoRepository;
 
         public LoggedPhotoRepository(
             ILogger logger,
             IPhotoRepository photoRepository
-        ) 
+        ) : base(logger)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -23,7 +22,6 @@ namespace PhotoFiler.Helpers.Repositories.Logged
             if (logger == null)
                 throw new ArgumentNullException(nameof(photoRepository));
 
-            _Logger = logger;
             _PhotoRepository = photoRepository;
         }
 
@@ -32,11 +30,11 @@ namespace PhotoFiler.Helpers.Repositories.Logged
             ErrorGeneratingPreview errorGeneratingPreviewHandler = null
         )
         {
-            _Logger.Information($"Creating instance photo for \"{file}\"");
+            Logger.Information($"Creating instance photo for \"{file}\"");
             
             return
                 new LoggedPreviewablePhoto(
-                    _Logger,
+                    Logger,
                     _PhotoRepository.Create(file, errorGeneratingPreviewHandler)
                 );            
         }

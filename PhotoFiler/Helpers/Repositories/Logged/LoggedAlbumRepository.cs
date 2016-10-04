@@ -7,15 +7,14 @@ using Telemetry;
 
 namespace PhotoFiler.Helpers.Repositories.Logged
 {
-    public class LoggedAlbumRepository : IAlbumRepository
+    public class LoggedAlbumRepository : LoggedBase, IAlbumRepository
     {
-        ILogger _Logger;
         IAlbumRepository _AlbumRepository;
 
         public LoggedAlbumRepository(
             ILogger logger,
             IAlbumRepository albumRepository
-        ) 
+        ) : base(logger)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -23,14 +22,13 @@ namespace PhotoFiler.Helpers.Repositories.Logged
             if (albumRepository == null)
                 throw new ArgumentNullException(nameof(albumRepository));
 
-            _Logger = logger;
             _AlbumRepository = albumRepository;
         }
 
         public IHashedAlbum Create(List<IPreviewablePhoto> photos)
         {
-            _Logger.Information($"Creating album with { photos.Count()} photos.");
-            _Logger
+            Logger.Information($"Creating album with { photos.Count()} photos.");
+            Logger
                 .Verbose(
                     photos
                         .Select(photo => photo.FileInfo.ToString())
@@ -39,7 +37,7 @@ namespace PhotoFiler.Helpers.Repositories.Logged
 
             return
                 new LoggedHashedAlbum(
-                    _Logger,
+                    Logger,
                     _AlbumRepository.Create(photos)
                 );            
         }

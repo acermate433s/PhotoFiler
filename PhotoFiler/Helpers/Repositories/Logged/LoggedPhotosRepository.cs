@@ -5,15 +5,14 @@ using Telemetry;
 
 namespace PhotoFiler.Helpers.Repositories.Logged
 {
-    public class LoggedPhotosRepository : IPhotosRepository
+    public class LoggedPhotosRepository : LoggedBase, IPhotosRepository
     {
-        ILogger _Logger;
         IPhotosRepository _PhotosRepository;
 
         public LoggedPhotosRepository(
             ILogger logger,
             IPhotosRepository photosRepository
-        ) 
+        ) : base(logger)
         {
             if (logger == null)
                 throw new ArgumentNullException(nameof(logger));
@@ -21,17 +20,16 @@ namespace PhotoFiler.Helpers.Repositories.Logged
             if (photosRepository == null)
                 throw new ArgumentNullException(nameof(photosRepository));
 
-            _Logger = logger;
             _PhotosRepository = photosRepository;
         }
 
         public IPreviewablePhotos Create()
         {
-            _Logger.Information("Creating photo repository.");
+            Logger.Information("Creating photo repository.");
             
             return
                 new LoggedPreviewablePhotos(
-                    _Logger,
+                    Logger,
                     _PhotosRepository.Create()
                 );
             
