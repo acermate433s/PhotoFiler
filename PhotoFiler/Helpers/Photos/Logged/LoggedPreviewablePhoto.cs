@@ -26,15 +26,15 @@ namespace PhotoFiler.Helpers.Photos.Logged
             _PreviewablePhoto = previewablePhoto;
 
             _PreviewablePhoto.ErrorGeneratingPreviewHandler +=
-                (photo, exception) =>
+                (sender, args) =>
                 {
                     Logger.Error(
-                        exception, 
+                        args.Exception, 
                         "Error generating preview from \"{0}\"", 
-                        photo.FileInfo.FullName
+                        args.Photo.FileInfo.FullName
                     );
 
-                    ErrorGeneratingPreviewHandler?.Invoke(photo, exception);
+                    ErrorGeneratingPreviewHandler?.Invoke(sender, args);
                 };
         }
 

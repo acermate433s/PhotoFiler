@@ -127,7 +127,11 @@ namespace PhotoFiler.Helpers.Photos.Hashed
             }
             catch(Exception ex)
             {
-                ErrorGeneratingPreviewHandler?.Invoke(this, ex);
+                var args = new ErrorGeneratingPreviewArgs();
+                args.Photo = this;
+                args.Exception = ex;
+
+                ErrorGeneratingPreviewHandler?.Invoke(this, args);
                 result = null;
             }
 

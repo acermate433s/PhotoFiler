@@ -54,10 +54,10 @@ namespace PhotoFiler
                     {
                         retriever = photosRepository.Create();
                         var photos = retriever.Retrieve(
-                            (p, e) =>
+                            (sender, args) =>
                             {
                                 var logger = ((ILogger) HttpContext.Current?.Application["Logger"]) ?? scope;
-                                logger?.Error(e, "Error generating preview for photo \"{0}\"", p.FileInfo.FullName);
+                                logger?.Error(args.Exception, "Error generating preview for photo \"{0}\"", args.Photo.FileInfo.FullName);
                             }
                         );
 
@@ -72,6 +72,7 @@ namespace PhotoFiler
                     if ((album != null) && (configuration.CreatePreview))
                     {
                         scope.Information("Deleting old previews");
+
                         configuration
                             .PreviewLocation
                             .GetFiles()
