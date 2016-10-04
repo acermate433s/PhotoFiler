@@ -37,10 +37,6 @@ namespace PhotoFiler.Helpers
                 CreationDateTime = creationDateTime;
                 Resolution = resolution;
             }
-            catch (IOException iox)
-            {
-                throw iox;
-            }
             catch
             {
                 CreationDateTime = DateTime.Now;
