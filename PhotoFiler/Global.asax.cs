@@ -105,6 +105,14 @@ namespace PhotoFiler
                 logger?.Error(ex);
             }
         }
+
+        protected void Dispose(bool disposing)
+        {
+            if(disposing)
+                _Logger.Dispose();
+
+            base.Dispose();
+        }
     }
 }
 
