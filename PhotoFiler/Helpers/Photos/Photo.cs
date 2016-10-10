@@ -26,21 +26,24 @@ namespace PhotoFiler.Helpers
                 Size = ComputeSize(FileInfo);
 
                 DateTime? creationDateTime = null;
-                string resolution = "Unknown";
+                int width = 0;
+                int height = 0;
 
                 ReadFileData(
                     FileInfo,
                     out creationDateTime,
-                    out resolution
+                    out width,
+                    out height
                 );
 
+                Width = width;
+                Height = height;
+
                 CreationDateTime = creationDateTime;
-                Resolution = resolution;
             }
             catch
             {
                 CreationDateTime = DateTime.Now;
-                Resolution = "Unknown";
             }
         }
 
@@ -62,7 +65,20 @@ namespace PhotoFiler.Helpers
         /// <summary>
         /// Resolution of the photo
         /// </summary>
-        public string Resolution { get; private set; }
+        public string Resolution
+        {
+            get
+            {
+                if (Width > 0 || Height > 0)
+                    return $"{Width}x{Height}";
+                else
+                    return "Unknown";
+            }
+        }
+
+        public int Height { get; private set; } = 0;
+
+        public int Width { get; private set; } = 0;
 
         /// <summary>
         /// Date when the photo was created
@@ -101,11 +117,13 @@ namespace PhotoFiler.Helpers
         private void ReadFileData(
             FileInfo file,
             out DateTime? creationDateTime,
-            out string resolution
+            out int width,
+            out int height
         )
         {
             creationDateTime = file.CreationTime;
-            resolution = "Unknown";
+            width = 0;
+            height = 0;
 
             // Read the entire file into memory.  This would be used throughout
             // the function to minimize reading the file multiple times
@@ -118,7 +136,10 @@ namespace PhotoFiler.Helpers
                 {
                     using (var stream = new MemoryStream(buffer))
                     using (var image = Image.FromStream(stream, false, false))
-                        resolution = $"{image.Width}x{image.Height}";
+                    {
+                        width = image.Width;
+                        height = image.Height;
+                    }
 
                     // Read the creation date from the EXIF. If we cannot, then
                     // set the creation date time to the file creation date time
@@ -136,7 +157,8 @@ namespace PhotoFiler.Helpers
             catch
             {
                 creationDateTime = null;
-                resolution = "";
+                width = 0;
+                height = 0;
             }
         }
     }

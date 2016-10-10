@@ -78,6 +78,22 @@ namespace PhotoFiler.Helpers.Photos.Logged
             }
         }
 
+        public int Width
+        {
+            get
+            {
+                return _PreviewablePhoto.Width;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return _PreviewablePhoto.Height;
+            }
+        }
+
         public string Size
         {
             get
