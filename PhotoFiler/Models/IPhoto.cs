@@ -20,6 +20,10 @@ namespace PhotoFiler.Models
         [DisplayName("Resolution")]
         string Resolution { get; }
 
+        int Height { get; }
+
+        int Width { get; }
+
         [DisplayName("Size")]
         string Size { get; }
     }

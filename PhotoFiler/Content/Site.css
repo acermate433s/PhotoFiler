@@ -24,9 +24,38 @@ textarea {
 }
 
 span.image-preview {
-	padding-bottom: 30px;
+    padding-bottom: 30px;
 }
 
 div.row.image-preview {
     padding-top: 30px;
+}
+
+span.image-preview {
+    cursor: pointer;
+}
+
+#image-preview {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+}
+
+/* center modal dialog vertically */
+.modal {
+    text-align: center;
+    padding: 0 !important;
+    margin-top: -1em;
+}
+.modal:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px; /* Adjusts for spacing */
+}
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
 }
