@@ -34,12 +34,12 @@
     <div class="col-xs-12 text-center">
         @if (ViewBag.Previous > 0)
         {
-            @Html.ActionLink(" ", "Gallery", new { page = ViewBag.Previous, count = ViewBag.Count }, new { @class = "glyphicon glyphicon-backward" });
+            @Html.ActionLink(" ", "Gallery", new { page = ViewBag.Previous, count = ViewBag.Count }, new { @class = "glyphicon glyphicon-backward", @accesskey = "<" });
         }
         <span>Page @ViewBag.Current / @ViewBag.Max</span>
         @if (ViewBag.Next <= ViewBag.Max)
         {
-            @Html.ActionLink(" ", "Gallery", new { page = ViewBag.Next, count = ViewBag.Count }, new { @class = "glyphicon glyphicon-forward" })
+            @Html.ActionLink(" ", "Gallery", new { page = ViewBag.Next, count = ViewBag.Count }, new { @class = "glyphicon glyphicon-forward", @accesskey = ">" })
         }
     </div>
 </div>
