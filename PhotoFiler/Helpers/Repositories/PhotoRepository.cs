@@ -41,8 +41,7 @@ namespace PhotoFiler.Helpers.Repositories
                 new PreviewablePhoto(
                     _HashLength,
                     file.FullName,
-                    _HashingFunction,
-                    _PreviewLocation
+                    _HashingFunction
                 );
 
             result.ErrorGeneratingPreviewHandler += errorGeneratingPreviewHandler;

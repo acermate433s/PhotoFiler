@@ -16,13 +16,10 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         // Maximum height and width
         private const int MAX = 300;
 
-        private DirectoryInfo _PreviewLocation;
-
         public PreviewablePhoto(
             int hashLength,
             string path,
-            IHashFunction hasher,
-            DirectoryInfo previewLocation
+            IHashFunction hasher
         ) : base(path, hasher)
         {
             if (hashLength <= 0)
@@ -33,11 +30,6 @@ namespace PhotoFiler.Helpers.Photos.Hashed
 
             if (hasher == null)
                 throw new ArgumentNullException(nameof(hasher));
-
-            if (previewLocation == null)
-                throw new ArgumentNullException(nameof(previewLocation));
-
-            _PreviewLocation = previewLocation;
         }
 
         /// <summary>
@@ -54,60 +46,16 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         }
 
         /// <summary>
-        /// Generates the preview of the image file
-        /// </summary>
-        /// <param name="hash">Hash of the photo</param>
-        /// <returns>Byte array content of the photo preview</returns>
-        public byte[] Preview()
-        {
-            byte[] result = Preview(Hash);
-            if (result == null)
-                result = Preview(FileInfo);
-
-            return result;
-        }
-
-        private string PreviewFile
-        {
-            get
-            {
-                return Path.ChangeExtension(Path.Combine(_PreviewLocation.FullName, Hash), "prev");
-            }
-        }
-
-        /// <summary>
         /// Reads the preview file from the preview location if it the photo exists
         /// </summary>
-        /// <param name="hash">Filename of the preview file derived from the hash of the photo</param>
         /// <returns>Byte array of the preview file if it exists, otherwise null</returns>
-        private byte[] Preview(string hash)
-        {
-            byte[] result = null;
-
-            var previewFile = Path.ChangeExtension(Path.Combine(_PreviewLocation.FullName, hash), "prev");
-            if (File.Exists(PreviewFile))
-            {
-                result = File.ReadAllBytes(previewFile);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Generates a preview file of the photo
-        /// </summary>
-        /// <param name="fileInfo">FileInfo of the photo to create the preview from</param>
-        /// <returns>Byte array of the preview file of the photo if it exists, otherwise retuls null</returns>
-        private byte[] Preview(FileInfo fileInfo)
+        public byte[] Preview()
         {
             byte[] result = null;
 
             try
             {
-                if (!File.Exists(fileInfo.FullName))
-                    return result;
-
-                byte[] buffer = File.ReadAllBytes(fileInfo.FullName);
+                byte[] buffer = File.ReadAllBytes(FileInfo.FullName);
 
                 // resize the image to MAX pixels by MAX
                 // pixels to server as the preview image
@@ -125,7 +73,7 @@ namespace PhotoFiler.Helpers.Photos.Hashed
                     result = output.ToArray();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var args = new ErrorGeneratingPreviewArgs();
                 args.Photo = this;

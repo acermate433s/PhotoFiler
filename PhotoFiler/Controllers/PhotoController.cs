@@ -47,7 +47,7 @@ namespace PhotoFiler.Controllers
         [Route("Preview/{hash}")]
         public ActionResult Preview(string hash)
         {
-            var content = Album.Photo(hash).Preview();
+            var content = Album.Preview(hash);
             if (content == null)
             {
                 return new HttpNotFoundResult($"Cannot find preview for photo with \"{hash}\"");
@@ -66,7 +66,7 @@ namespace PhotoFiler.Controllers
 
         private ActionResult Retrieve(string hash, bool inline)
         {
-            var content = Album.Photo(hash).View();
+            var content = Album.View(hash);
             if (content == null)
                 return new HttpNotFoundResult($"Cannot find view for \"{hash}\"");
 

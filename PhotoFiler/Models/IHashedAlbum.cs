@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Models
 {
@@ -32,7 +30,7 @@ namespace PhotoFiler.Models
         void GeneratePreviews();
 
         /// <summary>
-        /// Retrieves photos by page
+        /// Retrieves a number of photos by page
         /// </summary>
         /// <param name="page">Page number</param>
         /// <param name="count">Maximum number of photos per page</param>
@@ -45,5 +43,19 @@ namespace PhotoFiler.Models
         /// <param name="hash">Hash generated for the photo</param>
         /// <returns></returns>
         IPreviewablePhoto Photo(string hash);
+
+        /// <summary>
+        /// Preview of the photo in the album
+        /// </summary>
+        /// <param name="hash">Hash of the photo</param>
+        /// <returns>Byte array of the preview of the photo in the album</returns>
+        byte[] Preview(string hash);
+
+        /// <summary>
+        /// Full view of the photo in the album
+        /// </summary>
+        /// <param name="hash">Hash of the photo</param>
+        /// <returns>Byte array of the full view of the photo in the album</returns>
+        byte[] View(string hash);
     }
 }
