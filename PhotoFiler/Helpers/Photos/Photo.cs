@@ -13,17 +13,23 @@ namespace PhotoFiler.Helpers
     /// Represents a photo in the Album
     /// </summary>
     [Bind(Exclude = "FileInfo")]
-    public class Photo : IPhoto
+    public class Photo 
     {
         public Photo(
-            string path
+            string path,
+            IHashFunction hasher
         )
         {
+            if (hasher == null)
+                throw new ArgumentNullException(nameof(hasher), "Hash function cannot be null");
+
             try
             {
                 FileInfo = new System.IO.FileInfo(path);
                 Name = FileInfo.Name;
                 Size = ComputeSize(FileInfo);
+
+                Hash = hasher.Compute(FileInfo.FullName);
 
                 DateTime? creationDateTime = null;
                 int width = 0;
@@ -61,6 +67,11 @@ namespace PhotoFiler.Helpers
         /// File size of the photo in human readable format
         /// </summary>
         public string Size { get; private set; }
+
+        /// <summary>
+        /// Hash code of the photo.
+        /// </summary>
+        public string Hash { get; private set; }
 
         /// <summary>
         /// Resolution of the photo

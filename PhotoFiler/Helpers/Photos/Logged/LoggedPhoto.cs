@@ -5,13 +5,13 @@ using Telemetry;
 
 namespace PhotoFiler.Helpers.Photos.Logged
 {
-    public class LoggedHashedPhoto : LoggedBase, IHashedPhoto
+    public class LoggedPhoto : LoggedBase, IPhoto
     {
-        IHashedPhoto _Photo;
+        IPhoto _Photo;
 
-        public LoggedHashedPhoto(
-            ILogger logger, 
-            IHashedPhoto photo
+        public LoggedPhoto(
+            ILogger logger,
+            IPhoto photo
         ) : base(logger)
         {
             if (logger == null)

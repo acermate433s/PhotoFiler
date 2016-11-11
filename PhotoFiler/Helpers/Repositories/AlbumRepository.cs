@@ -23,7 +23,7 @@ namespace PhotoFiler.Helpers.Repositories
         public IHashedAlbum Create(List<IPreviewablePhoto> photos)
         {
             return
-                new HashedAlbum(
+                new Album(
                     _PreviewLocation,
                     photos
                 );

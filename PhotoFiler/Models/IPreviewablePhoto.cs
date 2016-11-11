@@ -2,7 +2,7 @@
 
 namespace PhotoFiler.Models
 {
-    public interface IPreviewablePhoto : IHashedPhoto
+    public interface IPreviewablePhoto : IPhoto
     {
         event ErrorGeneratingPreview ErrorGeneratingPreviewHandler;
 

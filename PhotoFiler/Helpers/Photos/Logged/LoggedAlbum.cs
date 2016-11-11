@@ -7,11 +7,11 @@ using Telemetry;
 
 namespace PhotoFiler.Helpers.Photos.Logged
 {
-    public class LoggedHashedAlbum : LoggedBase, IHashedAlbum
+    public class LoggedAlbum : LoggedBase, IHashedAlbum
     {
         IHashedAlbum _HashedAlbum;
 
-        public LoggedHashedAlbum(
+        public LoggedAlbum(
             ILogger logger, 
             IHashedAlbum album
         ) : base(logger)

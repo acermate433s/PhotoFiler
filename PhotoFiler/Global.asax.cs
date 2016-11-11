@@ -107,7 +107,7 @@ namespace PhotoFiler
             }
         }
 
-        public override void Dispose()
+        public sealed override void Dispose()
         {
             Dispose(true);
         }

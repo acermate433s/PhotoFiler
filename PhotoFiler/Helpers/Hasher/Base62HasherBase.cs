@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace PhotoFiler.Helpers.Hasher
 {
-    public class Base62HasherBase<THashAlgorithm> : IHasher where THashAlgorithm : HashAlgorithm, new()
+    public class Base62HasherBase<THashAlgorithm> : IHashFunction where THashAlgorithm : HashAlgorithm, new()
     {
         protected THashAlgorithm _Algorithm;
 
@@ -81,14 +81,16 @@ namespace PhotoFiler.Helpers.Hasher
         /// <param name="text">String to hash</param>
         /// <param name="length">Length of hash to return</param>
         /// <returns>A Base62 string</returns>
-        public string Hash(string text, int length = 0)
+        public string Compute(string text)
         {
             var value = ComputeHash(text);
 
-            if (length > 0)
-                value = value.Substring(value.Length - length);
+            if (HashLength > 0)
+                value = value.Substring(value.Length - HashLength);
 
             return value;
         }
+
+        public virtual int HashLength { get; protected set; } = 5;
     }
 }

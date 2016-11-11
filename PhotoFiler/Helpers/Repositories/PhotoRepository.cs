@@ -9,12 +9,12 @@ namespace PhotoFiler.Helpers.Repositories
     public class PhotoRepository : IPhotoRepository
     {
         int _HashLength = 0;
-        IHasher _HashingFunction = null;
+        IHashFunction _HashingFunction = null;
         DirectoryInfo _PreviewLocation = null;
 
         public PhotoRepository(
             int hashLength,
-            IHasher hashingFunction,
+            IHashFunction hashingFunction,
             DirectoryInfo previewLocation
         )
         {

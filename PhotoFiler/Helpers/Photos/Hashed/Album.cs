@@ -7,13 +7,13 @@ using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Photos.Hashed
 {
-    public class HashedAlbum : IHashedAlbum
+    public class Album : IHashedAlbum
     {
         public IList<IPreviewablePhoto> Photos { get; private set; }
 
         public DirectoryInfo PreviewLocation { get; private set; }
 
-        public HashedAlbum(
+        public Album(
             DirectoryInfo previewLocation,
             List<IPreviewablePhoto> photos
         )

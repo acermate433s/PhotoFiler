@@ -36,7 +36,7 @@ namespace PhotoFiler.Helpers
         /// <summary>
         /// Hashing function to use
         /// </summary>
-        public IHasher HashingFunction { get; set; }
+        public IHashFunction HashingFunction { get; set; }
 
         /// <summary>
         /// Flag to indicate if we want to enable logging
@@ -61,7 +61,7 @@ namespace PhotoFiler.Helpers
             else
                 throw new DirectoryNotFoundException("Preview location path not found!");
 
-            HashingFunction = new MD5();
+            HashingFunction = new MD5(HashLength);
             EnableLogging = bool.Parse(settings[ENABLE_LOGGING]);
         }
 

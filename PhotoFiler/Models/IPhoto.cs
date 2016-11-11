@@ -52,5 +52,10 @@ namespace PhotoFiler.Models
         /// </summary>
         [DisplayName("Size")]
         string Size { get; }
+
+        /// <summary>
+        /// Hash code of the photo.
+        /// </summary>
+        string Hash { get; }
     }
 }

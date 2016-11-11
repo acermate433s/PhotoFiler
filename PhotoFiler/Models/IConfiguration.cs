@@ -31,7 +31,7 @@ namespace PhotoFiler.Models
         /// <summary>
         /// Hashing function to use
         /// </summary>
-        IHasher HashingFunction { get; set; }
+        IHashFunction HashingFunction { get; set; }
 
         /// <summary>
         /// Flag to indicate if logging is generated

@@ -36,7 +36,7 @@ namespace PhotoFiler.Helpers.Repositories.Logged
                 );
 
             return
-                new LoggedHashedAlbum(
+                new LoggedAlbum(
                     Logger,
                     _AlbumRepository.Create(photos)
                 );            

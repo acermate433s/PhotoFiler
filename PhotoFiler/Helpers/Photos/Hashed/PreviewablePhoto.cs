@@ -6,7 +6,7 @@ using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Photos.Hashed
 {
-    public class PreviewablePhoto : HashedPhoto, IPreviewablePhoto
+    public class PreviewablePhoto : Photo, IPreviewablePhoto
     {
         public event ErrorGeneratingPreview ErrorGeneratingPreviewHandler;
 
@@ -21,9 +21,9 @@ namespace PhotoFiler.Helpers.Photos.Hashed
         public PreviewablePhoto(
             int hashLength,
             string path,
-            IHasher hasher,
+            IHashFunction hasher,
             DirectoryInfo previewLocation
-        ) : base(hashLength, path, hasher)
+        ) : base(path, hasher)
         {
             if (hashLength <= 0)
                 throw new ArgumentException("Hash length must be greater than zero.", nameof(path));
