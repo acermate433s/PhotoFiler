@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using static PhotoFiler.Helpers.Helpers;
 
-namespace PhotoFiler.Helpers.Photos.Hashed
+namespace PhotoFiler.Helpers.Photos
 {
     public class PreviewablePhoto : Photo, IPreviewablePhoto
     {

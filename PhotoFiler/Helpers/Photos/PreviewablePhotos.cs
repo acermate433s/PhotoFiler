@@ -1,14 +1,12 @@
-﻿using PhotoFiler.Helpers.Photos.Logged;
-using PhotoFiler.Helpers.Repositories;
+﻿using PhotoFiler.Helpers.Repositories;
 using PhotoFiler.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Web;
 using static PhotoFiler.Helpers.Helpers;
 
-namespace PhotoFiler.Helpers.Photos.Hashed
+namespace PhotoFiler.Helpers.Photos
 {
     public class PreviewablePhotos : IPreviewablePhotos
     {

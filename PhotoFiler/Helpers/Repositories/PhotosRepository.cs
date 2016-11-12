@@ -1,4 +1,4 @@
-﻿using PhotoFiler.Helpers.Photos.Hashed;
+﻿using PhotoFiler.Helpers.Photos;
 using PhotoFiler.Models;
 using System;
 using System.IO;

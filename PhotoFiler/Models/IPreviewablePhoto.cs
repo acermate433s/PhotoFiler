@@ -2,6 +2,10 @@
 
 namespace PhotoFiler.Models
 {
+    /// <summary>
+    /// Previewable photo
+    /// </summary>
+    /// <seealso cref="PhotoFiler.Models.IPhoto" />
     public interface IPreviewablePhoto : IPhoto
     {
         event ErrorGeneratingPreview ErrorGeneratingPreviewHandler;

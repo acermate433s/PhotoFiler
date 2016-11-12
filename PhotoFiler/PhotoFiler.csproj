@@ -155,7 +155,7 @@
     <Compile Include="Helpers\Repositories\PhotosRepository.cs" />
     <Compile Include="Helpers\Repositories\Repository.cs" />
     <Compile Include="Models\IConfiguration.cs" />
-    <Compile Include="Helpers\Photos\Hashed\PreviewablePhotos.cs" />
+    <Compile Include="Helpers\Photos\PreviewablePhotos.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedAlbum.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedPhoto.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedPreviewablePhoto.cs" />
@@ -164,12 +164,12 @@
     <Compile Include="Models\IHashFunction.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Models\IPreviewablePhoto.cs" />
-    <Compile Include="Helpers\Photos\Hashed\Album.cs" />
+    <Compile Include="Helpers\Photos\Album.cs" />
     <Compile Include="Models\IHashedAlbum.cs" />
     <Compile Include="Models\IPhoto.cs" />
     <Compile Include="Helpers\MetadataProvider.cs" />
     <Compile Include="Helpers\Photos\Photo.cs" />
-    <Compile Include="Helpers\Photos\Hashed\PreviewablePhoto.cs" />
+    <Compile Include="Helpers\Photos\PreviewablePhoto.cs" />
     <Compile Include="Models\IPreviewablePhotos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
