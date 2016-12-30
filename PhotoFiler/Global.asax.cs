@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Telemetry;
+using Telemetry.TraceSource;
 
 namespace PhotoFiler
 {
