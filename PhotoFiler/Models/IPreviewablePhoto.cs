@@ -13,14 +13,12 @@ namespace PhotoFiler.Models
         /// <summary>
         /// Get the generated preview of the photo using the hash 
         /// </summary>
-        /// <param name="hash">Hash generated for the photo</param>
         /// <returns></returns>
         byte[] Preview();
 
         /// <summary>
         /// Get the full photo using the hash
         /// </summary>
-        /// <param name="hash">Hash generated for the photo</param>
         /// <returns></returns>
         byte[] View();
     }

@@ -79,7 +79,6 @@ namespace PhotoFiler.Helpers.Hasher
         /// Computes the hash of a string
         /// </summary>
         /// <param name="text">String to hash</param>
-        /// <param name="length">Length of hash to return</param>
         /// <returns>A Base62 string</returns>
         public string Compute(string text)
         {

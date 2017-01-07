@@ -35,7 +35,6 @@ namespace PhotoFiler.Helpers.Photos
         /// <summary>
         /// Byte array content of the photo
         /// </summary>
-        /// <param name="hash"></param>
         /// <returns></returns>
         public byte[] View()
         {

@@ -104,7 +104,7 @@ namespace PhotoFiler.Helpers
         private string ComputeSize(FileInfo file)
         {
             // set the size of the file to a human-readable format
-            long length = FileInfo.Length;
+            long length = file.Length;
             var suffixes = new[] { "bytes", "KB", "MB", "GB" };
             int index = 0;
 
@@ -121,9 +121,9 @@ namespace PhotoFiler.Helpers
         /// Read the file and get the image file's creation date time, resolution and preview.
         /// </summary>
         /// <param name="file">FileInfo representing the file</param>
-        /// <param name="hash">Computed hash of the file</param>
         /// <param name="creationDateTime">EXIF or file creation date time</param>
-        /// <param name="resolution">Resolution of the image file</param>
+        /// <param name="height">Height of the photo</param>
+        /// <param name="width">Width of the photo</param>
         /// <returns></returns>
         private void ReadFileData(
             FileInfo file,
