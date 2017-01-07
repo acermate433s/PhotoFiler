@@ -13,7 +13,7 @@ namespace PhotoFiler.Helpers
     /// Represents a photo in the Album
     /// </summary>
     [Bind(Exclude = "FileInfo")]
-    public class Photo 
+    public class Photo : IPhoto
     {
         public Photo(
             string path,
