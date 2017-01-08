@@ -31,7 +31,7 @@ namespace PhotoFiler.Helpers.Repositories.Logged
             Logger
                 .Verbose(
                     photos
-                        .Select(photo => photo.FileInfo.ToString())
+                        .Select(photo => photo.Location)
                         .ToArray()
                 );
 

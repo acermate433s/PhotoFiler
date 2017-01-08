@@ -6,7 +6,7 @@ using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Photos
 {
-    public class PreviewablePhoto : Photo, IPreviewablePhoto
+    public class PreviewablePhoto : FileSystemPhoto, IPreviewablePhoto
     {
         public event ErrorGeneratingPreview ErrorGeneratingPreviewHandler;
 
@@ -38,8 +38,8 @@ namespace PhotoFiler.Helpers.Photos
         /// <returns></returns>
         public byte[] View()
         {
-            if (File.Exists(FileInfo.FullName))
-                return System.IO.File.ReadAllBytes(FileInfo.FullName);
+            if (File.Exists(Location))
+                return System.IO.File.ReadAllBytes(Location);
             else
                 return null;
         }
@@ -54,7 +54,7 @@ namespace PhotoFiler.Helpers.Photos
 
             try
             {
-                byte[] buffer = File.ReadAllBytes(FileInfo.FullName);
+                byte[] buffer = File.ReadAllBytes(Location);
 
                 // resize the image to MAX pixels by MAX
                 // pixels to server as the preview image

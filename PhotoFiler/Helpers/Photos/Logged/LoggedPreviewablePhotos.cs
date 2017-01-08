@@ -38,7 +38,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
             else
             {
                 Logger.Information($"Retrieved {result.Count()} photos.");
-                Logger.Verbose(result.Select(item => item.FileInfo.FullName).ToArray());
+                Logger.Verbose(result.Select(item => item.Location).ToArray());
             }
 
             return result;

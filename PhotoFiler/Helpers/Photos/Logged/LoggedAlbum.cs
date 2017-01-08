@@ -12,7 +12,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
         IHashedAlbum _HashedAlbum;
 
         public LoggedAlbum(
-            ILogger logger, 
+            ILogger logger,
             IHashedAlbum album
         ) : base(logger)
         {
@@ -24,7 +24,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
             _HashedAlbum = album;
 
-            Logger.Verbose(album.Photos?.Select(item => $"\"{item.FileInfo.FullName}\" ({item.Hash}).").ToArray());
+            Logger.Verbose(album.Photos?.Select(item => $"\"{item.Location}\" ({item.Hash}).").ToArray());
         }
 
         public IList<IPreviewablePhoto> Photos
@@ -92,12 +92,12 @@ namespace PhotoFiler.Helpers.Photos.Logged
                 if (photo != null)
                 {
                     var result = photo.Preview();
-                    if (photo.FileInfo != null)
+                    if (!String.IsNullOrEmpty(photo.Location))
                     {
                         if (result != null)
-                            scope.Information($"Preview size for \"{photo.FileInfo.FullName}\" with hash \"{hash}\" is {result.Length} bytes.");
+                            scope.Information($"Preview size for \"{photo.Location}\" with hash \"{hash}\" is {result.Length} bytes.");
                         else
-                            scope.Warning($"Cannot generate preview for \"{photo.FileInfo.FullName} with hash \"{hash}\".");
+                            scope.Warning($"Cannot generate preview for \"{photo.Location} with hash \"{hash}\".");
                     }
                     else
                         scope.Warning($"Cannot find photo with hash \"{hash}\".");
@@ -120,12 +120,12 @@ namespace PhotoFiler.Helpers.Photos.Logged
                 if (photo != null)
                 {
                     var result = photo.View();
-                    if (photo.FileInfo != null)
+                    if (!String.IsNullOrEmpty(photo.Location))
                     {
                         if (result != null)
-                            scope.Information($"Full size for \"{photo.FileInfo.FullName}\" with hash \"{hash}\" is {result.Length} bytes.");
+                            scope.Information($"Full size for \"{photo.Location}\" with hash \"{hash}\" is {result.Length} bytes.");
                         else
-                            scope.Warning($"Cannot generate view for \"{photo.FileInfo.FullName} with hash \"{hash}\".");
+                            scope.Warning($"Cannot generate view for \"{photo.Location} with hash \"{hash}\".");
                     }
                     else
                         scope.Warning($"Cannot find photo with hash \"{hash}\".");

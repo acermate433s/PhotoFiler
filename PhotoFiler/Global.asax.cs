@@ -58,7 +58,7 @@ namespace PhotoFiler
                             (sender, args) =>
                             {
                                 var logger = ((ILogger) HttpContext.Current?.Application["Logger"]) ?? scope;
-                                logger?.Error(args.Exception, "Error generating preview for photo \"{0}\"", args.Photo.FileInfo.FullName);
+                                logger?.Error(args.Exception, "Error generating preview for photo \"{0}\"", args.Photo.Location);
                             }
                         );
 

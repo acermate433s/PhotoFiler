@@ -31,7 +31,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
                     Logger.Error(
                         args.Exception, 
                         "Error generating preview from \"{0}\"", 
-                        args.Photo.FileInfo.FullName
+                        args.Photo.Location
                     );
 
                     ErrorGeneratingPreviewHandler?.Invoke(sender, args);
@@ -46,11 +46,11 @@ namespace PhotoFiler.Helpers.Photos.Logged
             }
         }
 
-        public FileInfo FileInfo
+        public string Location
         {
             get
             {
-                return _PreviewablePhoto.FileInfo;
+                return _PreviewablePhoto.Location;
             }
         }
 
@@ -104,25 +104,25 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
         public byte[] Preview()
         {
-            Logger.Information($"Generating preview for \"{FileInfo.FullName}\" with hash \"{Hash}\".");
+            Logger.Information($"Generating preview for \"{Location}\" with hash \"{Hash}\".");
             var result = _PreviewablePhoto.Preview();
 
             if (result == null)
-                Logger.Warning($"Cannot generate preview for photo \"{FileInfo.FullName}\" with hash \"{Hash}\".");
+                Logger.Warning($"Cannot generate preview for photo \"{Location}\" with hash \"{Hash}\".");
             else
-                Logger.Information($"Preview size for \"{FileInfo.FullName}\" with hash \"{Hash}\" is {result.Length} bytes.");
+                Logger.Information($"Preview size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
 
             return result;
         }
         public byte[] View()
         {
-            Logger.Information($"Generating view for \"{FileInfo.FullName}\" with hash \"{Hash}\".");
+            Logger.Information($"Generating view for \"{Location}\" with hash \"{Hash}\".");
             var result = _PreviewablePhoto.View();
 
             if (result == null)
-                Logger.Warning($"Cannot generate full view for photo \"{FileInfo.FullName}\" with hash \"{Hash}\".");
+                Logger.Warning($"Cannot generate full view for photo \"{Location}\" with hash \"{Hash}\".");
             else
-                Logger.Information($"Full size for \"{FileInfo.FullName}\" with hash \"{Hash}\" is {result.Length} bytes.");
+                Logger.Information($"Full size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
 
             return result;
             

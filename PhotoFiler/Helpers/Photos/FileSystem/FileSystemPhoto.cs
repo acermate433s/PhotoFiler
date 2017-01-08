@@ -13,9 +13,9 @@ namespace PhotoFiler.Helpers
     /// Represents a photo in the Album
     /// </summary>
     [Bind(Exclude = "FileInfo")]
-    public class Photo : IPhoto
+    public class FileSystemPhoto : IPhoto
     {
-        public Photo(
+        public FileSystemPhoto(
             string path,
             IHashFunction hasher
         )
@@ -25,18 +25,20 @@ namespace PhotoFiler.Helpers
 
             try
             {
-                FileInfo = new System.IO.FileInfo(path);
-                Name = FileInfo.Name;
-                Size = ComputeSize(FileInfo);
+                var fileInfo = new FileInfo(path);
 
-                Hash = hasher.Compute(FileInfo.FullName);
+                Location = path;
+                Name = fileInfo.Name;
+                Size = ComputeSize(fileInfo);
+
+                Hash = hasher.Compute(fileInfo.FullName);
 
                 DateTime? creationDateTime = null;
                 int width = 0;
                 int height = 0;
 
                 ReadFileData(
-                    FileInfo,
+                    fileInfo,
                     out creationDateTime,
                     out width,
                     out height
@@ -54,9 +56,9 @@ namespace PhotoFiler.Helpers
         }
 
         /// <summary>
-        /// FileInfo object that represents the photo
+        /// Location of the photo
         /// </summary>
-        public FileInfo FileInfo { get; private set; }
+        public string Location { get; private set; }
 
         /// <summary>
         /// Filename of the photo

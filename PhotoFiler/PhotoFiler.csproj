@@ -168,7 +168,7 @@
     <Compile Include="Models\IHashedAlbum.cs" />
     <Compile Include="Models\IPhoto.cs" />
     <Compile Include="Helpers\MetadataProvider.cs" />
-    <Compile Include="Helpers\Photos\Photo.cs" />
+    <Compile Include="Helpers\Photos\FileSystem\FileSystemPhoto.cs" />
     <Compile Include="Helpers\Photos\PreviewablePhoto.cs" />
     <Compile Include="Models\IPreviewablePhotos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

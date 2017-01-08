@@ -18,10 +18,10 @@ namespace PhotoFiler.Models
         DateTime? CreationDateTime { get; }
 
         /// <summary>
-        /// FileInfo object of the photo
+        /// Location of the photo
         /// </summary>
-        [DisplayName("FileInfo")]
-        FileInfo FileInfo { get; }
+        [DisplayName("Location")]
+        string Location { get; }
 
         /// <summary>
         /// Name of the photo

@@ -22,7 +22,7 @@ namespace PhotoFiler.Helpers.Photos.Logged
 
             _Photo = photo;
 
-            Logger.Information($"Photo \"{photo.FileInfo.FullName}\" with hash \"{Hash}\"");
+            Logger.Information($"Photo \"{photo.Location}\" with hash \"{Hash}\"");
         }
 
         public DateTime? CreationDateTime
@@ -33,11 +33,11 @@ namespace PhotoFiler.Helpers.Photos.Logged
             }
         }
 
-        public FileInfo FileInfo
+        public string Location
         {
             get
             {
-                return _Photo.FileInfo;
+                return _Photo.Location;
             }
         }
 
