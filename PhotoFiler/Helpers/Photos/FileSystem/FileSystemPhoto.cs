@@ -1,8 +1,6 @@
 ﻿using ExifLib;
 using PhotoFiler.Models;
 using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.IO;
 using System.Web.Mvc;
@@ -13,7 +11,7 @@ namespace PhotoFiler.Helpers
     /// Represents a photo in the Album
     /// </summary>
     [Bind(Exclude = "FileInfo")]
-    public class FileSystemPhoto : IPhoto
+    public class FileSystemPhoto : Photo
     {
         public FileSystemPhoto(
             string path,
@@ -54,49 +52,6 @@ namespace PhotoFiler.Helpers
                 CreationDateTime = DateTime.Now;
             }
         }
-
-        /// <summary>
-        /// Location of the photo
-        /// </summary>
-        public string Location { get; private set; }
-
-        /// <summary>
-        /// Filename of the photo
-        /// </summary>
-        public string Name { get; private set; }
-
-        /// <summary>
-        /// File size of the photo in human readable format
-        /// </summary>
-        public string Size { get; private set; }
-
-        /// <summary>
-        /// Hash code of the photo.
-        /// </summary>
-        public string Hash { get; private set; }
-
-        /// <summary>
-        /// Resolution of the photo
-        /// </summary>
-        public string Resolution
-        {
-            get
-            {
-                if (Width > 0 || Height > 0)
-                    return $"{Width}x{Height}";
-                else
-                    return "Unknown";
-            }
-        }
-
-        public int Height { get; private set; } = 0;
-
-        public int Width { get; private set; } = 0;
-
-        /// <summary>
-        /// Date when the photo was created
-        /// </summary>
-        public DateTime? CreationDateTime { get; private set; }
 
         /// <summary>
         /// Get the size of the file to a human-readable format

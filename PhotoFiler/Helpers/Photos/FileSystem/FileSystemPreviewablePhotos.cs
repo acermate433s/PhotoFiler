@@ -8,12 +8,12 @@ using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Photos
 {
-    public class PreviewablePhotos : IPreviewablePhotos
+    public class FileSystemPreviewablePhotos : IPreviewablePhotos
     {
         DirectoryInfo _Source = null;
         IPhotoRepository _PhotoRepository = null;
 
-        public PreviewablePhotos(
+        public FileSystemPreviewablePhotos(
             DirectoryInfo source,
             IPhotoRepository photoRepository
         )

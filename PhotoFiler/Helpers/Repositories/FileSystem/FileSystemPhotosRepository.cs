@@ -5,12 +5,12 @@ using System.IO;
 
 namespace PhotoFiler.Helpers.Repositories
 {
-    public class PhotosRepository : IPhotosRepository
+    public class FileSystemPhotosRepository : IPhotosRepository
     {
         DirectoryInfo _RootPath;
         IPhotoRepository _PhotoRepository;
 
-        public PhotosRepository(
+        public FileSystemPhotosRepository(
             DirectoryInfo roothPath,
             IPhotoRepository photoRepository
         )
@@ -28,7 +28,7 @@ namespace PhotoFiler.Helpers.Repositories
         public IPreviewablePhotos Create()
         {
             return
-                new PreviewablePhotos(
+                new FileSystemPreviewablePhotos(
                     _RootPath,
                     _PhotoRepository
                 );

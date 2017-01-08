@@ -3,11 +3,11 @@ using System;
 
 namespace PhotoFiler.Helpers.Repositories
 {
-    public class Repository : IRepository
+    public class FileSystemRepository : IRepository
     {
         protected IConfiguration Configuration { get; set; }
 
-        public Repository(
+        public FileSystemRepository(
             IConfiguration configuration
         )
         {
@@ -20,7 +20,7 @@ namespace PhotoFiler.Helpers.Repositories
         public IAlbumRepository CreateAlbumRepository()
         {
             return
-                new AlbumRepository(
+                new FileSystemAlbumRepository(
                     Configuration.PreviewLocation
                 );
         }
@@ -28,7 +28,7 @@ namespace PhotoFiler.Helpers.Repositories
         public IPhotoRepository CreatePhotoRepository()
         {
             return 
-                new PhotoRepository(
+                new FileSystemPhotoRepository(
                     Configuration.HashLength,
                     Configuration.HashingFunction,
                     Configuration.PreviewLocation
@@ -38,7 +38,7 @@ namespace PhotoFiler.Helpers.Repositories
         public IPhotosRepository CreatePhotosRepository()
         {
             return
-                new PhotosRepository(
+                new FileSystemPhotosRepository(
                     Configuration.RootPath,
                     CreatePhotoRepository()
                 );

@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace PhotoFiler.Helpers.Photos
 {
-    public class Album : IHashedAlbum
+    public class FileSystemAlbum : IHashedAlbum
     {
         /// <summary>
         /// Photos in the album
@@ -19,7 +19,7 @@ namespace PhotoFiler.Helpers.Photos
         public DirectoryInfo PreviewLocation { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Album"/> class.
+        /// Initializes a new instance of the <see cref="FileSystemAlbum"/> class.
         /// </summary>
         /// <param name="previewLocation">The preview location.</param>
         /// <param name="photos">The photos.</param>
@@ -28,7 +28,7 @@ namespace PhotoFiler.Helpers.Photos
         /// or
         /// photos
         /// </exception>
-        public Album(
+        public FileSystemAlbum(
             DirectoryInfo previewLocation,
             List<IPreviewablePhoto> photos
         )

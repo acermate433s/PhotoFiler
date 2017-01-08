@@ -34,14 +34,14 @@ namespace PhotoFiler
                     var configuration = new Configuration();
                     scope.Verbose(configuration.ToString());
 
-                    IRepository repository = new Repository(configuration);
+                    IRepository repository = new FileSystemRepository(configuration);
                     if (configuration.EnableLogging)
                     {
                         scope.Information("Logging enabled.");
                         repository =
                             new LoggedRepository(
                                 new ActivityTracerScope(new TraceSource("PhotoFiler"), "Logger"),
-                                new Repository(configuration)
+                                new FileSystemRepository(configuration)
                             );
                     }
 

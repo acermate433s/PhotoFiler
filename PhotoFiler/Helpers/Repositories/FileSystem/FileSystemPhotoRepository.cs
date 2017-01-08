@@ -6,13 +6,13 @@ using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Repositories
 {
-    public class PhotoRepository : IPhotoRepository
+    public class FileSystemPhotoRepository : IPhotoRepository
     {
         int _HashLength = 0;
         IHashFunction _HashingFunction = null;
         DirectoryInfo _PreviewLocation = null;
 
-        public PhotoRepository(
+        public FileSystemPhotoRepository(
             int hashLength,
             IHashFunction hashingFunction,
             DirectoryInfo previewLocation
@@ -38,7 +38,7 @@ namespace PhotoFiler.Helpers.Repositories
         )
         {
             var result =
-                new PreviewablePhoto(
+                new FileSystemPreviewablePhoto(
                     _HashLength,
                     file.FullName,
                     _HashingFunction

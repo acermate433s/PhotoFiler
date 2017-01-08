@@ -6,11 +6,11 @@ using System.IO;
 
 namespace PhotoFiler.Helpers.Repositories
 {
-    public class AlbumRepository : IAlbumRepository
+    public class FileSystemAlbumRepository : IAlbumRepository
     {
         DirectoryInfo _PreviewLocation;
 
-        public AlbumRepository(
+        public FileSystemAlbumRepository(
             DirectoryInfo previewLocation
         )
         {
@@ -23,7 +23,7 @@ namespace PhotoFiler.Helpers.Repositories
         public IHashedAlbum Create(List<IPreviewablePhoto> photos)
         {
             return
-                new Album(
+                new FileSystemAlbum(
                     _PreviewLocation,
                     photos
                 );

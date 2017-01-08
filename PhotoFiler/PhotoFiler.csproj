@@ -142,7 +142,8 @@
     <Compile Include="Helpers\Hasher\Base62HasherBase.cs" />
     <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Helpers\LoggedBase.cs" />
-    <Compile Include="Helpers\Repositories\AlbumRepository.cs" />
+    <Compile Include="Helpers\Photos\Photo.cs" />
+    <Compile Include="Helpers\Repositories\FileSystem\FileSystemAlbumRepository.cs" />
     <Compile Include="Helpers\Repositories\Interfaces\IAlbumRepository.cs" />
     <Compile Include="Helpers\Repositories\Interfaces\IPhotoRepository.cs" />
     <Compile Include="Helpers\Repositories\Interfaces\IPhotosRepository.cs" />
@@ -151,11 +152,11 @@
     <Compile Include="Helpers\Repositories\Logged\LoggedPhotoRepository.cs" />
     <Compile Include="Helpers\Repositories\Logged\LoggedPhotosRepository.cs" />
     <Compile Include="Helpers\Repositories\Logged\LoggedRepository.cs" />
-    <Compile Include="Helpers\Repositories\PhotoRepository.cs" />
-    <Compile Include="Helpers\Repositories\PhotosRepository.cs" />
-    <Compile Include="Helpers\Repositories\Repository.cs" />
+    <Compile Include="Helpers\Repositories\FileSystem\FileSystemPhotoRepository.cs" />
+    <Compile Include="Helpers\Repositories\FileSystem\FileSystemPhotosRepository.cs" />
+    <Compile Include="Helpers\Repositories\FileSystem\FileSystemRepository.cs" />
     <Compile Include="Models\IConfiguration.cs" />
-    <Compile Include="Helpers\Photos\PreviewablePhotos.cs" />
+    <Compile Include="Helpers\Photos\FileSystem\FileSystemPreviewablePhotos.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedAlbum.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedPhoto.cs" />
     <Compile Include="Helpers\Photos\Logged\LoggedPreviewablePhoto.cs" />
@@ -164,12 +165,12 @@
     <Compile Include="Models\IHashFunction.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Models\IPreviewablePhoto.cs" />
-    <Compile Include="Helpers\Photos\Album.cs" />
+    <Compile Include="Helpers\Photos\FileSystem\FileSystemAlbum.cs" />
     <Compile Include="Models\IHashedAlbum.cs" />
     <Compile Include="Models\IPhoto.cs" />
     <Compile Include="Helpers\MetadataProvider.cs" />
     <Compile Include="Helpers\Photos\FileSystem\FileSystemPhoto.cs" />
-    <Compile Include="Helpers\Photos\PreviewablePhoto.cs" />
+    <Compile Include="Helpers\Photos\FileSystem\FileSystemPreviewablePhoto.cs" />
     <Compile Include="Models\IPreviewablePhotos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

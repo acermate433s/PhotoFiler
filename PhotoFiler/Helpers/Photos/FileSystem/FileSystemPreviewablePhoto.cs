@@ -6,7 +6,7 @@ using static PhotoFiler.Helpers.Helpers;
 
 namespace PhotoFiler.Helpers.Photos
 {
-    public class PreviewablePhoto : FileSystemPhoto, IPreviewablePhoto
+    public class FileSystemPreviewablePhoto : FileSystemPhoto, IPreviewablePhoto
     {
         public event ErrorGeneratingPreview ErrorGeneratingPreviewHandler;
 
@@ -16,7 +16,7 @@ namespace PhotoFiler.Helpers.Photos
         // Maximum height and width
         private const int MAX = 300;
 
-        public PreviewablePhoto(
+        public FileSystemPreviewablePhoto(
             int hashLength,
             string path,
             IHashFunction hasher
