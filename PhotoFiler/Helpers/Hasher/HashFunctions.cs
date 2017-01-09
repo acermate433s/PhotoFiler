@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace PhotoFiler.Helpers.Hasher
+namespace PhotoFiler.Hasher
 {
     public class MD5 : Base62HasherBase<MD5Cng>
     {

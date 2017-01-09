@@ -1,9 +1,8 @@
-﻿using PhotoFiler.Helpers.Photos.Logged;
-using PhotoFiler.Models;
+﻿using PhotoFiler.Models;
 using System;
 using Telemetry;
 
-namespace PhotoFiler.Helpers.Repositories.Logged
+namespace PhotoFiler.Logged
 {
     public class LoggedPhotosRepository : LoggedBase, IPhotosRepository
     {

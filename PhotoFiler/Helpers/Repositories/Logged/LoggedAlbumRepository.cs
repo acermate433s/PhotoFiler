@@ -1,11 +1,10 @@
-﻿using PhotoFiler.Helpers.Photos.Logged;
-using PhotoFiler.Models;
+﻿using PhotoFiler.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Telemetry;
 
-namespace PhotoFiler.Helpers.Repositories.Logged
+namespace PhotoFiler.Logged
 {
     public class LoggedAlbumRepository : LoggedBase, IAlbumRepository
     {

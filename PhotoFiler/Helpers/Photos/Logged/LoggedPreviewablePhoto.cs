@@ -4,7 +4,7 @@ using System.IO;
 using Telemetry;
 using static PhotoFiler.Helpers.Helpers;
 
-namespace PhotoFiler.Helpers.Photos.Logged
+namespace PhotoFiler.Logged
 {
     public class LoggedPreviewablePhoto : LoggedBase, IPreviewablePhoto
     {

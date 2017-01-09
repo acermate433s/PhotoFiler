@@ -1,7 +1,7 @@
 ﻿using System;
 using Telemetry;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Logged
 {
     public class LoggedBase : IDisposable
     {

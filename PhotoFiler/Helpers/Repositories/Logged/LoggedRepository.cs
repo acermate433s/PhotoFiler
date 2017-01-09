@@ -1,7 +1,8 @@
-﻿using System;
+﻿using PhotoFiler.Models;
+using System;
 using Telemetry;
 
-namespace PhotoFiler.Helpers.Repositories.Logged
+namespace PhotoFiler.Logged
 {
     public class LoggedRepository : LoggedBase, IRepository
     {

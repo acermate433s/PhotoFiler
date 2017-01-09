@@ -5,7 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
 
-namespace PhotoFiler.Helpers.Hasher
+namespace PhotoFiler.Hasher
 {
     public class Base62HasherBase<THashAlgorithm> : IHashFunction where THashAlgorithm : HashAlgorithm, new()
     {

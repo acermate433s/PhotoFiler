@@ -1,6 +1,6 @@
-﻿using PhotoFiler.Helpers;
-using PhotoFiler.Helpers.Repositories;
-using PhotoFiler.Helpers.Repositories.Logged;
+﻿using PhotoFiler.FileSystem;
+using PhotoFiler.Helpers;
+using PhotoFiler.Logged;
 using PhotoFiler.Models;
 using System;
 using System.Diagnostics;

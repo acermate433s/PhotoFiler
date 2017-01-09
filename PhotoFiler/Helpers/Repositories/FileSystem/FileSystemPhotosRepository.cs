@@ -1,9 +1,8 @@
-﻿using PhotoFiler.Helpers.Photos;
-using PhotoFiler.Models;
+﻿using PhotoFiler.Models;
 using System;
 using System.IO;
 
-namespace PhotoFiler.Helpers.Repositories
+namespace PhotoFiler.FileSystem
 {
     public class FileSystemPhotosRepository : IPhotosRepository
     {

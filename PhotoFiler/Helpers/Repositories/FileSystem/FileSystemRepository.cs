@@ -1,7 +1,7 @@
 ﻿using PhotoFiler.Models;
 using System;
 
-namespace PhotoFiler.Helpers.Repositories
+namespace PhotoFiler.FileSystem
 {
     public class FileSystemRepository : IRepository
     {

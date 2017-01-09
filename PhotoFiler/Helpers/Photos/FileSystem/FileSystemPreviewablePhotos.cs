@@ -1,12 +1,11 @@
-﻿using PhotoFiler.Helpers.Repositories;
-using PhotoFiler.Models;
+﻿using PhotoFiler.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using static PhotoFiler.Helpers.Helpers;
 
-namespace PhotoFiler.Helpers.Photos
+namespace PhotoFiler.FileSystem
 {
     public class FileSystemPreviewablePhotos : IPreviewablePhotos
     {

@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
+﻿using PhotoFiler.Hasher;
 using PhotoFiler.Models;
-using PhotoFiler.Helpers.Hasher;
+using System;
+using System.IO;
 using System.Text;
 
 namespace PhotoFiler.Helpers

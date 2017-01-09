@@ -2,7 +2,7 @@
 using System.IO;
 using static PhotoFiler.Helpers.Helpers;
 
-namespace PhotoFiler.Helpers.Repositories
+namespace PhotoFiler.Models
 {
     /// <summary>
     /// IPhoto Repository

@@ -6,7 +6,7 @@ using System.Web;
 using Telemetry;
 using static PhotoFiler.Helpers.Helpers;
 
-namespace PhotoFiler.Helpers.Photos.Logged
+namespace PhotoFiler.Logged
 {
     public class LoggedPreviewablePhotos : LoggedBase, IPreviewablePhotos
     {

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler
 {
     public class Photo
     {

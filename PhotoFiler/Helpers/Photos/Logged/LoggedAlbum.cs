@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using Telemetry;
 
-namespace PhotoFiler.Helpers.Photos.Logged
+namespace PhotoFiler.Logged
 {
     public class LoggedAlbum : LoggedBase, IHashedAlbum
     {

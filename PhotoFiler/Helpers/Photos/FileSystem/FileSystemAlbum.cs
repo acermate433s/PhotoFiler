@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace PhotoFiler.Helpers.Photos
+namespace PhotoFiler.FileSystem
 {
     public class FileSystemAlbum : IHashedAlbum
     {

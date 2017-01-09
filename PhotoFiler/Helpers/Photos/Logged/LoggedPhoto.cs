@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using Telemetry;
 
-namespace PhotoFiler.Helpers.Photos.Logged
+namespace PhotoFiler.Logged
 {
     public class LoggedPhoto : LoggedBase, IPhoto
     {

@@ -1,11 +1,12 @@
 ﻿using ExifLib;
+using PhotoFiler.Helpers;
 using PhotoFiler.Models;
 using System;
 using System.Drawing;
 using System.IO;
 using System.Web.Mvc;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.FileSystem
 {
     /// <summary>
     /// Represents a photo in the Album

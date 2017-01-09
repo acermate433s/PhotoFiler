@@ -1,4 +1,4 @@
-﻿namespace PhotoFiler.Helpers.Repositories
+﻿namespace PhotoFiler.Models
 {
     /// <summary>
     /// Creates IPhoto, IPhotos and IAlbum repositories

@@ -1,7 +1,7 @@
 ﻿using PhotoFiler.Models;
 using System.Collections.Generic;
 
-namespace PhotoFiler.Helpers.Repositories
+namespace PhotoFiler.Models
 {
     /// <summary>
     /// IAlbum Repository
