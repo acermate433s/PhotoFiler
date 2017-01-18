@@ -1,4 +1,6 @@
-﻿using PhotoFiler.Hasher;
+﻿using PhotoFiler.FileSystem;
+using PhotoFiler.Hasher;
+using PhotoFiler.Logged;
 using PhotoFiler.Models;
 using System;
 using System.IO;
@@ -6,7 +8,7 @@ using System.Text;
 
 namespace PhotoFiler.Helpers
 {
-    public class Configuration : IConfiguration
+    public class Configuration : IFileSystemConfiguration, ILoggedConfiguration
     {
         private const string ROOTH_PATH = "RoothPath";
         private const string HASH_LENGTH = "HashLength";

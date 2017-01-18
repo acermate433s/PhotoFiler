@@ -139,9 +139,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
+    <Compile Include="Helpers\FileSystem\IFileSystemConfiguration.cs" />
     <Compile Include="Helpers\Hasher\Base62HasherBase.cs" />
     <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Helpers\LoggedBase.cs" />
+    <Compile Include="Helpers\Logged\ILoggedConfiguration.cs" />
     <Compile Include="Helpers\Photo.cs" />
     <Compile Include="Helpers\FileSystem\FileSystemAlbumRepository.cs" />
     <Compile Include="Models\IAlbumRepository.cs" />
@@ -155,7 +157,6 @@
     <Compile Include="Helpers\FileSystem\FileSystemPhotoRepository.cs" />
     <Compile Include="Helpers\FileSystem\FileSystemPhotosRepository.cs" />
     <Compile Include="Helpers\FileSystem\FileSystemRepository.cs" />
-    <Compile Include="Models\IConfiguration.cs" />
     <Compile Include="Helpers\FileSystem\FileSystemPreviewablePhotos.cs" />
     <Compile Include="Helpers\Logged\LoggedAlbum.cs" />
     <Compile Include="Helpers\Logged\LoggedPhoto.cs" />

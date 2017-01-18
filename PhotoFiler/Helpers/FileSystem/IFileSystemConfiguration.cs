@@ -1,12 +1,9 @@
 ﻿using PhotoFiler.Models;
 using System.IO;
 
-namespace PhotoFiler.Models
+namespace PhotoFiler.FileSystem
 {
-    /// <summary>
-    /// Application configuration settings
-    /// </summary>
-    public interface IConfiguration
+    public interface IFileSystemConfiguration
     {
         /// <summary>
         /// Flag to indicate if previews are created on startup
@@ -32,10 +29,5 @@ namespace PhotoFiler.Models
         /// Hashing function to use
         /// </summary>
         IHashFunction HashingFunction { get; set; }
-
-        /// <summary>
-        /// Flag to indicate if logging is generated
-        /// </summary>
-        bool EnableLogging { get; set; }
     }
 }
