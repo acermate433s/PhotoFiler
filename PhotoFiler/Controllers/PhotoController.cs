@@ -1,9 +1,7 @@
-﻿using PhotoFiler.Models;
+﻿using Photo.Models;
 using System.IO;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using Telemetry;
 
 namespace PhotoFiler.Controllers
 {

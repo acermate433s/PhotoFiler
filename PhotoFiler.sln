@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoFiler", "PhotoFiler\Ph
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoFiler.Tests", "PhotoFiler.Tests\PhotoFiler.Tests.csproj", "{021236ED-C07D-47DC-A56E-F3577D874A36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photo", "Photo\Photo.csproj", "{A9B7676F-AF01-4A67-B2FC-B7448C452AE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{021236ED-C07D-47DC-A56E-F3577D874A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{021236ED-C07D-47DC-A56E-F3577D874A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{021236ED-C07D-47DC-A56E-F3577D874A36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9B7676F-AF01-4A67-B2FC-B7448C452AE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9B7676F-AF01-4A67-B2FC-B7448C452AE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9B7676F-AF01-4A67-B2FC-B7448C452AE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9B7676F-AF01-4A67-B2FC-B7448C452AE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

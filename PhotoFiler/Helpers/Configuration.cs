@@ -1,7 +1,7 @@
-﻿using PhotoFiler.FileSystem;
-using PhotoFiler.Hasher;
-using PhotoFiler.Logged;
-using PhotoFiler.Models;
+﻿using Photo.FileSystem;
+using Photo.Hasher;
+using Photo.Logged;
+using Photo.Models;
 using System;
 using System.IO;
 using System.Text;

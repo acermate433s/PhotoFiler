@@ -55,14 +55,6 @@
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ExifLib, Version=1.7.0.0, Culture=neutral, PublicKeyToken=30284005913968db, processorArchitecture=MSIL">
-      <HintPath>..\packages\ExifLib.1.7.0.0\lib\net45\ExifLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ImageResizer.4.0.5\lib\net45\ImageResizer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -139,40 +131,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Configuration.cs" />
-    <Compile Include="Helpers\FileSystem\IFileSystemConfiguration.cs" />
-    <Compile Include="Helpers\Hasher\Base62HasherBase.cs" />
-    <Compile Include="Helpers\Helpers.cs" />
-    <Compile Include="Helpers\LoggedBase.cs" />
-    <Compile Include="Helpers\Logged\ILoggedConfiguration.cs" />
-    <Compile Include="Helpers\Photo.cs" />
-    <Compile Include="Helpers\FileSystem\FileSystemAlbumRepository.cs" />
-    <Compile Include="Helpers\Models\IAlbumRepository.cs" />
-    <Compile Include="Helpers\Models\IPhotoRepository.cs" />
-    <Compile Include="Helpers\Models\IPhotosRepository.cs" />
-    <Compile Include="Helpers\Models\IRepository.cs" />
-    <Compile Include="Helpers\Logged\LoggedAlbumRepository.cs" />
-    <Compile Include="Helpers\Logged\LoggedPhotoRepository.cs" />
-    <Compile Include="Helpers\Logged\LoggedPhotosRepository.cs" />
-    <Compile Include="Helpers\Logged\LoggedRepository.cs" />
-    <Compile Include="Helpers\FileSystem\FileSystemPhotoRepository.cs" />
-    <Compile Include="Helpers\FileSystem\FileSystemPhotosRepository.cs" />
-    <Compile Include="Helpers\FileSystem\FileSystemRepository.cs" />
-    <Compile Include="Helpers\FileSystem\FileSystemPreviewablePhotos.cs" />
-    <Compile Include="Helpers\Logged\LoggedAlbum.cs" />
-    <Compile Include="Helpers\Logged\LoggedPhoto.cs" />
-    <Compile Include="Helpers\Logged\LoggedPreviewablePhoto.cs" />
-    <Compile Include="Helpers\Hasher\HashFunctions.cs" />
-    <Compile Include="Helpers\Logged\LoggedPreviewablePhotos.cs" />
-    <Compile Include="Models\IHashFunction.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
-    <Compile Include="Models\IPreviewablePhoto.cs" />
-    <Compile Include="Helpers\FileSystem\FileSystemAlbum.cs" />
-    <Compile Include="Models\IHashedAlbum.cs" />
-    <Compile Include="Models\IPhoto.cs" />
     <Compile Include="Helpers\MetadataProvider.cs" />
-    <Compile Include="Helpers\FileSystem\FileSystemPhoto.cs" />
-    <Compile Include="Helpers\FileSystem\FileSystemPreviewablePhoto.cs" />
-    <Compile Include="Models\IPreviewablePhotos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -250,6 +211,12 @@
     <Analyzer Include="..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
     <Analyzer Include="..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.Analyzers.dll" />
     <Analyzer Include="..\packages\System.Security.Cryptography.Hashing.Algorithms.Analyzers.1.1.0\analyzers\dotnet\cs\System.Security.Cryptography.Hashing.Algorithms.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Photo\Photo.csproj">
+      <Project>{a9b7676f-af01-4a67-b2fc-b7448c452ae2}</Project>
+      <Name>Photo</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
