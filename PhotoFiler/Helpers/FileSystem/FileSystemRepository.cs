@@ -5,10 +5,10 @@ namespace PhotoFiler.FileSystem
 {
     public class FileSystemRepository : IRepository
     {
-        protected IConfiguration Configuration { get; set; }
+        protected IFileSystemConfiguration Configuration { get; set; }
 
         public FileSystemRepository(
-            IConfiguration configuration
+            IFileSystemConfiguration configuration
         )
         {
             if (configuration == null)
