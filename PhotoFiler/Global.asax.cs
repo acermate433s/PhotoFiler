@@ -1,7 +1,7 @@
-﻿using PhotoFiler.FileSystem;
+﻿using Photo.FileSystem;
+using Photo.Logged;
+using Photo.Models;
 using PhotoFiler.Helpers;
-using PhotoFiler.Logged;
-using PhotoFiler.Models;
 using System;
 using System.Diagnostics;
 using System.Linq;
