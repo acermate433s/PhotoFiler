@@ -35,14 +35,6 @@ namespace Photo.Logged
             }
         }
 
-        public DirectoryInfo PreviewLocation
-        {
-            get
-            {
-                return _HashedAlbum.PreviewLocation;
-            }
-        }
-
         public int Count()
         {
             return _HashedAlbum.Count();
@@ -50,7 +42,7 @@ namespace Photo.Logged
 
         public void GeneratePreviews()
         {
-            using (var scope = Logger.CreateScope($"Generating photo previews of {_HashedAlbum.Count()} photos in \"{_HashedAlbum.PreviewLocation.FullName}\" for album."))
+            using (var scope = Logger.CreateScope($"Generating photo previews of {_HashedAlbum.Count()} photos for album."))
             {
                 _HashedAlbum.GeneratePreviews();
             }

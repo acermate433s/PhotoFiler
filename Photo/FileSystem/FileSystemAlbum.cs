@@ -8,6 +8,9 @@ namespace Photo.FileSystem
 {
     public class FileSystemAlbum : IHashedAlbum
     {
+
+        private static object _Lock = new object();
+
         /// <summary>
         /// Photos in the album
         /// </summary>
@@ -63,22 +66,24 @@ namespace Photo.FileSystem
             var errors = new List<string>();
 
             Photos
-                .AsParallel()
-                .ForAll(photo =>
+                .ToList()
+                .ForEach(photo =>
                 {
                     try
                     {
-                        var filename = Path.Combine(PreviewLocation.FullName, photo.Hash);
-                        filename = Path.ChangeExtension(filename, "prev");
-
-                        if (!File.Exists(filename))
+                        lock(_Lock)
                         {
+                            var filename = Path.Combine(PreviewLocation.FullName, photo.Hash);
+                            filename = Path.ChangeExtension(filename, "prev");
+
+                            if(File.Exists(filename))
+                                File.Delete(filename);
+
                             var preview = photo.Preview();
-                            if (preview != null)
+                            if(preview != null)
                                 File.WriteAllBytes(filename, preview);
                             else
                                 errors.Add(photo.Hash);
-
                         }
                     }
                     catch
