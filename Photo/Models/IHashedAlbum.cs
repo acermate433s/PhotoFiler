@@ -14,11 +14,6 @@ namespace Photo.Models
         IList<IPreviewablePhoto> Photos { get; }
 
         /// <summary>
-        /// Location of the directory where the generated preview of the photos are stored.
-        /// </summary>
-        DirectoryInfo PreviewLocation { get; }
-
-        /// <summary>
         /// Number of photos in the album
         /// </summary>
         /// <returns></returns>
