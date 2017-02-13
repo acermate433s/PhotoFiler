@@ -14,12 +14,12 @@ namespace Photo.Models
         /// Get the generated preview of the photo using the hash 
         /// </summary>
         /// <returns></returns>
-        byte[] Preview();
+        byte[] Preview { get; }
 
         /// <summary>
         /// Get the full photo using the hash
         /// </summary>
         /// <returns></returns>
-        byte[] View();
+        byte[] View { get; }
     }
 }

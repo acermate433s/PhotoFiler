@@ -79,7 +79,7 @@ namespace Photo.FileSystem
                             if(File.Exists(filename))
                                 File.Delete(filename);
 
-                            var preview = photo.Preview();
+                            var preview = photo.Preview;
                             if(preview != null)
                                 File.WriteAllBytes(filename, preview);
                             else
@@ -151,7 +151,7 @@ namespace Photo.FileSystem
                 }
                 else
                 { 
-                    var preview = photo.Preview();
+                    var preview = photo.Preview;
                     if (preview != null)
                     {
                         File.WriteAllBytes(previewFilename, preview);
@@ -179,7 +179,7 @@ namespace Photo.FileSystem
             return
                 Photos?
                     .FirstOrDefault(item => item.Hash == hash)?
-                    .View();
+                    .View;
         }
     }
 }
