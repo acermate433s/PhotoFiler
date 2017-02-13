@@ -83,7 +83,7 @@ namespace Photo.Logged
                 var photo = Photos.FirstOrDefault(item => item.Hash == hash);
                 if (photo != null)
                 {
-                    var result = photo.Preview();
+                    var result = photo.Preview;
                     if (!String.IsNullOrEmpty(photo.Location))
                     {
                         if (result != null)
@@ -111,7 +111,7 @@ namespace Photo.Logged
                 var photo = Photos.FirstOrDefault(item => item.Hash == hash);
                 if (photo != null)
                 {
-                    var result = photo.View();
+                    var result = photo.View;
                     if (!String.IsNullOrEmpty(photo.Location))
                     {
                         if (result != null)

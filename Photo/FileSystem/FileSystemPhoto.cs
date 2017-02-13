@@ -11,6 +11,10 @@ namespace Photo.FileSystem
     /// </summary>
     public class FileSystemPhoto : Photo
     {
+        public FileSystemPhoto()
+        {
+        }
+
         public FileSystemPhoto(
             string path,
             IHashFunction hasher

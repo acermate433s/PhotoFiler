@@ -102,30 +102,35 @@ namespace Photo.Logged
             }
         }
 
-        public byte[] Preview()
+        public byte[] Preview
         {
-            Logger.Information($"Generating preview for \"{Location}\" with hash \"{Hash}\".");
-            var result = _PreviewablePhoto.Preview();
+            get
+            {
+                Logger.Information($"Generating preview for \"{Location}\" with hash \"{Hash}\".");
+                var result = _PreviewablePhoto.Preview;
 
-            if (result == null)
-                Logger.Warning($"Cannot generate preview for photo \"{Location}\" with hash \"{Hash}\".");
-            else
-                Logger.Information($"Preview size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
+                if(result == null)
+                    Logger.Warning($"Cannot generate preview for photo \"{Location}\" with hash \"{Hash}\".");
+                else
+                    Logger.Information($"Preview size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
 
-            return result;
+                return result;
+            }
         }
-        public byte[] View()
+        public byte[] View
         {
-            Logger.Information($"Generating view for \"{Location}\" with hash \"{Hash}\".");
-            var result = _PreviewablePhoto.View();
+            get
+            {
+                Logger.Information($"Generating view for \"{Location}\" with hash \"{Hash}\".");
+                var result = _PreviewablePhoto.View;
 
-            if (result == null)
-                Logger.Warning($"Cannot generate full view for photo \"{Location}\" with hash \"{Hash}\".");
-            else
-                Logger.Information($"Full size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
+                if(result == null)
+                    Logger.Warning($"Cannot generate full view for photo \"{Location}\" with hash \"{Hash}\".");
+                else
+                    Logger.Information($"Full size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
 
-            return result;
-            
+                return result;
+            }
         }
     }
 }

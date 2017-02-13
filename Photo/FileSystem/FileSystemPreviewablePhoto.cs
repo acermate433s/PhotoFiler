@@ -17,6 +17,10 @@ namespace Photo.FileSystem
         // Maximum height and width
         private const int MAX = 300;
 
+        public FileSystemPreviewablePhoto()
+        {
+        }
+
         public FileSystemPreviewablePhoto(
             int hashLength,
             string path,
@@ -37,53 +41,59 @@ namespace Photo.FileSystem
         /// Byte array content of the photo
         /// </summary>
         /// <returns></returns>
-        public byte[] View()
+        public byte[] View
         {
-            if (File.Exists(Location))
-                return System.IO.File.ReadAllBytes(Location);
-            else
-                return null;
+            get
+            {
+                if(File.Exists(Location))
+                    return System.IO.File.ReadAllBytes(Location);
+                else
+                    return null;
+            }
         }
 
         /// <summary>
         /// Reads the preview file from the preview location if it the photo exists
         /// </summary>
         /// <returns>Byte array of the preview file if it exists, otherwise null</returns>
-        public byte[] Preview()
+        public byte[] Preview
         {
-            byte[] result = null;
-
-            try
+            get
             {
-                byte[] buffer = File.ReadAllBytes(Location);
+                byte[] result = null;
 
-                // resize the image to MAX pixels by MAX
-                // pixels to server as the preview image
-                using (var input = new MemoryStream(buffer))
-                using (var output = new MemoryStream())
+                try
                 {
-                    var job =
-                        new ImageJob(
-                            input,
-                            output,
-                            new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
-                        );
-                    job.Build();
+                    byte[] buffer = File.ReadAllBytes(Location);
 
-                    result = output.ToArray();
+                    // resize the image to MAX pixels by MAX
+                    // pixels to server as the preview image
+                    using(var input = new MemoryStream(buffer))
+                    using(var output = new MemoryStream())
+                    {
+                        var job =
+                            new ImageJob(
+                                input,
+                                output,
+                                new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
+                            );
+                        job.Build();
+
+                        result = output.ToArray();
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                var args = new ErrorGeneratingPreviewArgs();
-                args.Photo = this;
-                args.Exception = ex;
+                catch(Exception ex)
+                {
+                    var args = new ErrorGeneratingPreviewArgs();
+                    args.Photo = this;
+                    args.Exception = ex;
 
-                ErrorGeneratingPreviewHandler?.Invoke(this, args);
-                result = null;
-            }
+                    ErrorGeneratingPreviewHandler?.Invoke(this, args);
+                    result = null;
+                }
 
-            return result;
+                return result;
+            }
         }
     }
 }
