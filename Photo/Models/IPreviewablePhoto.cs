@@ -8,7 +8,7 @@ namespace Photo.Models
     /// <seealso cref="Photo.Models.IPhoto" />
     public interface IPreviewablePhoto : IPhoto
     {
-        event ErrorGeneratingPreview ErrorGeneratingPreviewHandler;
+        event ErrorGeneratingPreviewEventHandler ErrorGeneratingPreviewHandler;
 
         /// <summary>
         /// Get the generated preview of the photo using the hash 

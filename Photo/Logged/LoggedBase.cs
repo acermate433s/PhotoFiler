@@ -10,10 +10,12 @@ namespace Photo.Logged
             Logger = logger;
         }
 
-        protected ILogger Logger;
+        private ILogger logger;
 
         // To detect redundant calls
         private bool _Disposed = false;
+
+        protected ILogger Logger { get => logger; set => logger = value; }
 
         protected virtual void Dispose(bool disposing)
         {
@@ -29,6 +31,7 @@ namespace Photo.Logged
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

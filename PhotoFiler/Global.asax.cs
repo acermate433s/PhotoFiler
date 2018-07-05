@@ -1,4 +1,6 @@
-﻿using Photo.FileSystem;
+﻿#pragma warning disable CA1707 // Identifiers should not contain underscores
+
+using Photo.FileSystem;
 using Photo.Logged;
 using Photo.Models;
 using PhotoFiler.Helpers;
@@ -111,6 +113,7 @@ namespace PhotoFiler
         public sealed override void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)

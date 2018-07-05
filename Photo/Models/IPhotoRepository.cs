@@ -11,7 +11,7 @@ namespace Photo.Models
     {
         IPreviewablePhoto Create(
             FileInfo file, 
-            ErrorGeneratingPreview errorGeneratingPreviewHandler = null
+            ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null
         );
     }
 }

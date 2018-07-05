@@ -1,6 +1,7 @@
 ﻿using Photo.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -9,11 +10,11 @@ namespace Photo.Hasher
 {
     public class Base62HasherBase<THashAlgorithm> : IHashFunction where THashAlgorithm : HashAlgorithm, new()
     {
-        protected THashAlgorithm _Algorithm;
+        private THashAlgorithm algorithm;
 
         public Base62HasherBase()
         {
-            _Algorithm = new THashAlgorithm();
+            Algorithm = new THashAlgorithm();
         }
 
         /// <summary>
@@ -67,9 +68,9 @@ namespace Photo.Hasher
         private string ComputeHash(string text)
         {
             var bytes = GetBytes(text);
-            var hashCode = _Algorithm.ComputeHash(bytes);
-            var hashNumber = String.Join("", hashCode.Select(item => String.Format("{0}", item)));
-            var number = BigInteger.Abs(BigInteger.Parse(hashNumber));
+            var hashCode = Algorithm.ComputeHash(bytes);
+            var hashNumber = String.Join("", hashCode.Select(item => String.Format(CultureInfo.CurrentCulture, "{0}", item)));
+            var number = BigInteger.Abs(BigInteger.Parse(hashNumber, CultureInfo.CurrentCulture.NumberFormat));
             var digits = (new String(ConvertToBase62(number).ToArray()));
 
             return digits;
@@ -91,5 +92,6 @@ namespace Photo.Hasher
         }
 
         public virtual int HashLength { get; protected set; } = 5;
+        protected THashAlgorithm Algorithm { get => algorithm; set => algorithm = value; }
     }
 }

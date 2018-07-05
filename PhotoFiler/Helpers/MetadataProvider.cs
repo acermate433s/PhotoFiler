@@ -18,12 +18,12 @@ namespace PhotoFiler.Helpers
         {
             if (containerType == null)
             {
-                throw new ArgumentNullException("containerType");
+                throw new ArgumentNullException(nameof(containerType));
             }
             if (String.IsNullOrEmpty(propertyName))
             {
                 throw new ArgumentException(
-                    "The property &apos;{0}&apos; cannot be null or empty", "propertyName"
+                    "The property &apos;{0}&apos; cannot be null or empty", nameof(propertyName)
                 );
             }
 
