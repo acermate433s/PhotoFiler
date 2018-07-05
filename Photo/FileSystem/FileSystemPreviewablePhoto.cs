@@ -18,7 +18,7 @@ namespace Photo.FileSystem
         private const int MAX = 300;
 
         public FileSystemPreviewablePhoto()
-        {
+        {   
         }
 
         public FileSystemPreviewablePhoto(
@@ -84,9 +84,11 @@ namespace Photo.FileSystem
                 }
                 catch(Exception ex)
                 {
-                    var args = new ErrorGeneratingPreviewEventArgs();
-                    args.Photo = this;
-                    args.Exception = ex;
+                    var args = new ErrorGeneratingPreviewEventArgs
+                    {
+                        Photo = this,
+                        Exception = ex
+                    };
 
                     ErrorGeneratingPreviewHandler?.Invoke(this, args);
                     result = null;

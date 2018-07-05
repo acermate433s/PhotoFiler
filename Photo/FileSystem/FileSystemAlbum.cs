@@ -25,7 +25,7 @@ namespace Photo.FileSystem
         /// Initializes a new instance of the <see cref="FileSystemAlbum"/> class.
         /// </summary>
         /// <param name="previewLocation">The preview location.</param>
-        /// <param name="photos">The photos.</param>
+        /// <param name="repository">The repository that creates photos.</param>
         /// <exception cref="System.ArgumentNullException">
         /// previewLocation
         /// or
@@ -33,16 +33,17 @@ namespace Photo.FileSystem
         /// </exception>
         public FileSystemAlbum(
             DirectoryInfo previewLocation,
-            List<IPreviewablePhoto> photos
+            IPhotosRepository repository,
+            Helpers.Helpers.ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null
         )
         {
             if (previewLocation == null)
                 throw new ArgumentNullException(nameof(previewLocation));
 
-            if (photos == null)
-                throw new ArgumentNullException(nameof(photos));
+            if (repository == null)
+                throw new ArgumentNullException(nameof(repository));
 
-            Photos = photos;
+            Photos = repository.Create().Retrieve(errorGeneratingPreviewHandler);
             PreviewLocation = previewLocation;
         }
 

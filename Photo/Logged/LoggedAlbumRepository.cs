@@ -24,20 +24,14 @@ namespace Photo.Logged
             _AlbumRepository = albumRepository;
         }
 
-        public IHashedAlbum Create(List<IPreviewablePhoto> photos)
+        public IHashedAlbum Create(IPhotosRepository repository, Helpers.Helpers.ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null)
         {
-            Logger.Information($"Creating album with { photos.Count()} photos.");
-            Logger
-                .Verbose(
-                    photos
-                        .Select(photo => photo.Location)
-                        .ToArray()
-                );
+            Logger.Information($"Creating album.");
 
             return
                 new LoggedAlbum(
                     Logger,
-                    _AlbumRepository.Create(photos)
+                    _AlbumRepository.Create(repository, errorGeneratingPreviewHandler)
                 );            
         }
     }

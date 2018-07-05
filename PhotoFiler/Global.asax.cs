@@ -47,25 +47,20 @@ namespace PhotoFiler
                             );
                     }
 
-                    IPreviewablePhotos retriever = null;
                     IHashedAlbum album = null;
-
-                    var photosRepository = repository.CreatePhotosRepository();
-                    var albumRepository = repository.CreateAlbumRepository();
-
                     try
                     {
-                        retriever = photosRepository.Create();
-                        var photos = retriever.Retrieve(
-                            (sender, args) =>
-                            {
-                                var logger = ((ILogger) HttpContext.Current?.Application["Logger"]) ?? scope;
-                                logger?.Error(args.Exception, "Error generating preview for photo \"{0}\"", args.Photo.Location);
-                            }
-                        );
+                        var albumRepository = repository.CreateAlbumRepository();
 
-                        if (retriever != null)
-                            album = albumRepository.Create(photos);
+                        album = 
+                            albumRepository.Create(
+                                repository.CreatePhotosRepository(),
+                                (sender, args) =>
+                                {
+                                    var logger = ((ILogger) HttpContext.Current?.Application["Logger"]) ?? scope;
+                                    logger?.Error(args.Exception, "Error generating preview for photo \"{0}\"", args.Photo.Location);
+                                }
+                            );
                     }
                     catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
                     {

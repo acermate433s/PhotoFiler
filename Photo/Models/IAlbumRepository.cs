@@ -9,7 +9,8 @@ namespace Photo.Models
     public interface IAlbumRepository
     {
         IHashedAlbum Create(
-            List<IPreviewablePhoto> photos
+            IPhotosRepository repository,
+            Helpers.Helpers.ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null
         );
     }
 }

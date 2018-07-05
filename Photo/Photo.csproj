@@ -74,6 +74,11 @@
     <Compile Include="Hasher\Base62HasherBase.cs" />
     <Compile Include="Hasher\HashFunctions.cs" />
     <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="LiteDb\ILiteDbConfiguration.cs" />
+    <Compile Include="LiteDb\LiteDbAlbumRepository.cs" />
+    <Compile Include="LiteDb\LiteDbAlbum.cs" />
+    <Compile Include="LiteDb\LiteDbPhotosRepository.cs" />
+    <Compile Include="LiteDb\LiteDbPreviewablePhotos.cs" />
     <Compile Include="Logged\ILoggedConfiguration.cs" />
     <Compile Include="Logged\LoggedAlbum.cs" />
     <Compile Include="Logged\LoggedAlbumRepository.cs" />

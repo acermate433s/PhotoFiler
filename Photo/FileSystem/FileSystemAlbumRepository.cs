@@ -1,6 +1,5 @@
 ﻿using Photo.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Photo.FileSystem
@@ -19,12 +18,13 @@ namespace Photo.FileSystem
             _PreviewLocation = previewLocation;
         }
 
-        public IHashedAlbum Create(List<IPreviewablePhoto> photos)
+        public IHashedAlbum Create(IPhotosRepository repository, Helpers.Helpers.ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null)
         {
             return
                 new FileSystemAlbum(
                     _PreviewLocation,
-                    photos
+                    repository,
+                    errorGeneratingPreviewHandler
                 );
         }
     }

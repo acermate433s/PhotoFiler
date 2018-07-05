@@ -17,13 +17,12 @@ namespace Photo.Logged
             IPreviewablePhoto previewablePhoto
         ) : base(logger)
         {
-            if (logger == null)
+            if(logger == null)
+            {
                 throw new ArgumentNullException(nameof(logger));
+            }
 
-            if (previewablePhoto == null)
-                throw new ArgumentNullException(nameof(previewablePhoto));
-
-            _PreviewablePhoto = previewablePhoto;
+            _PreviewablePhoto = previewablePhoto ?? throw new ArgumentNullException(nameof(previewablePhoto));
 
             _PreviewablePhoto.ErrorGeneratingPreviewHandler +=
                 (sender, args) =>
