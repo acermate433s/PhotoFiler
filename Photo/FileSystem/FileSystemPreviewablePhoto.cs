@@ -9,7 +9,7 @@ namespace Photo.FileSystem
 {
     public class FileSystemPreviewablePhoto : FileSystemPhoto, IPreviewablePhoto
     {
-        public event ErrorGeneratingPreview ErrorGeneratingPreviewHandler;
+        public event ErrorGeneratingPreviewEventHandler ErrorGeneratingPreviewHandler;
 
         // JPEG compression quality
         private const int QUALITY = 50;
@@ -75,7 +75,7 @@ namespace Photo.FileSystem
             }
             catch (Exception ex)
             {
-                var args = new ErrorGeneratingPreviewArgs();
+                var args = new ErrorGeneratingPreviewEventArgs();
                 args.Photo = this;
                 args.Exception = ex;
 

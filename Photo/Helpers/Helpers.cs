@@ -5,10 +5,10 @@ namespace Photo.Helpers
 {
     public static class Helpers
     {
-        public delegate void ErrorGeneratingPreview(object sender, ErrorGeneratingPreviewArgs args);
+        public delegate void ErrorGeneratingPreviewEventHandler(object sender, ErrorGeneratingPreviewEventArgs args);
     }
 
-    public class ErrorGeneratingPreviewArgs : EventArgs
+    public class ErrorGeneratingPreviewEventArgs : EventArgs
     {
         public IPhoto Photo { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using Photo.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using static Photo.Helpers.Helpers;
@@ -27,7 +28,7 @@ namespace Photo.FileSystem
             _PhotoRepository = photoRepository;
         }
 
-        public List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreview errorGeneratingPreviewHandler = null)
+        public List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null)
         {
             return
                 GetPhotoFiles(_Source)
@@ -44,7 +45,7 @@ namespace Photo.FileSystem
                 .AddRange(
                     root
                         .EnumerateFiles()
-                        .Where(file => (new[] { ".jpg", ".png" }).Contains(file.Extension.ToLower()))
+                        .Where(file => (new[] { ".jpg", ".png" }).Contains(file.Extension.ToLower(CultureInfo.CurrentCulture)))
                         .Cast<FileInfo>()
                 );
 

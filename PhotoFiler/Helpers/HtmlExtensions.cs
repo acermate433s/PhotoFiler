@@ -10,7 +10,7 @@ namespace PhotoFiler.Helpers
             builder.MergeAttribute("src", src);
             builder.MergeAttribute("alt", altText);
 
-            if (className != "")
+            if (!string.IsNullOrEmpty(className))
                 builder.MergeAttribute("class", className);
 
             return MvcHtmlString.Create(builder.ToString(TagRenderMode.SelfClosing));

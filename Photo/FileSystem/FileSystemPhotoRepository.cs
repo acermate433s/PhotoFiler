@@ -33,7 +33,7 @@ namespace Photo.FileSystem
 
         public IPreviewablePhoto Create(
             FileInfo file,
-            ErrorGeneratingPreview errorGeneratingPreviewHandler = null
+            ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null
         )
         {
             var result =

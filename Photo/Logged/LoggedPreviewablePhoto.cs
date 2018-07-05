@@ -8,7 +8,7 @@ namespace Photo.Logged
 {
     public class LoggedPreviewablePhoto : LoggedBase, IPreviewablePhoto
     {
-        public event ErrorGeneratingPreview ErrorGeneratingPreviewHandler;
+        public event ErrorGeneratingPreviewEventHandler ErrorGeneratingPreviewHandler;
 
         IPreviewablePhoto _PreviewablePhoto;
 

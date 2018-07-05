@@ -26,7 +26,7 @@ namespace Photo.Logged
 
         public  IPreviewablePhoto Create(
             FileInfo file, 
-            ErrorGeneratingPreview errorGeneratingPreviewHandler = null
+            ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null
         )
         {
             Logger.Information($"Creating instance photo for \"{file}\"");
