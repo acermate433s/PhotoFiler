@@ -3,6 +3,7 @@ using Photo.Hasher;
 using Photo.Logged;
 using Photo.Models;
 using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -54,7 +55,7 @@ namespace PhotoFiler.Helpers
             else
                 throw new DirectoryNotFoundException("Root path for photos not found!");
 
-            HashLength = int.Parse(settings[HASH_LENGTH]);
+            HashLength = int.Parse(settings[HASH_LENGTH], CultureInfo.CurrentCulture.DateTimeFormat);
             CreatePreview = bool.Parse(settings[CREATE_PREVIEW]);
 
             var previewPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();

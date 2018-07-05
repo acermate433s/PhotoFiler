@@ -8,6 +8,6 @@ namespace Photo.Models
     /// </summary>
     public interface IPreviewablePhotos
     {
-        List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreview errorGeneratingPreviewHandler = null);
+        List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null);
     }
 }

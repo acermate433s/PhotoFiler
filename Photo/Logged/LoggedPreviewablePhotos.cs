@@ -26,7 +26,7 @@ namespace Photo.Logged
             _PreviewablePhotos = previewablePhotos;
         }
 
-        public List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreview errorGeneratingPreviewHandler = null)
+        public List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null)
         {
             Logger.Information($"Retrieving photos.");            
             var result = _PreviewablePhotos.Retrieve(errorGeneratingPreviewHandler);

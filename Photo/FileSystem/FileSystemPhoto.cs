@@ -29,15 +29,11 @@ namespace Photo.FileSystem
 
                 Hash = hasher.Compute(fileInfo.FullName);
 
-                DateTime? creationDateTime = null;
-                int width = 0;
-                int height = 0;
-
                 ReadFileData(
                     fileInfo,
-                    out creationDateTime,
-                    out width,
-                    out height
+                    out DateTime? creationDateTime,
+                    out int width,
+                    out int height
                 );
 
                 Width = width;
@@ -56,7 +52,7 @@ namespace Photo.FileSystem
         /// </summary>
         /// <param name="file">File to get the size</param>
         /// <returns>The size of the file in a human-readable format</returns>
-        private string ComputeSize(FileInfo file)
+        private static string ComputeSize(FileInfo file)
         {
             // set the size of the file to a human-readable format
             long length = file.Length;
@@ -112,8 +108,7 @@ namespace Photo.FileSystem
                     using (var stream = new MemoryStream(buffer))
                     {
                         var reader = new ExifReader(stream);
-                        DateTime exifCreationDate;
-                        if (reader.GetTagValue(ExifTags.DateTime, out exifCreationDate))
+                        if(reader.GetTagValue(ExifTags.DateTime, out DateTime exifCreationDate))
                             creationDateTime = exifCreationDate;
                         else
                             creationDateTime = file.CreationTime;
