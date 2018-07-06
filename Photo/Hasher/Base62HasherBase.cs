@@ -22,7 +22,7 @@ namespace Photo.Hasher
         /// </summary>
         /// <param name="number">Number to convert to Base 62</param>
         /// <returns>An array of char of Base 62</returns>
-        private IEnumerable<char> ConvertToBase62(BigInteger number)
+        private static IEnumerable<char> ConvertToBase62(BigInteger number)
         {
             // This are the only allowed characters for a URL
             const string SYMBOLS = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

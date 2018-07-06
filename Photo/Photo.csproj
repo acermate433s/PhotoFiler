@@ -39,8 +39,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="acermate433s.Telemetry, Version=1.1.0.0, Culture=neutral, PublicKeyToken=e30883e9a7d57543, processorArchitecture=MSIL">
-      <HintPath>..\packages\acermate433s.Telemetry.1.1.0.0\lib\net40\acermate433s.Telemetry.dll</HintPath>
+    <Reference Include="acermate433s.Telemetry, Version=1.1.0.1, Culture=neutral, PublicKeyToken=e30883e9a7d57543, processorArchitecture=MSIL">
+      <HintPath>..\packages\acermate433s.Telemetry.1.1.0.1\lib\net40\acermate433s.Telemetry.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ExifLib, Version=1.7.0.0, Culture=neutral, PublicKeyToken=30284005913968db, processorArchitecture=MSIL">
@@ -97,7 +97,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Desktop.Analyzers.1.1.0\analyzers\dotnet\cs\Desktop.Analyzers.dll" />
