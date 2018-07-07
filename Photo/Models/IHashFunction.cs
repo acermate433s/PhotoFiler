@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace Photo.Models
+﻿namespace Photo.Models
 {
     /// <summary>
     /// Hashing function
