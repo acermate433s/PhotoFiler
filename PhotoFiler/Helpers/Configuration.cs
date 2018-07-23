@@ -3,38 +3,46 @@ using Photo.Hasher;
 using Photo.Logged;
 using Photo.Models;
 using System;
-using System.Globalization;
+using System.Configuration;
 using System.IO;
 using System.Text;
 
 namespace PhotoFiler.Helpers
 {
-    public class Configuration : IFileSystemConfiguration, ILoggedConfiguration
+    public class Configuration : ConfigurationSection, IFileSystemConfiguration, ILoggedConfiguration
     {
-        private const string ROOTH_PATH = "RoothPath";
-        private const string HASH_LENGTH = "HashLength";
-        private const string CREATE_PREVIEW = "CreatePreview";
-        private const string ENABLE_LOGGING = "EnableLogging";
+        private const string ROOT_PATH = "rootPath";
+        private const string HASH_LENGTH = "hashLength";
+        private const string CREATE_PREVIEW = "createPreview";
+        private const string ENABLE_LOGGING = "enableLogging";
 
         /// <summary>
         /// Root path of the folder where the photos are stored
         /// </summary>
-        public DirectoryInfo RootPath { get; set; }
+        [ConfigurationProperty(ROOT_PATH)]
+        public string RoothPath { get => (string) this[ROOT_PATH]; set => this[ROOT_PATH] = value; }
+
+        /// <summary>
+        /// Root path of the folder where the photos are stored
+        /// </summary>
+        public DirectoryInfo RootPathDirectory { get => new DirectoryInfo(this.RoothPath); }
 
         /// <summary>
         /// Lenght of hash to generate per photo. Default is 5.
         /// </summary>
-        public int HashLength { get; set; } = 5;
+        [ConfigurationProperty(HASH_LENGTH)]
+        public int HashLength { get => (int) this[HASH_LENGTH]; set => this[HASH_LENGTH] = value; }
 
         /// <summary>
         /// Flag to indicate if preview files for photos are generated when the application is started.
         /// </summary>
-        public bool CreatePreview { get; set; } = false;
+        [ConfigurationProperty(CREATE_PREVIEW)]
+        public bool CreatePreview { get => (bool) this[CREATE_PREVIEW]; set => this[CREATE_PREVIEW] = value; }
 
         /// <summary>
         /// Location where the preview files are stored
         /// </summary>
-        public DirectoryInfo PreviewLocation { get; set; }
+        public DirectoryInfo PreviewLocationDirectory { get; }
 
         /// <summary>
         /// Hashing function to use
@@ -44,35 +52,25 @@ namespace PhotoFiler.Helpers
         /// <summary>
         /// Flag to indicate if we want to enable logging
         /// </summary>
-        public bool EnableLogging { get; set; }
+        [ConfigurationProperty(ENABLE_LOGGING)]
+        public bool EnableLogging { get => (bool) this[ENABLE_LOGGING]; set => this[ENABLE_LOGGING] = value; }
 
         public Configuration()
         {
-            var settings = System.Configuration.ConfigurationManager.AppSettings;
-
-            if ((settings[ROOTH_PATH] != null) && (Directory.Exists(settings[ROOTH_PATH])))
-                RootPath = new DirectoryInfo(settings[ROOTH_PATH]);
-            else
-                throw new DirectoryNotFoundException("Root path for photos not found!");
-
-            HashLength = int.Parse(settings[HASH_LENGTH], CultureInfo.CurrentCulture.DateTimeFormat);
-            CreatePreview = bool.Parse(settings[CREATE_PREVIEW]);
-
             var previewPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             if (Directory.Exists(previewPath))
-                PreviewLocation = new DirectoryInfo(previewPath);
+                PreviewLocationDirectory = new DirectoryInfo(previewPath);
             else
                 throw new DirectoryNotFoundException("Preview location path not found!");
 
-            HashingFunction = new MD5(HashLength);
-            EnableLogging = bool.Parse(settings[ENABLE_LOGGING]);
+            HashingFunction = new MD5(this.HashLength);
         }
 
         public override string ToString()
         {
             var builder = new StringBuilder();
 
-            builder.Append($"RootPath: \"{RootPath}\"");
+            builder.Append($"RootPath: \"{RootPathDirectory}\"");
             builder.Append(System.Environment.NewLine);
 
             builder.Append($"HashLength: {HashLength}");
@@ -81,7 +79,7 @@ namespace PhotoFiler.Helpers
             builder.Append($"CreatePreview: {CreatePreview}");
             builder.Append(System.Environment.NewLine);
 
-            builder.Append($"PreviewLocation: \"{PreviewLocation}\"");
+            builder.Append($"PreviewLocation: \"{PreviewLocationDirectory}\"");
             builder.Append(System.Environment.NewLine);
 
             builder.Append($"HashingFunction: {HashingFunction}");

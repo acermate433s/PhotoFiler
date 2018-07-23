@@ -21,7 +21,7 @@ namespace Photo.FileSystem
         {
             return
                 new FileSystemAlbumRepository(
-                    Configuration.PreviewLocation
+                    Configuration.PreviewLocationDirectory
                 );
         }
 
@@ -31,7 +31,7 @@ namespace Photo.FileSystem
                 new FileSystemPhotoRepository(
                     Configuration.HashLength,
                     Configuration.HashingFunction,
-                    Configuration.PreviewLocation
+                    Configuration.PreviewLocationDirectory
                 );
         }
 
@@ -39,7 +39,7 @@ namespace Photo.FileSystem
         {
             return
                 new FileSystemPhotosRepository(
-                    Configuration.RootPath,
+                    Configuration.RootPathDirectory,
                     CreatePhotoRepository()
                 );
         }

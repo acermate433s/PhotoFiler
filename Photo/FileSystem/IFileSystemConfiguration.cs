@@ -8,26 +8,26 @@ namespace Photo.FileSystem
         /// <summary>
         /// Flag to indicate if previews are created on startup
         /// </summary>
-        bool CreatePreview { get; set; }
+        bool CreatePreview { get; }
 
         /// <summary>
         /// Length of the hash 
         /// </summary>
-        int HashLength { get; set; }
+        int HashLength { get; }
 
         /// <summary>
         /// Rooth directory where the photos are stored
         /// </summary>
-        DirectoryInfo RootPath { get; set; }
+        DirectoryInfo RootPathDirectory { get; }
 
         /// <summary>
         /// Location of the directory where the generated previews are stored
         /// </summary>
-        DirectoryInfo PreviewLocation { get; set; }
+        DirectoryInfo PreviewLocationDirectory { get; }
 
         /// <summary>
         /// Hashing function to use
         /// </summary>
-        IHashFunction HashingFunction { get; set; }
+        IHashFunction HashingFunction { get; }
     }
 }

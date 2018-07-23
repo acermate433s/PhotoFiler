@@ -7,6 +7,7 @@ using PhotoFiler.Helpers;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -33,17 +34,18 @@ namespace PhotoFiler
             {
                 try
                 {
-                    var configuration = new Configuration();
-                    scope.Verbose(configuration.ToString());
+                    var applicationConfiguration = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
+                    var photoFilerConfiguration = (Configuration) applicationConfiguration.GetSection("photoFilerConfiguration");
+                    scope.Verbose(photoFilerConfiguration.ToString());
 
-                    IRepository repository = new FileSystemRepository(configuration);
-                    if (configuration.EnableLogging)
+                    IRepository repository = new FileSystemRepository(photoFilerConfiguration);
+                    if (photoFilerConfiguration.EnableLogging)
                     {
                         scope.Information("Logging enabled.");
                         repository =
                             new LoggedRepository(
                                 new ActivityTracerScope(new TraceSource("PhotoFiler"), "Logger"),
-                                new FileSystemRepository(configuration)
+                                new FileSystemRepository(photoFilerConfiguration)
                             );
                     }
 
@@ -72,12 +74,12 @@ namespace PhotoFiler
                         scope.Error(ex);
                     }
 
-                    if ((album != null) && (configuration.CreatePreview))
+                    if ((album != null) && (photoFilerConfiguration.CreatePreview))
                     {
                         scope.Information("Deleting old previews");
 
-                        configuration
-                            .PreviewLocation
+                        photoFilerConfiguration
+                            .PreviewLocationDirectory
                             .GetFiles()
                             .ToList()
                             .ForEach(item => item.Delete());
