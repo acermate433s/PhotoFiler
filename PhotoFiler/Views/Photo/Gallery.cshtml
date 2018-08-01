@@ -7,13 +7,7 @@
     ViewBag.Title = "Gallery";
 }
 
-<div class="row image-preview">
-    @foreach (var item in Model)
-    {
-        <span class="col-xs-12 col-sm-6 col-md-4 col-md-3 image-preview" id="@item.Hash">
-            @Html.Image(Url.Action("Preview", new { hash = item.Hash }), item.Name, String.Format("img-thumbnail img-responsive {0}", @item.Height > item.Width ? "portrait" : "landscape"))
-        </span>
-    }
+<div id="photos" class="row image-preview">
 </div>
 
 <div class="modal fade" id="image-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
@@ -27,20 +21,6 @@
                 <img src="" id="image-preview">
             </div>
         </div>
-    </div>  
-</div>
-
-<div class="row">
-    <div class="col-xs-12 text-center">
-        @if (ViewBag.Previous > 0)
-        {
-            @Html.ActionLink(" ", "Gallery", new { page = ViewBag.Previous, count = ViewBag.Count }, new { @class = "glyphicon glyphicon-backward", @accesskey = "<" });
-        }
-        <span>Page @ViewBag.Current / @ViewBag.Max</span>
-        @if (ViewBag.Next <= ViewBag.Max)
-        {
-            @Html.ActionLink(" ", "Gallery", new { page = ViewBag.Next, count = ViewBag.Count }, new { @class = "glyphicon glyphicon-forward", @accesskey = ">" })
-        }
     </div>
 </div>
 
@@ -48,36 +28,46 @@
 {
     <script type="text/javascript">
 
+        var photos = $('#photos');
+        var page = 1;
+        var count = 12;
+
         $(document)
-            .ready(function () {
-                $("span.image-preview").on("click", function () {
+            .ready(function ()
+            {
+                window.onscroll = function (ev) {
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                        loadPhotos(++page, count);
+                    }
+                };                
 
-                    var hash = $(this).attr("id");
-
-                    // change the size of the modal dialog depending on 
-                    // whether the photo is landscape or portrait so it
-                    // would better fit the entire screen
-                    var span = document.getElementById(hash);
-                    var image = span.getElementsByTagName("img")[0];
+                photos.on('click', 'span', function ()
+                {
+                    var hash = this.getAttribute('id');
+                    var image = this.children[0];
                     var className = image.className;
-                    var modalDialog = document.getElementById("modal-dialog");
-                    if (className.includes("portrait"))
-                        modalDialog.setAttribute("class", "modal-dialog");
+                    var modalDialog = document.getElementById('modal-dialog');
+                    if (className.includes('portrait'))
+                        modalDialog.setAttribute('class', 'modal-dialog');
                     else
-                        modalDialog.setAttribute("class", "modal-dialog modal-lg");
+                        modalDialog.setAttribute('class', 'modal-dialog modal-lg');
 
-                    // change title
-                    document.getElementsByClassName("modal-title")[0].textContent = image.getAttribute("alt");
+                    document.getElementsByClassName('modal-title')[0].textContent = image.getAttribute('alt');
+                    document.getElementById('image-preview').setAttribute('src', '@Url.Content("~/Content/loader.gif")');
+                    document.getElementById('image-preview').setAttribute('src', hash);
 
-                    // here asign the image to the modal when the user click the enlarge link
-                    document.getElementById("image-preview").setAttribute("src", '@Url.Content("~/Content/loader.gif")');
-                    document.getElementById("image-preview").setAttribute("src", hash);
-
-                    // imagemodal is the id attribute assigned to the bootstrap modal, then i use the show function
                     $('#image-modal').modal('show');
                 });
+
+                loadPhotos(page, count);
             })
 
-    </script>
+        function loadPhotos(page, count)
+        {
+            $.get(`/Photos?page=${page}&count=${count}`, function (data) {
+                photos.append(data)
+            });
+        }
 
+    </script>
 }

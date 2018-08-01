@@ -103,33 +103,15 @@ namespace PhotoFiler.Controllers
             return File(content, contentType);
         }
 
-        [Route("List")]
-        public ActionResult List(int page = DEFAULT_PAGE, int count = DEFAULT_COUNT)
+        [Route("Photos")]
+        public ActionResult Photos(int page = DEFAULT_PAGE, int count = DEFAULT_COUNT)
         {
-            int total = Album.Count();
-
-            ViewBag.Total = total;
-            ViewBag.Previous = page - 1;
-            ViewBag.Current = page;
-            ViewBag.Max = total / count + (total % count == 0 ? 0 : 1);
-            ViewBag.Next = page + 1;
-            ViewBag.Count = count;
-
-            return View(Album.List(page, count));
+            return PartialView(Album.List(page, count));
         }
 
         [Route("")]
         public ActionResult Gallery(int page = DEFAULT_PAGE, int count = DEFAULT_COUNT)
         {
-            int total = Album.Count();
-
-            ViewBag.Total = total;
-            ViewBag.Previous = page - 1;
-            ViewBag.Current = page;
-            ViewBag.Max = total / count + (total % count == 0 ? 0 : 1);
-            ViewBag.Next = page + 1;
-            ViewBag.Count = count;
-
             return View(Album.List(page, count));
         }
     }

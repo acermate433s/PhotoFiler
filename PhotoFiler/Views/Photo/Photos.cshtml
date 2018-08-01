@@ -1,0 +1,12 @@
+﻿@using Photo.Models
+@using PhotoFiler.Helpers
+
+@model IEnumerable<IPhoto>
+
+@foreach(var item in Model)
+{
+    <span class="col-xs-12 col-sm-6 col-md-4 col-md-3 image-preview" id="@item.Hash">
+        @Html.Image(Url.Action("Preview", new { hash = item.Hash }), item.Name, String.Format("img-thumbnail img-responsive {0}", @item.Height > item.Width ? "portrait" : "landscape"))
+    </span>
+}
+
