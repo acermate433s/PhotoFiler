@@ -1,6 +1,5 @@
 ﻿using Photo.Models;
 using System;
-using System.IO;
 using Telemetry;
 using static Photo.Helpers.Helpers;
 

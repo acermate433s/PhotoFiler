@@ -1,6 +1,5 @@
 ﻿using Photo.Models;
 using System;
-using System.IO;
 using Telemetry;
 
 namespace Photo.Logged
