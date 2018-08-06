@@ -1,6 +1,6 @@
-﻿using Photo.Models;
+﻿using Microsoft.Extensions.Logging;
+using Photo.Models;
 using System;
-using Telemetry;
 
 namespace Photo.Logged
 {
@@ -24,7 +24,7 @@ namespace Photo.Logged
 
         public IPreviewablePhotos Create()
         {
-            Logger.Information("Creating photo repository.");
+            Logger.LogInformation("Creating photo repository.");
             
             return
                 new LoggedPreviewablePhotos(

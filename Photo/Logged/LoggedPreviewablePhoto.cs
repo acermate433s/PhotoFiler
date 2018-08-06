@@ -1,6 +1,6 @@
-﻿using Photo.Models;
+﻿using Microsoft.Extensions.Logging;
+using Photo.Models;
 using System;
-using Telemetry;
 using static Photo.Helpers.Helpers;
 
 namespace Photo.Logged
@@ -27,7 +27,7 @@ namespace Photo.Logged
             _PreviewablePhoto.ErrorGeneratingPreviewHandler +=
                 (sender, args) =>
                 {
-                    Logger.Error(
+                    Logger.LogError(
                         args.Exception, 
                         "Error generating preview from \"{0}\"", 
                         args.Photo.Location
@@ -103,25 +103,25 @@ namespace Photo.Logged
 
         public byte[] Preview()
         {
-            Logger.Information($"Generating preview for \"{Location}\" with hash \"{Hash}\".");
+            Logger.LogInformation($"Generating preview for \"{Location}\" with hash \"{Hash}\".");
             var result = _PreviewablePhoto.Preview();
 
             if (result == null)
-                Logger.Warning($"Cannot generate preview for photo \"{Location}\" with hash \"{Hash}\".");
+                Logger.LogWarning($"Cannot generate preview for photo \"{Location}\" with hash \"{Hash}\".");
             else
-                Logger.Information($"Preview size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
+                Logger.LogInformation($"Preview size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
 
             return result;
         }
         public byte[] View()
         {
-            Logger.Information($"Generating view for \"{Location}\" with hash \"{Hash}\".");
+            Logger.LogInformation($"Generating view for \"{Location}\" with hash \"{Hash}\".");
             var result = _PreviewablePhoto.View();
 
             if (result == null)
-                Logger.Warning($"Cannot generate full view for photo \"{Location}\" with hash \"{Hash}\".");
+                Logger.LogWarning($"Cannot generate full view for photo \"{Location}\" with hash \"{Hash}\".");
             else
-                Logger.Information($"Full size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
+                Logger.LogInformation($"Full size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
 
             return result;
             

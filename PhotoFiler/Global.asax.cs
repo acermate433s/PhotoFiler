@@ -1,28 +1,29 @@
 ﻿#pragma warning disable CA1707 // Identifiers should not contain underscores
 
+using Microsoft.Extensions.Logging;
 using Photo.FileSystem;
 using Photo.Logged;
 using Photo.Models;
 using PhotoFiler.Helpers;
+using Serilog;
 using System;
-using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using Telemetry;
-using Telemetry.TraceSource;
 
 namespace PhotoFiler
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        ILogger _Logger = new ActivityTracerScope("PhotoFiler", "Global Logger");
+        Microsoft.Extensions.Logging.ILogger _Logger = new LoggerFactory()
+            .AddSerilog()
+            .CreateLogger("PhotoFiler");
 
         protected void Application_Start()
         {
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -30,21 +31,21 @@ namespace PhotoFiler
 
             ModelMetadataProviders.Current = new InterfaceMetadataProvider();
 
-            using (var scope = _Logger.CreateScope("Application initialization"))
+            using (var scope = _Logger.BeginScope("Application initialization"))
             {
                 try
                 {
                     var applicationConfiguration = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
                     var photoFilerConfiguration = (Configuration) applicationConfiguration.GetSection("photoFilerConfiguration");
-                    scope.Verbose(photoFilerConfiguration.ToString());
+                    _Logger.LogInformation(photoFilerConfiguration.ToString());
 
                     IRepository repository = new FileSystemRepository(photoFilerConfiguration);
                     if (photoFilerConfiguration.EnableLogging)
                     {
-                        scope.Information("Logging enabled.");
+                        _Logger.LogInformation("Logging enabled.");
                         repository =
                             new LoggedRepository(
-                                new ActivityTracerScope(new TraceSource("PhotoFiler"), "Logger"),
+                                _Logger,
                                 new FileSystemRepository(photoFilerConfiguration)
                             );
                     }
@@ -61,8 +62,8 @@ namespace PhotoFiler
                         var photos = retriever.Retrieve(
                             (sender, args) =>
                             {
-                                var logger = ((ILogger) HttpContext.Current?.Application["Logger"]) ?? scope;
-                                logger?.Error(args.Exception, "Error generating preview for photo \"{0}\"", args.Photo.Location);
+                                var logger = ((Microsoft.Extensions.Logging.ILogger) HttpContext.Current?.Application["Logger"]) ?? _Logger;
+                                logger?.LogError(args.Exception, "Error generating preview for photo \"{0}\"", args.Photo.Location);
                             }
                         );
 
@@ -71,12 +72,12 @@ namespace PhotoFiler
                     }
                     catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
                     {
-                        scope.Error(ex);
+                        _Logger.LogError(ex, "Cannot create photos from repository.");
                     }
 
                     if ((album != null) && (photoFilerConfiguration.CreatePreview))
                     {
-                        scope.Information("Deleting old previews");
+                        _Logger.LogInformation("Deleting old previews");
 
                         photoFilerConfiguration
                             .PreviewLocationDirectory
@@ -95,7 +96,7 @@ namespace PhotoFiler
                 }
                 catch (Exception ex)
                 {
-                    _Logger.Critical(ex);
+                    _Logger.LogCritical(ex, "Application initialization error");
                     throw new HttpUnhandledException("Cannot continue.  Check trace file for explanation.", ex);
                 }
             }
@@ -107,29 +108,9 @@ namespace PhotoFiler
             {
                 Exception ex = Server.GetLastError();
 
-                var logger = (ILogger) HttpContext.Current?.Application["Logger"];
-                logger?.Error(ex);
+                var logger = (Microsoft.Extensions.Logging.ILogger) HttpContext.Current?.Application["Logger"];
+                logger?.LogError(ex, "Application error");
             }
-        }
-
-        public sealed override void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_Logger != null)
-                {
-                    _Logger.Dispose();
-                    _Logger = null;
-                }
-            }
-
-            base.Dispose();
         }
     }
 }

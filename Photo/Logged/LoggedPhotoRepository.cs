@@ -1,7 +1,8 @@
-﻿using Photo.Models;
+﻿using Microsoft.Extensions.Logging;
+using Photo.Models;
 using System;
 using System.IO;
-using Telemetry;
+
 using static Photo.Helpers.Helpers;
 
 namespace Photo.Logged
@@ -29,7 +30,7 @@ namespace Photo.Logged
             ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null
         )
         {
-            Logger.Information($"Creating instance photo for \"{file}\"");
+            Logger.LogInformation($"Creating instance photo for \"{file}\"");
             
             return
                 new LoggedPreviewablePhoto(

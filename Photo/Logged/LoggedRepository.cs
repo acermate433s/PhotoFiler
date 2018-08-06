@@ -1,6 +1,6 @@
-﻿using Photo.Models;
+﻿using Microsoft.Extensions.Logging;
+using Photo.Models;
 using System;
-using Telemetry;
 
 namespace Photo.Logged
 {
@@ -24,7 +24,7 @@ namespace Photo.Logged
 
         public IAlbumRepository CreateAlbumRepository()
         {
-            Logger.Information("Creating IAlbumRepository instance");
+            Logger.LogInformation("Creating IAlbumRepository instance");
 
             return
                 new LoggedAlbumRepository(
@@ -35,7 +35,7 @@ namespace Photo.Logged
 
         public IPhotoRepository CreatePhotoRepository()
         {
-            Logger.Information("Creating IPhotoRepository instance");
+            Logger.LogInformation("Creating IPhotoRepository instance");
 
             return
                 new LoggedPhotoRepository(
@@ -46,7 +46,7 @@ namespace Photo.Logged
 
         public IPhotosRepository CreatePhotosRepository()
         {
-            Logger.Information("Creating IPhotosRepository instance");
+            Logger.LogInformation("Creating IPhotosRepository instance");
 
             return
                 new LoggedPhotosRepository(

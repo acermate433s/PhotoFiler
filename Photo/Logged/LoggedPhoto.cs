@@ -1,6 +1,6 @@
-﻿using Photo.Models;
+﻿using Microsoft.Extensions.Logging;
+using Photo.Models;
 using System;
-using Telemetry;
 
 namespace Photo.Logged
 {
@@ -21,7 +21,7 @@ namespace Photo.Logged
 
             _Photo = photo;
 
-            Logger.Information($"Photo \"{photo.Location}\" with hash \"{Hash}\"");
+            Logger.LogInformation($"Photo \"{photo.Location}\" with hash \"{Hash}\"");
         }
 
         public DateTime? CreationDateTime

@@ -1,8 +1,8 @@
-﻿using Photo.Models;
+﻿using Microsoft.Extensions.Logging;
+using Photo.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Telemetry;
 
 namespace Photo.Logged
 {
@@ -26,13 +26,14 @@ namespace Photo.Logged
 
         public IHashedAlbum Create(List<IPreviewablePhoto> photos)
         {
-            Logger.Information($"Creating album with { photos.Count()} photos.");
-            Logger
-                .Verbose(
+            Logger.LogInformation($"Creating album with { photos.Count()} photos.");
+            Logger.LogInformation(
+                String.Join(
+                    Environment.NewLine,
                     photos
                         .Select(photo => photo.Location)
                         .ToArray()
-                );
+                ));
 
             return
                 new LoggedAlbum(

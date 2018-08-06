@@ -1,9 +1,8 @@
-﻿using Photo.Models;
+﻿using Microsoft.Extensions.Logging;
+using Photo.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using Telemetry;
 using static Photo.Helpers.Helpers;
 
 namespace Photo.Logged
@@ -28,17 +27,17 @@ namespace Photo.Logged
 
         public List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null)
         {
-            Logger.Information($"Retrieving photos.");            
+            Logger.LogInformation($"Retrieving photos.");            
             var result = _PreviewablePhotos.Retrieve(errorGeneratingPreviewHandler);
 
             if (result.Count() == 0)
             {
-                Logger.Warning("No photos retrieved!");
+                Logger.LogWarning("No photos retrieved!");
             }
             else
             {
-                Logger.Information($"Retrieved {result.Count()} photos.");
-                Logger.Verbose(result.Select(item => item.Location).ToArray());
+                Logger.LogInformation($"Retrieved {result.Count()} photos.");
+                Logger.LogTrace(String.Join(Environment.NewLine, result.Select(item => item.Location).ToArray()));
             }
 
             return result;
