@@ -76,7 +76,7 @@ namespace Photo.FileSystem
         /// <param name="height">Height of the photo</param>
         /// <param name="width">Width of the photo</param>
         /// <returns></returns>
-        private void ReadFileData(
+        private static void ReadFileData(
             FileInfo file,
             out DateTime? creationDateTime,
             out int width,

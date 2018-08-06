@@ -41,7 +41,7 @@ namespace Photo.Hasher
         /// </summary>
         /// <param name="text">String to convert to array of bytes</param>
         /// <returns>Array of bytes of string</returns>
-        private byte[] GetBytes(string text)
+        private static byte[] GetBytes(string text)
         {
             byte[] bytes = new byte[text.Length * sizeof(char)];
             System.Buffer.BlockCopy(text.ToCharArray(), 0, bytes, 0, bytes.Length);
