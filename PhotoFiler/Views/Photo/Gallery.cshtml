@@ -35,8 +35,10 @@
         $(document)
             .ready(function ()
             {
-                window.onscroll = function (ev) {
-                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                window.onscroll = (ev) =>
+                {
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 100)
+                    {
                         loadPhotos(++page, count);
                     }
                 };                
@@ -46,6 +48,7 @@
                     var hash = this.getAttribute('id');
                     var image = this.children[0];
                     var className = image.className;
+                    
                     var modalDialog = document.getElementById('modal-dialog');
                     if (className.includes('portrait'))
                         modalDialog.setAttribute('class', 'modal-dialog');
@@ -64,7 +67,8 @@
 
         function loadPhotos(page, count)
         {
-            $.get(`/Photos?page=${page}&count=${count}`, function (data) {
+            $.get(`/Photos?page=${page}&count=${count}`, (data) =>
+            {
                 photos.append(data)
             });
         }
