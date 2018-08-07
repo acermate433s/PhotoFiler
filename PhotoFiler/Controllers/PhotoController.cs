@@ -1,7 +1,11 @@
-﻿using Photo.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Photo.Models;
+using PhotoFiler.Helpers;
+using System;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace PhotoFiler.Controllers
 {
@@ -10,10 +14,11 @@ namespace PhotoFiler.Controllers
         private const int DEFAULT_PAGE = 1;
         private const int DEFAULT_COUNT = 12;
 
-        private IHashedAlbum Album = (IHashedAlbum) System.Web.HttpContext.Current.Application["Album"];
+        private readonly IHashedAlbum album;
 
         public PhotoController()
         {
+            this.album = Bootstrapper.ServiceProvider.GetService<IHashedAlbum>();
         }
 
         [Route("{hash}")]
@@ -45,7 +50,7 @@ namespace PhotoFiler.Controllers
         [Route("Preview/{hash}")]
         public ActionResult Preview(string hash)
         {
-            var content = Album.Preview(hash);
+            var content = album.Preview(hash);
             if (content == null)
             {
                 return new HttpNotFoundResult($"Cannot find preview for photo with \"{hash}\"");
@@ -55,7 +60,7 @@ namespace PhotoFiler.Controllers
                 ImageFile(
                     hash,
                     true,
-                    Album.Photo(hash),
+                    album.Photo(hash),
                     content
                 );
 
@@ -64,7 +69,7 @@ namespace PhotoFiler.Controllers
 
         private ActionResult Retrieve(string hash, bool inline)
         {
-            var content = Album.View(hash);
+            var content = album.View(hash);
             if (content == null)
                 return new HttpNotFoundResult($"Cannot find view for \"{hash}\"");
 
@@ -72,7 +77,7 @@ namespace PhotoFiler.Controllers
                 ImageFile(
                     hash,
                     inline,
-                    Album.Photo(hash),
+                    album.Photo(hash),
                     content
                 );
 
@@ -106,13 +111,13 @@ namespace PhotoFiler.Controllers
         [Route("Photos")]
         public ActionResult Photos(int page = DEFAULT_PAGE, int count = DEFAULT_COUNT)
         {
-            return PartialView(Album.List(page, count));
+            return PartialView(album.List(page, count));
         }
 
         [Route("")]
         public ActionResult Gallery(int page = DEFAULT_PAGE, int count = DEFAULT_COUNT)
         {
-            return View(Album.List(page, count));
+            return View(album.List(page, count));
         }
     }
 }

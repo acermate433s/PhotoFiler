@@ -1,5 +1,7 @@
 ﻿#pragma warning disable CA1707 // Identifiers should not contain underscores
 
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Photo.FileSystem;
 using Photo.Logged;
@@ -17,86 +19,110 @@ namespace PhotoFiler
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        Microsoft.Extensions.Logging.ILogger _Logger = new LoggerFactory()
-            .AddSerilog()
-            .CreateLogger("PhotoFiler");
-
-        protected void Application_Start()
+        private void Registration()
         {
-
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
 
-            ModelMetadataProviders.Current = new InterfaceMetadataProvider();
+        private IConfigurationRoot Configuration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(HttpRuntime.AppDomainAppPath)
+                .AddJsonFile("appsettings.json", optional: false);
 
-            using (var scope = _Logger.BeginScope("Application initialization"))
-            {
-                try
+            return builder.Build();
+        }
+
+        private IServiceCollection RegisterServices(IConfigurationRoot configurationRoot, IServiceCollection services)
+        {
+            services = (services ?? new ServiceCollection())
+                .AddLogging(configure =>
                 {
-                    var applicationConfiguration = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("~");
-                    var photoFilerConfiguration = (Configuration) applicationConfiguration.GetSection("photoFilerConfiguration");
-                    _Logger.LogInformation(photoFilerConfiguration.ToString());
+                    configure.AddSerilog();
+                })
+                .AddSingleton<ILoggerFactory, LoggerFactory>()
+                .AddSingleton<Microsoft.Extensions.Logging.ILogger>(new LoggerFactory().CreateLogger("PhotoFiler"))
+                .AddSingleton<IRepository>(factory => {
 
-                    IRepository repository = new FileSystemRepository(photoFilerConfiguration);
-                    if (photoFilerConfiguration.EnableLogging)
+                    var configuration = configurationRoot.GetSection("PhotoFiler").Get<PhotoFilerConfiguration>();
+                    IRepository repository = new FileSystemRepository(configuration);
+
+                    if (configuration.EnableLogging)
                     {
-                        _Logger.LogInformation("Logging enabled.");
                         repository =
                             new LoggedRepository(
-                                _Logger,
-                                new FileSystemRepository(photoFilerConfiguration)
+                                factory.GetService<Microsoft.Extensions.Logging.ILogger>(),
+                                repository
                             );
                     }
 
-                    IPreviewablePhotos retriever = null;
-                    IHashedAlbum album = null;
-
+                    return repository;
+                })
+                .AddSingleton<IHashedAlbum>(factory =>
+                {
+                    var repository = factory.GetService<IRepository>();
                     var photosRepository = repository.CreatePhotosRepository();
                     var albumRepository = repository.CreateAlbumRepository();
+                    var retriever = photosRepository.Create();
 
-                    try
-                    {
-                        retriever = photosRepository.Create();
-                        var photos = retriever.Retrieve(
+                    var photos = retriever.Retrieve(
                             (sender, args) =>
                             {
-                                var logger = ((Microsoft.Extensions.Logging.ILogger) HttpContext.Current?.Application["Logger"]) ?? _Logger;
-                                logger?.LogError(args.Exception, "Error generating preview for photo \"{0}\"", args.Photo.Location);
+                                factory.GetService<Microsoft.Extensions.Logging.ILogger>()?
+                                    .LogError(args.Exception, "Error generating preview for photo \"{0}\"", args.Photo.Location);
                             }
                         );
 
-                        if (retriever != null)
-                            album = albumRepository.Create(photos);
+                    return albumRepository.Create(photos);
+                });
+
+            return services;
+        }
+
+        protected void Application_Start()
+        {
+            this.Registration();
+
+            var configuration = this.Configuration();
+            Bootstrapper.ServiceProvider = RegisterServices(configuration, new ServiceCollection()).BuildServiceProvider();
+            var logger = Bootstrapper.ServiceProvider.GetService<Microsoft.Extensions.Logging.ILogger>();
+            ModelMetadataProviders.Current = new InterfaceMetadataProvider();
+
+            using (var scope = logger.BeginScope("Application initialization"))
+            {
+                try
+                {
+                    var photoFilerConfiguration = configuration.GetSection("PhotoFiler").Get<PhotoFilerConfiguration>();
+                    logger?.LogInformation(configuration.ToString());
+
+                    IHashedAlbum album = Bootstrapper.ServiceProvider.GetService<IHashedAlbum>();
+
+                   try
+                    {
+                        if ((album != null) && (album.Count() == 0) && (photoFilerConfiguration.CreatePreview))
+                        {
+                            logger.LogInformation("Deleting old previews");
+
+                            photoFilerConfiguration
+                                .PreviewLocationDirectory
+                                .GetFiles()
+                                .ToList()
+                                .ForEach(item => item.Delete());
+
+                            album.GeneratePreviews();
+                        }
                     }
                     catch (Exception ex) when (ex is ArgumentException || ex is ArgumentNullException)
                     {
-                        _Logger.LogError(ex, "Cannot create photos from repository.");
+                        logger.LogError(ex, "Cannot create photos from repository.");
                     }
-
-                    if ((album != null) && (photoFilerConfiguration.CreatePreview))
-                    {
-                        _Logger.LogInformation("Deleting old previews");
-
-                        photoFilerConfiguration
-                            .PreviewLocationDirectory
-                            .GetFiles()
-                            .ToList()
-                            .ForEach(item => item.Delete());
-
-                        album.GeneratePreviews();
-                    }
-
-                    var applicationState = HttpContext.Current.Application;
-                    applicationState.Lock();
-                    applicationState["Album"] = album;
-                    applicationState["Logger"] = _Logger;
-                    applicationState.UnLock();
                 }
                 catch (Exception ex)
                 {
-                    _Logger.LogCritical(ex, "Application initialization error");
+                    logger.LogCritical(ex, "Application initialization error");
                     throw new HttpUnhandledException("Cannot continue.  Check trace file for explanation.", ex);
                 }
             }
@@ -107,9 +133,7 @@ namespace PhotoFiler
             if (Server != null)
             {
                 Exception ex = Server.GetLastError();
-
-                var logger = (Microsoft.Extensions.Logging.ILogger) HttpContext.Current?.Application["Logger"];
-                logger?.LogError(ex, "Application error");
+                Bootstrapper.ServiceProvider.GetService<Microsoft.Extensions.Logging.ILogger>()?.LogError(ex, "Application error");
             }
         }
     }

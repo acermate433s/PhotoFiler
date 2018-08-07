@@ -9,7 +9,7 @@ using System.Text;
 
 namespace PhotoFiler.Helpers
 {
-    public class Configuration : ConfigurationSection, IFileSystemConfiguration, ILoggedConfiguration
+    public class PhotoFilerConfiguration : ConfigurationSection, IFileSystemConfiguration, ILoggedConfiguration
     {
         private const string ROOT_PATH = "rootPath";
         private const string HASH_LENGTH = "hashLength";
@@ -55,7 +55,7 @@ namespace PhotoFiler.Helpers
         [ConfigurationProperty(ENABLE_LOGGING)]
         public bool EnableLogging { get => (bool) this[ENABLE_LOGGING]; set => this[ENABLE_LOGGING] = value; }
 
-        public Configuration()
+        public PhotoFilerConfiguration()
         {
             var previewPath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString();
             if (Directory.Exists(previewPath))
