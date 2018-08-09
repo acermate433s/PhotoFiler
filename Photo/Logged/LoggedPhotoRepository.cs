@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
-using Photo.Models;
+using PhotoFiler.Photo.Models;
 using System;
 using System.IO;
 
-using static Photo.Helpers.Helpers;
+using static PhotoFiler.Photo.Helpers;
 
-namespace Photo.Logged
+namespace PhotoFiler.Photo.Logged
 {
     public class LoggedPhotoRepository : LoggedBase, IPhotoRepository
     {

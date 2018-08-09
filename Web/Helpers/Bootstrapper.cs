@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Web.Helpers
 {
     public static class Bootstrapper
     {

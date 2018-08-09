@@ -1,7 +1,7 @@
-﻿using Photo.Models;
+﻿using PhotoFiler.Photo.Models;
 using System;
 
-namespace Photo.Helpers
+namespace PhotoFiler.Photo
 {
     public static class Helpers
     {

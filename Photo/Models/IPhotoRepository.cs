@@ -1,8 +1,8 @@
-﻿using Photo.Models;
-using System.IO;
-using static Photo.Helpers.Helpers;
+﻿using System.IO;
 
-namespace Photo.Models
+using static PhotoFiler.Photo.Helpers;
+
+namespace PhotoFiler.Photo.Models
 {
     /// <summary>
     /// IPhoto Repository

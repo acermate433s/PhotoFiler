@@ -1,4 +1,4 @@
-﻿using Photo.Models;
+﻿using PhotoFiler.Photo.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
 
-namespace Photo.Hasher
+namespace PhotoFiler.PhotoHasher
 {
     public class Base62HasherBase<THashAlgorithm> : IHashFunction where THashAlgorithm : HashAlgorithm, new()
     {

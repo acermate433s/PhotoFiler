@@ -1,10 +1,11 @@
-﻿using Photo.Models;
+﻿
+using PhotoFiler.Photo.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Photo.FileSystem
+namespace PhotoFiler.Photo.FileSystem
 {
     public class FileSystemAlbum : IHashedAlbum
     {

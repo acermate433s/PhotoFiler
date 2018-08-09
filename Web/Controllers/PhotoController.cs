@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Photo.Models;
-using PhotoFiler.Helpers;
-using System;
+using PhotoFiler.Photo.Models;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using PhotoFiler.Web.Helpers;
 
-namespace PhotoFiler.Controllers
+namespace PhotoFiler.Web.Controllers
 {
     public class PhotoController : Controller
     {

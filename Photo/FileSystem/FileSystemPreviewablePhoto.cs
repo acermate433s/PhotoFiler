@@ -1,11 +1,11 @@
 ﻿using ImageResizer;
-using Photo.Helpers;
-using Photo.Models;
+using PhotoFiler.Photo.Models;
 using System;
 using System.IO;
-using static Photo.Helpers.Helpers;
 
-namespace Photo.FileSystem
+using static PhotoFiler.Photo.Helpers;
+
+namespace PhotoFiler.Photo.FileSystem
 {
     public class FileSystemPreviewablePhoto : FileSystemPhoto, IPreviewablePhoto
     {

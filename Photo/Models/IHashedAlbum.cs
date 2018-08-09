@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Photo.Models
+namespace PhotoFiler.Photo.Models
 {
     /// <summary>
     /// Photo album of hashed photos

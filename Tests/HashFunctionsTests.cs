@@ -1,9 +1,9 @@
-﻿using Photo.Hasher;
-using Photo.Models;
+﻿using PhotoFiler.Photo.Models;
+using PhotoFiler.PhotoHasher;
 using System.Linq;
 using Xunit;
 
-namespace PhotoFiler.Tests
+namespace Web.Tests
 {
     public class HashFunctionsTests
     {

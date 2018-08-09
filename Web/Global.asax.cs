@@ -3,10 +3,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Photo.FileSystem;
-using Photo.Logged;
-using Photo.Models;
-using PhotoFiler.Helpers;
+using PhotoFiler.Web.Helpers;
 using Serilog;
 using System;
 using System.Linq;
@@ -14,8 +11,11 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using PhotoFiler.Photo.Models;
+using PhotoFiler.Photo.Logged;
+using PhotoFiler.Photo.FileSystem;
 
-namespace PhotoFiler
+namespace PhotoFiler.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {

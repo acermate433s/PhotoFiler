@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Logging;
-using Photo.Models;
+using PhotoFiler.Photo.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Photo.Helpers.Helpers;
 
-namespace Photo.Logged
+using static PhotoFiler.Photo.Helpers;
+
+namespace PhotoFiler.Photo.Logged
 {
     public class LoggedPreviewablePhotos : LoggedBase, IPreviewablePhotos
     {

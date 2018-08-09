@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Web.Helpers
 {
     /// <summary>
     /// Hack to make model binding work for models that implements interfaces

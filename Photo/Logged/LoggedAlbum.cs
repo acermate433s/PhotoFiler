@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
-using Photo.Models;
+using PhotoFiler.Photo.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Photo.Logged
+namespace PhotoFiler.Photo.Logged
 {
     public class LoggedAlbum : LoggedBase, IHashedAlbum
     {

@@ -1,13 +1,13 @@
-﻿using Photo.FileSystem;
-using Photo.Hasher;
-using Photo.Logged;
-using Photo.Models;
+﻿using PhotoFiler.Photo.FileSystem;
+using PhotoFiler.Photo.Logged;
+using PhotoFiler.Photo.Models;
+using PhotoFiler.PhotoHasher;
 using System;
 using System.Configuration;
 using System.IO;
 using System.Text;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Web.Helpers
 {
     public class PhotoFilerConfiguration : ConfigurationSection, IFileSystemConfiguration, ILoggedConfiguration
     {

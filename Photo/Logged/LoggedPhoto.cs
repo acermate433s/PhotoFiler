@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using Photo.Models;
+using PhotoFiler.Photo.Models;
 using System;
 
-namespace Photo.Logged
+namespace PhotoFiler.Photo.Logged
 {
     public class LoggedPhoto : LoggedBase, IPhoto
     {

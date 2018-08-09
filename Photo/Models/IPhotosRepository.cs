@@ -1,6 +1,6 @@
-﻿using Photo.Models;
+﻿using PhotoFiler.Photo.Models;
 
-namespace Photo.Models
+namespace PhotoFiler.Photo.Models
 {
     /// <summary>
     /// IPhotos Repository

@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace PhotoFiler
+namespace PhotoFiler.Web
 {
     public static class FilterConfig
     {

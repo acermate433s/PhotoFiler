@@ -1,7 +1,6 @@
-﻿using Photo.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Photo.Models
+namespace PhotoFiler.Photo.Models
 {
     /// <summary>
     /// IAlbum Repository

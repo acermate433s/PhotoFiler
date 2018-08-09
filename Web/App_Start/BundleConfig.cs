@@ -1,6 +1,6 @@
 ﻿using System.Web.Optimization;
 
-namespace PhotoFiler
+namespace PhotoFiler.Web
 {
     public static class BundleConfig
     {

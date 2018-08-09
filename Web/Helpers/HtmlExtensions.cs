@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace PhotoFiler.Helpers
+namespace PhotoFiler.Web.Helpers
 {
     public static class HtmlExtensions
     {

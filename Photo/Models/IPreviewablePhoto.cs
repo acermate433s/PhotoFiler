@@ -1,11 +1,11 @@
-﻿using static Photo.Helpers.Helpers;
+﻿using static PhotoFiler.Photo.Helpers;
 
-namespace Photo.Models
+namespace PhotoFiler.Photo.Models
 {
     /// <summary>
     /// Previewable photo
     /// </summary>
-    /// <seealso cref="Photo.Models.IPhoto" />
+    /// <seealso cref="PhotoFiler.Photo.Models.IPhoto" />
     public interface IPreviewablePhoto : IPhoto
     {
         event ErrorGeneratingPreviewEventHandler ErrorGeneratingPreviewHandler;

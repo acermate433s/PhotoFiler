@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace PhotoFiler
+namespace PhotoFiler.Web
 {
     public static class RouteConfig
     {

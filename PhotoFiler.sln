@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoFiler", "PhotoFiler\PhotoFiler.csproj", "{228C0CBF-1DF3-4D02-9C75-05690CB6107F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "Web\Web.csproj", "{228C0CBF-1DF3-4D02-9C75-05690CB6107F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhotoFiler.Tests", "PhotoFiler.Tests\PhotoFiler.Tests.csproj", "{021236ED-C07D-47DC-A56E-F3577D874A36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{021236ED-C07D-47DC-A56E-F3577D874A36}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A9B7676F-AF01-4A67-B2FC-B7448C452AE2} = {A9B7676F-AF01-4A67-B2FC-B7448C452AE2}
 	EndProjectSection

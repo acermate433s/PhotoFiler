@@ -1,7 +1,7 @@
-﻿using Photo.Models;
+﻿using PhotoFiler.Photo.Models;
 using System.IO;
 
-namespace Photo.FileSystem
+namespace PhotoFiler.Photo.FileSystem
 {
     public interface IFileSystemConfiguration
     {

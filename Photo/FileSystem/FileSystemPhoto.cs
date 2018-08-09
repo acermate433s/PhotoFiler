@@ -1,15 +1,15 @@
 ﻿using ExifLib;
-using Photo.Models;
+using PhotoFiler.Photo.Models;
 using System;
 using System.Drawing;
 using System.IO;
 
-namespace Photo.FileSystem
+namespace PhotoFiler.Photo.FileSystem
 {
     /// <summary>
     /// Represents a photo in the Album
     /// </summary>
-    public class FileSystemPhoto : Photo
+    public class FileSystemPhoto : PhotoFiler.Photo.Photo
     {
         public FileSystemPhoto(
             string path,

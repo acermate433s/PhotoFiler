@@ -1,4 +1,4 @@
-﻿namespace Photo.Logged
+﻿namespace PhotoFiler.Photo.Logged
 {
     public interface ILoggedConfiguration
     {

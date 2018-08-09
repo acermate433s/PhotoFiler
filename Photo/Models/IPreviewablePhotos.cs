@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using static Photo.Helpers.Helpers;
 
-namespace Photo.Models
+using static PhotoFiler.Photo.Helpers;
+
+namespace PhotoFiler.Photo.Models
 {
     /// <summary>
     /// List of previewable photos

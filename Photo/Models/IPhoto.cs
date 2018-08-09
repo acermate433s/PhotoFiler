@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Photo.Models
+namespace PhotoFiler.Photo.Models
 {
     /// <summary>
     /// Photo
