@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using PhotoFiler.Photo.Models;
-using System.IO;
+﻿using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using PhotoFiler.Web.Helpers;
+
+using PhotoFiler.Photo.Models;
 
 namespace PhotoFiler.Web.Controllers
 {
@@ -15,9 +14,9 @@ namespace PhotoFiler.Web.Controllers
 
         private readonly IHashedAlbum album;
 
-        public PhotoController()
+        public PhotoController(IHashedAlbum album)
         {
-            this.album = Bootstrapper.ServiceProvider.GetService<IHashedAlbum>();
+            this.album = album;
         }
 
         [Route("{hash}")]

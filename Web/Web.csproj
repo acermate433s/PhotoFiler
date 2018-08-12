@@ -208,10 +208,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\Bootstrapper.cs" />
+    <Compile Include="Helpers\DefaultDependencyResolver.cs" />
     <Compile Include="Helpers\PhotoFilerConfiguration.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\MetadataProvider.cs" />
+    <Compile Include="Helpers\PhotoFilerExtensions.cs" />
+    <Compile Include="Helpers\ServiceProviderExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
