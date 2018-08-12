@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+
+using Microsoft.Extensions.Logging;
 
 namespace PhotoFiler.Photo.Logged
 {
@@ -6,11 +8,9 @@ namespace PhotoFiler.Photo.Logged
     {
         public LoggedBase(ILogger logger)
         {
-            Logger = logger;
+            this.Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        private ILogger logger;
-
-        protected ILogger Logger { get => logger; set => logger = value; }
+        protected ILogger Logger { get; set; }
     }
 }

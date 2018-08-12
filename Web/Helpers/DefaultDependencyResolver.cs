@@ -8,7 +8,7 @@ namespace PhotoFiler.Web.Helpers
 {
     public sealed class DefaultDependencyResolver : IDependencyResolver
     {
-        private IServiceProvider serviceProvider;
+        private readonly IServiceProvider serviceProvider;
 
         public DefaultDependencyResolver(IServiceProvider serviceProvider)
         {

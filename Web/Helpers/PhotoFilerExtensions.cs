@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
+using PhotoFiler.Photo;
 using PhotoFiler.Photo.FileSystem;
 using PhotoFiler.Photo.Logged;
 using PhotoFiler.Photo.Models;
@@ -15,12 +16,14 @@ namespace PhotoFiler.Web.Helpers
         public static IServiceCollection AddPhotoFiler(this IServiceCollection services, IConfigurationRoot configurationRoot)
         {
             return services
+                .AddTransient<IExifReaderService, ExifReaderService>()
                 .AddSingleton<PhotoFilerConfiguration>(provider => configurationRoot.GetSection("PhotoFiler").Get<PhotoFilerConfiguration>())
                 .AddSingleton<IFileSystemConfiguration, PhotoFilerConfiguration>(provider => provider.GetService<PhotoFilerConfiguration>())
                 .AddSingleton<IRepository>(provider =>
                 {
                     var configuration = provider.GetService<PhotoFilerConfiguration>();
-                    IRepository repository = new FileSystemRepository(configuration);
+                    var exifReader = provider.GetService<IExifReaderService>();
+                    IRepository repository = new FileSystemRepository(configuration, exifReader);
 
                     if (configuration.EnableLogging)
                     {
@@ -61,7 +64,8 @@ namespace PhotoFiler.Web.Helpers
                 .AddSingleton<IRepository>(provider =>
                 {
                     var configuration = provider.GetService<PhotoFilerConfiguration>();
-                    IRepository repository = new FileSystemRepository(configuration);
+                    var exifReader = provider.GetService<IExifReaderService>();
+                    IRepository repository = new FileSystemRepository(configuration, exifReader);
 
                     if (configuration.EnableLogging)
                     {

@@ -1,5 +1,6 @@
-﻿using PhotoFiler.Photo.Models;
-using System;
+﻿using System;
+
+using PhotoFiler.Photo.Models;
 
 namespace PhotoFiler.Photo
 {

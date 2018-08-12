@@ -1,57 +1,53 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+
+using Microsoft.Extensions.Logging;
+
 using PhotoFiler.Photo.Models;
-using System;
 
 namespace PhotoFiler.Photo.Logged
 {
     public class LoggedRepository : LoggedBase, IRepository
     {
-        IRepository _Repository;
+        private readonly IRepository repository;
 
         public LoggedRepository(
             ILogger logger,
             IRepository repository
         ) : base(logger)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
-            if (repository == null)
-                throw new ArgumentNullException(nameof(repository));
-
-            _Repository = repository;
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         public IAlbumRepository CreateAlbumRepository()
         {
-            Logger.LogInformation("Creating IAlbumRepository instance");
+            this.Logger.LogInformation("Creating IAlbumRepository instance");
 
             return
                 new LoggedAlbumRepository(
-                    Logger,
-                    _Repository.CreateAlbumRepository()
+                    this.Logger,
+                    this.repository.CreateAlbumRepository()
                 );
         }
 
         public IPhotoRepository CreatePhotoRepository()
         {
-            Logger.LogInformation("Creating IPhotoRepository instance");
+            this.Logger.LogInformation("Creating IPhotoRepository instance");
 
             return
                 new LoggedPhotoRepository(
-                    Logger,
-                    _Repository.CreatePhotoRepository()
+                    this.Logger,
+                    this.repository.CreatePhotoRepository()
                 );
         }
 
         public IPhotosRepository CreatePhotosRepository()
         {
-            Logger.LogInformation("Creating IPhotosRepository instance");
+            this.Logger.LogInformation("Creating IPhotosRepository instance");
 
             return
                 new LoggedPhotosRepository(
-                    Logger,
-                    _Repository.CreatePhotosRepository()
+                    this.Logger,
+                    this.repository.CreatePhotosRepository()
                 );
         }
     }

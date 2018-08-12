@@ -39,10 +39,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ExifLib, Version=1.7.0.0, Culture=neutral, PublicKeyToken=30284005913968db, processorArchitecture=MSIL">
-      <HintPath>..\packages\ExifLib.1.7.0.0\lib\net40\ExifLib.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ImageResizer.4.2.5\lib\net45\ImageResizer.dll</HintPath>
     </Reference>
@@ -106,6 +102,7 @@
     <Compile Include="Hasher\Base62HasherBase.cs" />
     <Compile Include="Hasher\HashFunctions.cs" />
     <Compile Include="Helpers\Helpers.cs" />
+    <Compile Include="Helpers\IExifReaderService.cs" />
     <Compile Include="Logged\ILoggedConfiguration.cs" />
     <Compile Include="Logged\LoggedAlbum.cs" />
     <Compile Include="Logged\LoggedAlbumRepository.cs" />

@@ -11,6 +11,7 @@ namespace PhotoFiler.Photo.Models
     {
         IPreviewablePhoto Create(
             FileInfo file, 
+            IExifReaderService exifReader,
             ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null
         );
     }

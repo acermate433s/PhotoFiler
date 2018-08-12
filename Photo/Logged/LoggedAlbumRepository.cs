@@ -8,26 +8,20 @@ namespace PhotoFiler.Photo.Logged
 {
     public class LoggedAlbumRepository : LoggedBase, IAlbumRepository
     {
-        IAlbumRepository _AlbumRepository;
+        private readonly IAlbumRepository albumRepository;
 
         public LoggedAlbumRepository(
             ILogger logger,
             IAlbumRepository albumRepository
         ) : base(logger)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
-            if (albumRepository == null)
-                throw new ArgumentNullException(nameof(albumRepository));
-
-            _AlbumRepository = albumRepository;
+            this.albumRepository = albumRepository ?? throw new ArgumentNullException(nameof(albumRepository));
         }
 
         public IHashedAlbum Create(List<IPreviewablePhoto> photos)
         {
-            Logger.LogInformation($"Creating album with { photos.Count()} photos.");
-            Logger.LogInformation(
+            this.Logger.LogInformation($"Creating album with { photos.Count()} photos.");
+            this.Logger.LogInformation(
                 String.Join(
                     Environment.NewLine,
                     photos
@@ -37,8 +31,8 @@ namespace PhotoFiler.Photo.Logged
 
             return
                 new LoggedAlbum(
-                    Logger,
-                    _AlbumRepository.Create(photos)
+                    this.Logger,
+                    this.albumRepository.Create(photos)
                 );            
         }
     }

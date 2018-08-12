@@ -1,34 +1,30 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+
+using Microsoft.Extensions.Logging;
+
 using PhotoFiler.Photo.Models;
-using System;
 
 namespace PhotoFiler.Photo.Logged
 {
     public class LoggedPhoto : LoggedBase, IPhoto
     {
-        IPhoto _Photo;
+        private readonly IPhoto photo;
 
         public LoggedPhoto(
             ILogger logger,
             IPhoto photo
         ) : base(logger)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
+            this.photo = photo ?? throw new ArgumentNullException(nameof(photo));
 
-            if (photo == null)
-                throw new ArgumentNullException(nameof(photo));
-
-            _Photo = photo;
-
-            Logger.LogInformation($"Photo \"{photo.Location}\" with hash \"{Hash}\"");
+            this.Logger.LogInformation($"Photo \"{photo.Location}\" with hash \"{Hash}\"");
         }
 
         public DateTime? CreationDateTime
         {
             get
             {
-                return _Photo.CreationDateTime;
+                return this.photo.CreationDateTime;
             }
         }
 
@@ -36,7 +32,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _Photo.Location;
+                return this.photo.Location;
             }
         }
 
@@ -44,7 +40,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _Photo.Hash;
+                return this.photo.Hash;
             }
         }
 
@@ -52,7 +48,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _Photo.Name;
+                return this.photo.Name;
             }
         }
 
@@ -60,14 +56,14 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _Photo.Resolution;
+                return this.photo.Resolution;
             }
         }
 
         public int Width {
             get
             {
-                return _Photo.Width;
+                return this.photo.Width;
             }
         }
 
@@ -75,7 +71,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _Photo.Height;
+                return this.photo.Height;
             }
         }
 
@@ -83,7 +79,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _Photo.Size;
+                return this.photo.Size;
             }
         }
     }

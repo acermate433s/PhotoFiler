@@ -1,9 +1,10 @@
-﻿using PhotoFiler.Photo.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+
+using PhotoFiler.Photo.Models;
 
 using static PhotoFiler.Photo.Helpers;
 
@@ -11,29 +12,26 @@ namespace PhotoFiler.Photo.FileSystem
 {
     public class FileSystemPreviewablePhotos : IPreviewablePhotos
     {
-        DirectoryInfo _Source = null;
-        IPhotoRepository _PhotoRepository = null;
+        private readonly DirectoryInfo source = null;
+        private readonly IPhotoRepository photoRepository = null;
+        private readonly IExifReaderService exifReader = null;
 
         public FileSystemPreviewablePhotos(
             DirectoryInfo source,
-            IPhotoRepository photoRepository
+            IPhotoRepository photoRepository,
+            IExifReaderService exifReader
         )
         {
-            if (source == null)
-                throw new ArgumentNullException(nameof(source));
-
-            if (photoRepository == null)
-                throw new ArgumentNullException(nameof(photoRepository));
-
-            _Source = source;
-            _PhotoRepository = photoRepository;
+            this.source = source ?? throw new ArgumentNullException(nameof(source));
+            this.photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
+            this.exifReader = exifReader ?? throw new ArgumentNullException(nameof(exifReader));
         }
 
         public List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null)
         {
             return
-                GetPhotoFiles(_Source)
-                    .Select(file => _PhotoRepository.Create(file, errorGeneratingPreviewHandler))
+                GetPhotoFiles(source)
+                    .Select(file => photoRepository.Create(file, this.exifReader, errorGeneratingPreviewHandler))
                     .ToList();
         }
 

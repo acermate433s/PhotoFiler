@@ -20,17 +20,17 @@ namespace PhotoFiler.Photo.FileSystem
         public FileSystemPreviewablePhoto(
             int hashLength,
             string path,
-            IHashFunction hasher
-        ) : base(path, hasher)
+            IHashFunction hasher,
+            IExifReaderService exifReader
+        ) : base(path, hasher, exifReader)
         {
-            if (hashLength <= 0)
-                throw new ArgumentException("Hash length must be greater than zero.", nameof(path));
+            if (hashLength <= 0) throw new ArgumentException("Hash length must be greater than zero.", nameof(path));
 
-            if (path == null)
-                throw new ArgumentNullException(nameof(path));
+            if (path == null) throw new ArgumentNullException(nameof(path));
 
-            if (hasher == null)
-                throw new ArgumentNullException(nameof(hasher));
+            if (hasher == null) throw new ArgumentNullException(nameof(hasher));
+
+            if (exifReader == null) throw new ArgumentNullException(nameof(exifReader));
         }
 
         /// <summary>

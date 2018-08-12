@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+
+using Microsoft.Extensions.Logging;
+
 using PhotoFiler.Photo.Models;
-using System;
 
 using static PhotoFiler.Photo.Helpers;
 
@@ -10,25 +12,19 @@ namespace PhotoFiler.Photo.Logged
     {
         public event ErrorGeneratingPreviewEventHandler ErrorGeneratingPreviewHandler;
 
-        IPreviewablePhoto _PreviewablePhoto;
+        private readonly IPreviewablePhoto previewablePhoto;
 
         public LoggedPreviewablePhoto(
             ILogger logger, 
             IPreviewablePhoto previewablePhoto
         ) : base(logger)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
+            this.previewablePhoto = previewablePhoto ?? throw new ArgumentNullException(nameof(previewablePhoto));
 
-            if (previewablePhoto == null)
-                throw new ArgumentNullException(nameof(previewablePhoto));
-
-            _PreviewablePhoto = previewablePhoto;
-
-            _PreviewablePhoto.ErrorGeneratingPreviewHandler +=
+            this.previewablePhoto.ErrorGeneratingPreviewHandler +=
                 (sender, args) =>
                 {
-                    Logger.LogError(
+                    this.Logger.LogError(
                         args.Exception, 
                         "Error generating preview from \"{0}\"", 
                         args.Photo.Location
@@ -42,7 +38,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _PreviewablePhoto.CreationDateTime;
+                return this.previewablePhoto.CreationDateTime;
             }
         }
 
@@ -50,7 +46,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _PreviewablePhoto.Location;
+                return this.previewablePhoto.Location;
             }
         }
 
@@ -58,7 +54,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _PreviewablePhoto.Hash;
+                return this.previewablePhoto.Hash;
             }
         }
 
@@ -66,7 +62,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _PreviewablePhoto.Name;
+                return this.previewablePhoto.Name;
             }
         }
 
@@ -74,7 +70,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _PreviewablePhoto.Resolution;
+                return this.previewablePhoto.Resolution;
             }
         }
 
@@ -82,7 +78,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _PreviewablePhoto.Width;
+                return this.previewablePhoto.Width;
             }
         }
 
@@ -90,7 +86,7 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _PreviewablePhoto.Height;
+                return this.previewablePhoto.Height;
             }
         }
 
@@ -98,34 +94,41 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _PreviewablePhoto.Size;
+                return this.previewablePhoto.Size;
             }
         }
 
         public byte[] Preview()
         {
-            Logger.LogInformation($"Generating preview for \"{Location}\" with hash \"{Hash}\".");
-            var result = _PreviewablePhoto.Preview();
+            this.Logger.LogInformation($"Generating preview for \"{Location}\" with hash \"{Hash}\".");
+            var result = this.previewablePhoto.Preview();
 
             if (result == null)
-                Logger.LogWarning($"Cannot generate preview for photo \"{Location}\" with hash \"{Hash}\".");
+            {
+                this.Logger.LogWarning($"Cannot generate preview for photo \"{Location}\" with hash \"{Hash}\".");
+            }
             else
-                Logger.LogInformation($"Preview size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
+            {
+                this.Logger.LogInformation($"Preview size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
+            }
 
             return result;
         }
         public byte[] View()
         {
-            Logger.LogInformation($"Generating view for \"{Location}\" with hash \"{Hash}\".");
-            var result = _PreviewablePhoto.View();
+            this.Logger.LogInformation($"Generating view for \"{Location}\" with hash \"{Hash}\".");
+            var result = this.previewablePhoto.View();
 
             if (result == null)
-                Logger.LogWarning($"Cannot generate full view for photo \"{Location}\" with hash \"{Hash}\".");
+            {
+                this.Logger.LogWarning($"Cannot generate full view for photo \"{Location}\" with hash \"{Hash}\".");
+            }
             else
-                Logger.LogInformation($"Full size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
+            {
+                this.Logger.LogInformation($"Full size for \"{Location}\" with hash \"{Hash}\" is {result.Length} bytes.");
+            }
 
-            return result;
-            
+            return result;            
         }
     }
 }

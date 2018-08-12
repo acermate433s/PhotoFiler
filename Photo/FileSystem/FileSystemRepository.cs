@@ -1,27 +1,28 @@
-﻿using PhotoFiler.Photo.Models;
-using System;
+﻿using System;
+
+using PhotoFiler.Photo.Models;
 
 namespace PhotoFiler.Photo.FileSystem
 {
     public class FileSystemRepository : IRepository
     {
-        protected IFileSystemConfiguration Configuration { get; set; }
+        private readonly IFileSystemConfiguration configuration;
+        private readonly IExifReaderService exifReader;
 
         public FileSystemRepository(
-            IFileSystemConfiguration configuration
+            IFileSystemConfiguration configuration,
+            IExifReaderService exifReader
         )
         {
-            if (configuration == null)
-                throw new ArgumentNullException(nameof(configuration));
-
-            Configuration = configuration;
+            this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            this.exifReader = exifReader ?? throw new ArgumentNullException(nameof(exifReader));
         }
 
         public IAlbumRepository CreateAlbumRepository()
         {
             return
                 new FileSystemAlbumRepository(
-                    Configuration.PreviewLocationDirectory
+                    configuration.PreviewLocationDirectory
                 );
         }
 
@@ -29,9 +30,9 @@ namespace PhotoFiler.Photo.FileSystem
         {
             return 
                 new FileSystemPhotoRepository(
-                    Configuration.HashLength,
-                    Configuration.HashingFunction,
-                    Configuration.PreviewLocationDirectory
+                    configuration.HashLength,
+                    configuration.HashingFunction,
+                    configuration.PreviewLocationDirectory
                 );
         }
 
@@ -39,8 +40,9 @@ namespace PhotoFiler.Photo.FileSystem
         {
             return
                 new FileSystemPhotosRepository(
-                    Configuration.RootPathDirectory,
-                    CreatePhotoRepository()
+                    this.configuration.RootPathDirectory,
+                    CreatePhotoRepository(),
+                    this.exifReader
                 );
         }
     }

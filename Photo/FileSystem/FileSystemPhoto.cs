@@ -1,8 +1,8 @@
-﻿using ExifLib;
-using PhotoFiler.Photo.Models;
-using System;
+﻿using System;
 using System.Drawing;
 using System.IO;
+
+using PhotoFiler.Photo.Models;
 
 namespace PhotoFiler.Photo.FileSystem
 {
@@ -11,13 +11,19 @@ namespace PhotoFiler.Photo.FileSystem
     /// </summary>
     public class FileSystemPhoto : PhotoFiler.Photo.Photo
     {
+        private readonly IExifReaderService exifReader;
+
         public FileSystemPhoto(
             string path,
-            IHashFunction hasher
+            IHashFunction hasher,
+            IExifReaderService exifReader
         )
         {
-            if (hasher == null)
-                throw new ArgumentNullException(nameof(hasher), "Hash function cannot be null");
+            if (!File.Exists(path)) throw new ArgumentException($"'{path}' doesn't exists.");
+
+            if (hasher == null) throw new ArgumentNullException(nameof(hasher), "Hash function cannot be null");
+
+            this.exifReader = exifReader ?? throw new ArgumentNullException(nameof(exifReader), "Exif reader cannot be null");
 
             try
             {
@@ -76,7 +82,7 @@ namespace PhotoFiler.Photo.FileSystem
         /// <param name="height">Height of the photo</param>
         /// <param name="width">Width of the photo</param>
         /// <returns></returns>
-        private static void ReadFileData(
+        private void ReadFileData(
             FileInfo file,
             out DateTime? creationDateTime,
             out int width,
@@ -107,11 +113,8 @@ namespace PhotoFiler.Photo.FileSystem
                     // set the creation date time to the file creation date time
                     using (var stream = new MemoryStream(buffer))
                     {
-                        var reader = new ExifReader(stream);
-                        if(reader.GetTagValue(ExifTags.DateTime, out DateTime exifCreationDate))
-                            creationDateTime = exifCreationDate;
-                        else
-                            creationDateTime = file.CreationTime;
+                        this.exifReader.Stream = stream;
+                        creationDateTime = this.exifReader.DateTime() ?? file.CreationTime;
                     }
                 }
             }

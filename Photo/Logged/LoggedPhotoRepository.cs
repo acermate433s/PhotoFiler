@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
-using PhotoFiler.Photo.Models;
-using System;
+﻿using System;
 using System.IO;
+
+using Microsoft.Extensions.Logging;
+
+using PhotoFiler.Photo.Models;
 
 using static PhotoFiler.Photo.Helpers;
 
@@ -9,33 +11,28 @@ namespace PhotoFiler.Photo.Logged
 {
     public class LoggedPhotoRepository : LoggedBase, IPhotoRepository
     {
-        IPhotoRepository _PhotoRepository;
+        private readonly IPhotoRepository photoRepository;
 
         public LoggedPhotoRepository(
             ILogger logger,
             IPhotoRepository photoRepository
         ) : base(logger)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
-            if (logger == null)
-                throw new ArgumentNullException(nameof(photoRepository));
-
-            _PhotoRepository = photoRepository;
+            this.photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
         }
 
         public  IPreviewablePhoto Create(
             FileInfo file, 
+            IExifReaderService exifReader,
             ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null
         )
         {
-            Logger.LogInformation($"Creating instance photo for \"{file}\"");
+            this.Logger.LogInformation($"Creating instance photo for \"{file}\"");
             
             return
                 new LoggedPreviewablePhoto(
-                    Logger,
-                    _PhotoRepository.Create(file, errorGeneratingPreviewHandler)
+                    this.Logger,
+                    this.photoRepository.Create(file, exifReader, errorGeneratingPreviewHandler)
                 );            
         }
     }

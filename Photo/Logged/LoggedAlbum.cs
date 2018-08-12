@@ -1,37 +1,33 @@
-﻿using Microsoft.Extensions.Logging;
-using PhotoFiler.Photo.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
+using Microsoft.Extensions.Logging;
+
+using PhotoFiler.Photo.Models;
 
 namespace PhotoFiler.Photo.Logged
 {
     public class LoggedAlbum : LoggedBase, IHashedAlbum
     {
-        IHashedAlbum _HashedAlbum;
+        private readonly IHashedAlbum hashedAlbum;
 
         public LoggedAlbum(
             ILogger logger,
             IHashedAlbum album
         ) : base(logger)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
+            hashedAlbum = album ?? throw new ArgumentNullException(nameof(album));
 
-            if (album == null)
-                throw new ArgumentNullException(nameof(album));
-
-            _HashedAlbum = album;
-
-            Logger.LogInformation(String.Join(Environment.NewLine, album.Photos?.Select(item => $"\"{item.Location}\" ({item.Hash}).").ToArray()));
+            this.Logger.LogInformation(String.Join(Environment.NewLine, album.Photos?.Select(item => $"\"{item.Location}\" ({item.Hash}).").ToArray()));
         }
 
         public IList<IPreviewablePhoto> Photos
         {
             get
             {
-                return _HashedAlbum.Photos;
+                return this.hashedAlbum.Photos;
             }
         }
 
@@ -39,33 +35,33 @@ namespace PhotoFiler.Photo.Logged
         {
             get
             {
-                return _HashedAlbum.PreviewLocation;
+                return this.hashedAlbum.PreviewLocation;
             }
         }
 
         public int Count()
         {
-            return _HashedAlbum.Count();
+            return this.hashedAlbum.Count();
         }
 
         public void GeneratePreviews()
         {
-            using (var scope = Logger.BeginScope($"Generating photo previews of {_HashedAlbum.Count()} photos in \"{_HashedAlbum.PreviewLocation.FullName}\" for album."))
+            using (var scope = Logger.BeginScope($"Generating photo previews of {hashedAlbum.Count()} photos in \"{hashedAlbum.PreviewLocation.FullName}\" for album."))
             {
-                _HashedAlbum.GeneratePreviews();
+                this.hashedAlbum.GeneratePreviews();
             }
         }
 
         public IEnumerable<IPreviewablePhoto> List(int page = 1, int count = 10)
         {
-            using (var scope = Logger.BeginScope("Generate list of photos in album."))
+            using (var scope = this.Logger.BeginScope("Generate list of photos in album."))
             {
-                var result = _HashedAlbum.List(page, count);
+                var result = this.hashedAlbum.List(page, count);
 
                 if (result != null)
-                    Logger.LogInformation($"Retrieved page {page} expecting {count} photos but retrieved {result.Count()}.");
+                    this.Logger.LogInformation($"Retrieved page {page} expecting {count} photos but retrieved {result.Count()}.");
                 else
-                    Logger.LogWarning($"No photos where retrieved.");
+                    this.Logger.LogWarning($"No photos where retrieved.");
 
                 return result;
             }
@@ -73,12 +69,12 @@ namespace PhotoFiler.Photo.Logged
 
         public IPreviewablePhoto Photo(string hash)
         {
-            using (var scope = Logger.BeginScope($"Get photo with hash \"{hash}\"."))
+            using (var scope = this.Logger.BeginScope($"Get photo with hash \"{hash}\"."))
             {
-                var result = _HashedAlbum.Photo(hash);
+                var result = this.hashedAlbum.Photo(hash);
 
                 if (result == null)
-                    Logger.LogWarning($"Cannot find photo for hash \"{hash}\".");
+                    this.Logger.LogWarning($"Cannot find photo for hash \"{hash}\".");
 
                 return result;
             }
@@ -86,27 +82,27 @@ namespace PhotoFiler.Photo.Logged
 
         public byte[] Preview(string hash)
         {
-            using (var scope = Logger.BeginScope($"Generate preview for photo with \"{hash}\" in album."))
+            using (var scope = this.Logger.BeginScope($"Generate preview for photo with \"{hash}\" in album."))
             {
-                var photo = Photos.FirstOrDefault(item => item.Hash == hash);
+                var photo = this.Photos.FirstOrDefault(item => item.Hash == hash);
                 if (photo != null)
                 {
                     var result = photo.Preview();
                     if (!String.IsNullOrEmpty(photo.Location))
                     {
                         if (result != null)
-                            Logger.LogInformation($"Preview size for \"{photo.Location}\" with hash \"{hash}\" is {result.Length} bytes.");
+                            this.Logger.LogInformation($"Preview size for \"{photo.Location}\" with hash \"{hash}\" is {result.Length} bytes.");
                         else
-                            Logger.LogWarning($"Cannot generate preview for \"{photo.Location} with hash \"{hash}\".");
+                            this.Logger.LogWarning($"Cannot generate preview for \"{photo.Location} with hash \"{hash}\".");
                     }
                     else
-                        Logger.LogWarning($"Cannot find photo with hash \"{hash}\".");
+                        this.Logger.LogWarning($"Cannot find photo with hash \"{hash}\".");
 
                     return result;
                 }
                 else
                 {
-                    Logger.LogWarning("No photos can be found in the album.");
+                    this.Logger.LogWarning("No photos can be found in the album.");
                     return null;
                 }
             }

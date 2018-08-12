@@ -1,35 +1,31 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+
+using Microsoft.Extensions.Logging;
+
 using PhotoFiler.Photo.Models;
-using System;
 
 namespace PhotoFiler.Photo.Logged
 {
     public class LoggedPhotosRepository : LoggedBase, IPhotosRepository
     {
-        IPhotosRepository _PhotosRepository;
+        private readonly IPhotosRepository photosRepository;
 
         public LoggedPhotosRepository(
             ILogger logger,
             IPhotosRepository photosRepository
         ) : base(logger)
         {
-            if (logger == null)
-                throw new ArgumentNullException(nameof(logger));
-
-            if (photosRepository == null)
-                throw new ArgumentNullException(nameof(photosRepository));
-
-            _PhotosRepository = photosRepository;
+            this.photosRepository = photosRepository ?? throw new ArgumentNullException(nameof(photosRepository));
         }
 
         public IPreviewablePhotos Create()
         {
-            Logger.LogInformation("Creating photo repository.");
+            this.Logger.LogInformation("Creating photo repository.");
             
             return
                 new LoggedPreviewablePhotos(
-                    Logger,
-                    _PhotosRepository.Create()
+                    this.Logger,
+                    this.photosRepository.Create()
                 );
             
         }

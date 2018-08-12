@@ -20,7 +20,7 @@ namespace PhotoFiler.Web
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        private void Registration()
+        private static void Registration()
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -54,7 +54,7 @@ namespace PhotoFiler.Web
 
         protected void Application_Start()
         {
-            this.Registration();
+            Registration();
 
             var configuration = this.Configuration();
             var serviceProvider = RegisterServices(configuration).BuildServiceProvider();
