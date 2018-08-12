@@ -39,9 +39,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ImageResizer.4.2.5\lib\net45\ImageResizer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Extensions.Configuration, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Configuration.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
     </Reference>
@@ -103,6 +100,7 @@
     <Compile Include="Hasher\HashFunctions.cs" />
     <Compile Include="Helpers\Helpers.cs" />
     <Compile Include="Helpers\IExifReaderService.cs" />
+    <Compile Include="Helpers\IImageResizerService.cs" />
     <Compile Include="Logged\ILoggedConfiguration.cs" />
     <Compile Include="Logged\LoggedAlbum.cs" />
     <Compile Include="Logged\LoggedAlbumRepository.cs" />

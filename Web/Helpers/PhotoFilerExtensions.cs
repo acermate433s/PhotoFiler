@@ -16,14 +16,16 @@ namespace PhotoFiler.Web.Helpers
         public static IServiceCollection AddPhotoFiler(this IServiceCollection services, IConfigurationRoot configurationRoot)
         {
             return services
-                .AddTransient<IExifReaderService, ExifReaderService>()
+                .AddTransient<IExifReaderService, ImageServices>()
+                .AddTransient<IImageResizerService, ImageServices>()
                 .AddSingleton<PhotoFilerConfiguration>(provider => configurationRoot.GetSection("PhotoFiler").Get<PhotoFilerConfiguration>())
                 .AddSingleton<IFileSystemConfiguration, PhotoFilerConfiguration>(provider => provider.GetService<PhotoFilerConfiguration>())
                 .AddSingleton<IRepository>(provider =>
                 {
                     var configuration = provider.GetService<PhotoFilerConfiguration>();
                     var exifReader = provider.GetService<IExifReaderService>();
-                    IRepository repository = new FileSystemRepository(configuration, exifReader);
+                    var imageResizer = provider.GetService<IImageResizerService>();
+                    IRepository repository = new FileSystemRepository(configuration, exifReader, imageResizer);
 
                     if (configuration.EnableLogging)
                     {
@@ -65,7 +67,8 @@ namespace PhotoFiler.Web.Helpers
                 {
                     var configuration = provider.GetService<PhotoFilerConfiguration>();
                     var exifReader = provider.GetService<IExifReaderService>();
-                    IRepository repository = new FileSystemRepository(configuration, exifReader);
+                    var imageResizer = provider.GetService<IImageResizerService>();
+                    IRepository repository = new FileSystemRepository(configuration, exifReader, imageResizer);
 
                     if (configuration.EnableLogging)
                     {

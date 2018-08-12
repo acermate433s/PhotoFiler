@@ -24,6 +24,7 @@ namespace PhotoFiler.Photo.Logged
         public  IPreviewablePhoto Create(
             FileInfo file, 
             IExifReaderService exifReader,
+            IImageResizerService imageResizer,
             ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null
         )
         {
@@ -32,7 +33,7 @@ namespace PhotoFiler.Photo.Logged
             return
                 new LoggedPreviewablePhoto(
                     this.Logger,
-                    this.photoRepository.Create(file, exifReader, errorGeneratingPreviewHandler)
+                    this.photoRepository.Create(file, exifReader, imageResizer, errorGeneratingPreviewHandler)
                 );            
         }
     }

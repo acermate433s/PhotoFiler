@@ -1,7 +1,7 @@
-﻿using ImageResizer;
-using PhotoFiler.Photo.Models;
 using System;
 using System.IO;
+
+using PhotoFiler.Photo.Models;
 
 using static PhotoFiler.Photo.Helpers;
 
@@ -11,6 +11,8 @@ namespace PhotoFiler.Photo.FileSystem
     {
         public event ErrorGeneratingPreviewEventHandler ErrorGeneratingPreviewHandler;
 
+        private readonly IImageResizerService imageResizer;
+
         // JPEG compression quality
         private const int QUALITY = 50;
 
@@ -18,19 +20,13 @@ namespace PhotoFiler.Photo.FileSystem
         private const int MAX = 300;
 
         public FileSystemPreviewablePhoto(
-            int hashLength,
             string path,
             IHashFunction hasher,
-            IExifReaderService exifReader
+            IExifReaderService exifReader,
+            IImageResizerService imageResizer
         ) : base(path, hasher, exifReader)
         {
-            if (hashLength <= 0) throw new ArgumentException("Hash length must be greater than zero.", nameof(path));
-
-            if (path == null) throw new ArgumentNullException(nameof(path));
-
-            if (hasher == null) throw new ArgumentNullException(nameof(hasher));
-
-            if (exifReader == null) throw new ArgumentNullException(nameof(exifReader));
+            this.imageResizer = imageResizer ?? throw new ArgumentNullException(nameof(imageResizer));
         }
 
         /// <summary>
@@ -56,22 +52,7 @@ namespace PhotoFiler.Photo.FileSystem
             try
             {
                 byte[] buffer = File.ReadAllBytes(Location);
-
-                // resize the image to MAX pixels by MAX
-                // pixels to server as the preview image
-                using (var input = new MemoryStream(buffer))
-                using (var output = new MemoryStream())
-                {
-                    var job =
-                        new ImageJob(
-                            input,
-                            output,
-                            new Instructions($"?height={MAX}&width={MAX}&mode=crop&quality={QUALITY}&format=jpg")
-                        );
-                    job.Build();
-
-                    result = output.ToArray();
-                }
+                result = this.imageResizer.Resize(MAX, MAX, QUALITY);
             }
             catch (Exception ex)
             {

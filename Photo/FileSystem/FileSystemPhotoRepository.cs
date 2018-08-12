@@ -9,19 +9,14 @@ namespace PhotoFiler.Photo.FileSystem
 {
     public class FileSystemPhotoRepository : IPhotoRepository
     {
-        private readonly int hashLength = 0;
         private readonly IHashFunction hashingFunction = null;
         private readonly DirectoryInfo previewLocation = null;
 
         public FileSystemPhotoRepository(
-            int hashLength,
             IHashFunction hashingFunction,
             DirectoryInfo previewLocation
         )
         {
-            if (hashLength < 0) throw new ArgumentOutOfRangeException(nameof(hashLength), "Hash length must be greater than zero.");
-
-            this.hashLength = hashLength;
             this.hashingFunction = hashingFunction ?? throw new ArgumentNullException(nameof(hashingFunction));
             this.previewLocation = previewLocation ?? throw new ArgumentNullException(nameof(previewLocation));
         }
@@ -29,6 +24,7 @@ namespace PhotoFiler.Photo.FileSystem
         public IPreviewablePhoto Create(
             FileInfo file,
             IExifReaderService exifReader,
+            IImageResizerService imageResizer,
             ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null            
         )
         {
@@ -36,10 +32,10 @@ namespace PhotoFiler.Photo.FileSystem
 
             var result =
                 new FileSystemPreviewablePhoto(
-                    hashLength,
                     file.FullName,
                     hashingFunction,
-                    exifReader
+                    exifReader,
+                    imageResizer
                 );
 
             result.ErrorGeneratingPreviewHandler += errorGeneratingPreviewHandler;

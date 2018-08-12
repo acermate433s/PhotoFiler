@@ -15,23 +15,26 @@ namespace PhotoFiler.Photo.FileSystem
         private readonly DirectoryInfo source = null;
         private readonly IPhotoRepository photoRepository = null;
         private readonly IExifReaderService exifReader = null;
+        private readonly IImageResizerService imageResizer = null;
 
         public FileSystemPreviewablePhotos(
             DirectoryInfo source,
             IPhotoRepository photoRepository,
-            IExifReaderService exifReader
+            IExifReaderService exifReader,
+            IImageResizerService imageResizer
         )
         {
             this.source = source ?? throw new ArgumentNullException(nameof(source));
             this.photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
             this.exifReader = exifReader ?? throw new ArgumentNullException(nameof(exifReader));
+            this.imageResizer = imageResizer ?? throw new ArgumentNullException(nameof(imageResizer));
         }
 
         public List<IPreviewablePhoto> Retrieve(ErrorGeneratingPreviewEventHandler errorGeneratingPreviewHandler = null)
         {
             return
                 GetPhotoFiles(source)
-                    .Select(file => photoRepository.Create(file, this.exifReader, errorGeneratingPreviewHandler))
+                    .Select(file => photoRepository.Create(file, this.exifReader, this.imageResizer, errorGeneratingPreviewHandler))
                     .ToList();
         }
 

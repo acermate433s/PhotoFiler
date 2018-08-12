@@ -1,9 +1,9 @@
-﻿
-using PhotoFiler.Photo.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
+using PhotoFiler.Photo.Models;
 
 namespace PhotoFiler.Photo.FileSystem
 {

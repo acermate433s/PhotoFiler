@@ -8,14 +8,17 @@ namespace PhotoFiler.Photo.FileSystem
     {
         private readonly IFileSystemConfiguration configuration;
         private readonly IExifReaderService exifReader;
+        private readonly IImageResizerService imageResizer;
 
         public FileSystemRepository(
             IFileSystemConfiguration configuration,
-            IExifReaderService exifReader
+            IExifReaderService exifReader,
+            IImageResizerService imageResizer
         )
         {
             this.configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             this.exifReader = exifReader ?? throw new ArgumentNullException(nameof(exifReader));
+            this.imageResizer = imageResizer ?? throw new ArgumentNullException(nameof(imageResizer));
         }
 
         public IAlbumRepository CreateAlbumRepository()
@@ -30,7 +33,6 @@ namespace PhotoFiler.Photo.FileSystem
         {
             return 
                 new FileSystemPhotoRepository(
-                    configuration.HashLength,
                     configuration.HashingFunction,
                     configuration.PreviewLocationDirectory
                 );
@@ -42,7 +44,8 @@ namespace PhotoFiler.Photo.FileSystem
                 new FileSystemPhotosRepository(
                     this.configuration.RootPathDirectory,
                     CreatePhotoRepository(),
-                    this.exifReader
+                    this.exifReader,
+                    this.imageResizer
                 );
         }
     }

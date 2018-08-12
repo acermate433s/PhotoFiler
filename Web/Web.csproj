@@ -212,7 +212,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\DefaultDependencyResolver.cs" />
-    <Compile Include="Helpers\ExifReaderService.cs" />
+    <Compile Include="Helpers\ImageServices.cs" />
     <Compile Include="Helpers\PhotoFilerConfiguration.cs" />
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\MetadataProvider.cs" />
