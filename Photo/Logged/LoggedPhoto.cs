@@ -36,7 +36,7 @@ namespace PhotoFiler.Photo.Logged
             }
         }
 
-        public string Hash
+        public Hash Hash
         {
             get
             {

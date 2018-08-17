@@ -96,6 +96,7 @@
     <Compile Include="Models\IPreviewablePhotos.cs" />
     <Compile Include="Models\IRepository.cs" />
     <Compile Include="Photo.cs" />
+    <Compile Include="Hash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

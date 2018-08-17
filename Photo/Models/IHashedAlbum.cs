@@ -42,20 +42,20 @@ namespace PhotoFiler.Photo.Models
         /// </summary>
         /// <param name="hash">Hash generated for the photo</param>
         /// <returns></returns>
-        IPreviewablePhoto Photo(string hash);
+        IPreviewablePhoto Photo(Hash hash);
 
         /// <summary>
         /// Preview of the photo in the album
         /// </summary>
         /// <param name="hash">Hash of the photo</param>
         /// <returns>Byte array of the preview of the photo in the album</returns>
-        byte[] Preview(string hash);
+        byte[] Preview(Hash hash);
 
         /// <summary>
         /// Full view of the photo in the album
         /// </summary>
         /// <param name="hash">Hash of the photo</param>
         /// <returns>Byte array of the full view of the photo in the album</returns>
-        byte[] View(string hash);
+        byte[] View(Hash hash);
     }
 }

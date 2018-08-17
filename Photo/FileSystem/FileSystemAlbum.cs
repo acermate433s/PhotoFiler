@@ -34,14 +34,8 @@ namespace PhotoFiler.Photo.FileSystem
             List<IPreviewablePhoto> photos
         )
         {
-            if (previewLocation == null)
-                throw new ArgumentNullException(nameof(previewLocation));
-
-            if (photos == null)
-                throw new ArgumentNullException(nameof(photos));
-
-            Photos = photos;
-            PreviewLocation = previewLocation;
+            Photos = photos ?? throw new ArgumentNullException(nameof(photos));
+            PreviewLocation = previewLocation ?? throw new ArgumentNullException(nameof(previewLocation));
         }
 
         /// <summary>
@@ -69,7 +63,7 @@ namespace PhotoFiler.Photo.FileSystem
                 {
                     try
                     {
-                        var filename = Path.Combine(PreviewLocation.FullName, photo.Hash);
+                        var filename = Path.Combine(PreviewLocation.FullName, photo.Hash.Value);
                         filename = Path.ChangeExtension(filename, "prev");
 
                         if (!File.Exists(filename))
@@ -78,18 +72,20 @@ namespace PhotoFiler.Photo.FileSystem
                             if (preview != null)
                                 File.WriteAllBytes(filename, preview);
                             else
-                                errors.Add(photo.Hash);
+                                errors.Add(photo.Hash.Value);
 
                         }
                     }
                     catch
                     {
-                        errors.Add(photo.Hash);
+                        errors.Add(photo.Hash.Value);
                     }
                 });
 
             foreach (var error in errors)
-                Photos.Remove(Photos.First(item => item.Hash == error));
+            {
+                Photos.Remove(Photos.First(item => item.Hash.Value == error));
+            }
         }
 
         /// <summary>
@@ -117,7 +113,7 @@ namespace PhotoFiler.Photo.FileSystem
         /// </summary>
         /// <param name="hash">Hash generated for the photo</param>
         /// <returns></returns>
-        public IPreviewablePhoto Photo(string hash)
+        public IPreviewablePhoto Photo(Hash hash)
         {
             return Photos.FirstOrDefault(item => item.Hash == hash);
         }
@@ -132,13 +128,13 @@ namespace PhotoFiler.Photo.FileSystem
         /// <returns>
         /// Byte array of the preview of the photo in the album.  Returns null if there is an error generating the preview file.
         /// </returns>
-        public byte[] Preview(string hash)
+        public byte[] Preview(Hash hash)
         {
             var photo = Photos?.FirstOrDefault(item => item.Hash == hash);
 
             if (photo != null)
             {
-                var previewFilename = Path.Combine(PreviewLocation.FullName, photo.Hash);
+                var previewFilename = Path.Combine(PreviewLocation.FullName, photo.Hash.Value);
                 previewFilename = Path.ChangeExtension(previewFilename, "prev");
 
                 if (File.Exists(previewFilename))
@@ -170,7 +166,7 @@ namespace PhotoFiler.Photo.FileSystem
         /// <returns>
         /// Byte array of the full view of the photo in the album
         /// </returns>
-        public byte[] View(string hash)
+        public byte[] View(Hash hash)
         {
             return
                 Photos?

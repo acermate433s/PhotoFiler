@@ -22,7 +22,7 @@ namespace PhotoFiler.Photo
         /// <summary>
         /// Hash code of the photo.
         /// </summary>
-        public string Hash { get; protected set; }
+        public Hash Hash { get; protected set; }
 
         /// <summary>
         /// Resolution of the photo

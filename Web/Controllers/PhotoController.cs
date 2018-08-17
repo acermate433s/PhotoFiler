@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 
+using PhotoFiler.Photo;
 using PhotoFiler.Photo.Models;
 
 namespace PhotoFiler.Web.Controllers
@@ -20,7 +21,7 @@ namespace PhotoFiler.Web.Controllers
         }
 
         [Route("{hash}")]
-        public ActionResult Index(string hash)
+        public ActionResult Index(Hash hash)
         {
             if (hash != null)
             {
@@ -33,7 +34,7 @@ namespace PhotoFiler.Web.Controllers
         }
 
         [Route("Download/{hash}")]
-        public ActionResult Download(string hash)
+        public ActionResult Download(Hash hash)
         {
             if (hash != null)
             {
@@ -46,7 +47,7 @@ namespace PhotoFiler.Web.Controllers
         }
 
         [Route("Preview/{hash}")]
-        public ActionResult Preview(string hash)
+        public ActionResult Preview(Hash hash)
         {
             var content = album.Preview(hash);
             if (content == null)
@@ -65,7 +66,7 @@ namespace PhotoFiler.Web.Controllers
             return result;
         }
 
-        private ActionResult Retrieve(string hash, bool inline)
+        private ActionResult Retrieve(Hash hash, bool inline)
         {
             var content = album.View(hash);
             if (content == null)
@@ -83,7 +84,7 @@ namespace PhotoFiler.Web.Controllers
         }
 
         private ActionResult ImageFile(
-            string hash,
+            Hash hash,
             bool inline,
             IPhoto photo,
             byte[] content

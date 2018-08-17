@@ -55,6 +55,6 @@ namespace PhotoFiler.Photo.Models
         /// <summary>
         /// Hash code of the photo.
         /// </summary>
-        string Hash { get; }
+        Hash Hash { get; }
     }
 }

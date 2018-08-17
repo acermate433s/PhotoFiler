@@ -33,7 +33,7 @@ namespace PhotoFiler.Photo.FileSystem
                 Name = fileInfo.Name;
                 Size = ComputeSize(fileInfo);
 
-                Hash = hasher.Compute(fileInfo.FullName);
+                Hash = (Hash) hasher.Compute(fileInfo.FullName);
 
                 ReadFileData(
                     fileInfo,

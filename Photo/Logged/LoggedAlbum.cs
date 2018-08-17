@@ -67,7 +67,7 @@ namespace PhotoFiler.Photo.Logged
             }
         }
 
-        public IPreviewablePhoto Photo(string hash)
+        public IPreviewablePhoto Photo(Hash hash)
         {
             using (var scope = this.Logger.BeginScope($"Get photo with hash \"{hash}\"."))
             {
@@ -80,7 +80,7 @@ namespace PhotoFiler.Photo.Logged
             }
         }
 
-        public byte[] Preview(string hash)
+        public byte[] Preview(Hash hash)
         {
             using (var scope = this.Logger.BeginScope($"Generate preview for photo with \"{hash}\" in album."))
             {
@@ -108,7 +108,7 @@ namespace PhotoFiler.Photo.Logged
             }
         }
 
-        public byte[] View(string hash)
+        public byte[] View(Hash hash)
         {
             using (var scope = Logger.BeginScope($"Generate full view for photo with \"{hash}\" in album."))
             {
